@@ -1,6 +1,6 @@
 import Navbar from "@/components/Navbar";
 import SideBar from "@/components/SideBar";
-import Content from "./components/content";
+import Content from "./components/Content";
 
 export default function HomePage() {
   return (

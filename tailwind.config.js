@@ -7,11 +7,11 @@ module.exports = {
   theme: {
     extend: {
       colors: {
-        background: "hsl(var(--background))",
-        foreground: "hsl(var(--foreground))",
+        background: "#ffffff",
+        foreground: "#000000",
         btn: {
           background: "hsl(var(--btn-background))",
-          "background-hover": "hsl(var(--btn-background-hover))",
+          background_hover: "hsl(var(--btn-background-hover))",
         },
       },
     },

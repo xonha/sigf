@@ -59,7 +59,7 @@ export default async function Index() {
             ) : (
               <Link
                 href="/login"
-                className="py-2 px-4 rounded-md no-underline bg-btn-background hover:bg-btn-background-hover"
+                className="py-2 px-4 rounded-md no-underline bg-green-500 text-white hover:bg-btn-background-hover"
               >
                 Login
               </Link>

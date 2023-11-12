@@ -6,6 +6,7 @@ import {
   FaGear,
 } from "react-icons/fa6";
 import SideBarButton from "./SideBarButton";
+import ClassesMenu from "./ClassesMenu";
 
 export default function SideBar() {
   return (
@@ -15,7 +16,7 @@ export default function SideBar() {
         <SideBarButton text="Agenda" icon={<FaCalendar />} />
       </div>
       <div className="flex flex-col border-b-[1px] border-gray-300">
-        <SideBarButton text="Turmas" icon={<FaAngleRight />} />
+        <ClassesMenu />
       </div>
       <div className="flex flex-col border-b-[1px] border-gray-300">
         <SideBarButton text="Turmas Arquivadas" icon={<FaBoxArchive />} />
