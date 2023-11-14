@@ -1,14 +1,22 @@
 "use client";
 
-import { FaBars } from "react-icons/fa";
 import { useState } from "react";
+import { FaBars } from "react-icons/fa";
 import LogoutButton from "./LogoutButton";
+import ModalMenu from "./Modal";
 
 export default function Navbar() {
   const [menuVisible, setMenuVisible] = useState(false);
+  const toggleMenu = () => setMenuVisible(!menuVisible);
 
-  const toggleMenu = () => {
-    setMenuVisible(!menuVisible);
+  const [isMenuOpen, setIsMenuOpen] = useState(false);
+
+  const openMenu = () => {
+    setIsMenuOpen(true);
+  };
+
+  const closeMenu = () => {
+    setIsMenuOpen(false);
   };
 
   return (
@@ -20,8 +28,12 @@ export default function Navbar() {
         </a>
       </div>
 
-      <div>
-        <button className="bg-green-500 hover:bg-green-600 text-white font-bold py-2 px-4  rounded">
+      <div id="__create_class">
+        <ModalMenu isOpen={isMenuOpen} onRequestClose={closeMenu} />
+        <button
+          onClick={openMenu}
+          className="bg-green-500 hover:bg-green-600 text-white font-bold py-2 px-4  rounded"
+        >
           Criar Turma
         </button>
       </div>
