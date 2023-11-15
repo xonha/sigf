@@ -32,7 +32,7 @@ export default function Navbar() {
         <ModalMenu isOpen={isMenuOpen} onRequestClose={closeMenu} />
         <button
           onClick={openMenu}
-          className="bg-green-500 hover:bg-green-600 text-white font-bold py-2 px-4  rounded"
+          className="bg-green-500 hover:bg-green-600 text-white font-bold py-2 px-4 rounded"
         >
           Criar Turma
         </button>

@@ -22,7 +22,7 @@ export default function Login() {
         >
           <polyline points="15 18 9 12 15 6" />
         </svg>{" "}
-        Back
+        Voltar
       </Link>
 
       <form
@@ -36,11 +36,11 @@ export default function Login() {
         <input
           className="rounded-md px-4 py-2 bg-inherit border mb-6"
           name="email"
-          placeholder="you@example.com"
+          placeholder="exemplo@exemplo.com"
           required
         />
         <label className="text-md" htmlFor="password">
-          Password
+          Senha
         </label>
         <input
           className="rounded-md px-4 py-2 bg-inherit border mb-6"
@@ -50,13 +50,13 @@ export default function Login() {
           required
         />
         <button className="bg-green-500 rounded px-4 py-2 text-white mb-2">
-          Sign In
+          Entrar
         </button>
         <button
           formAction="/api/auth/sign-up"
           className="border border-gray-700 rounded px-4 py-2 text-black mb-2"
         >
-          Sign Up
+          Registrar
         </button>
         <Messages />
       </form>

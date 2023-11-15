@@ -1,30 +1,14 @@
 "use client";
 
+import { newClassAtom } from "@/app/atoms/newClassAtom";
 import { useState } from "react";
+import { FaAngleDown, FaAngleRight } from "react-icons/fa6";
+import { useRecoilState } from "recoil";
 import SideBarButton from "./SideBarButton";
-import { FaAngleRight, FaAngleDown } from "react-icons/fa6";
-
-const classes = [
-  {
-    id: "1",
-    name: "Avançada 1",
-  },
-  {
-    id: "2",
-    name: "Avançada 2",
-  },
-  {
-    id: "3",
-    name: "Iniciante 1",
-  },
-  {
-    id: "4",
-    name: "Iniciante 2",
-  },
-];
 
 export default function ClassesMenu() {
   const [classesOpen, setClassesOpen] = useState(false);
+  const [newClasses, setNewClasses] = useRecoilState(newClassAtom);
 
   const toggleClassesOpen = () => {
     setClassesOpen(!classesOpen);
@@ -48,14 +32,15 @@ export default function ClassesMenu() {
           icon={<FaAngleDown />}
           onClick={toggleClassesOpen}
         />
-        {classes.map((c) => (
-          <SideBarButton
-            key={c.id}
-            text={c.name}
-            icon={<FaAngleRight />}
-            href="/login"
-          />
-        ))}
+        {newClasses &&
+          newClasses.map((classItem, index) => (
+            <SideBarButton
+              key={classItem.id}
+              text={classItem.name}
+              icon={<FaAngleRight />}
+              href="/login"
+            />
+          ))}
       </>
     );
   }
