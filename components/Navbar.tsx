@@ -1,23 +1,33 @@
 "use client";
 
-import { useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import { FaBars } from "react-icons/fa";
 import LogoutButton from "./LogoutButton";
 import ModalMenu from "./Modal";
 
 export default function Navbar() {
-  const [menuVisible, setMenuVisible] = useState(false);
-  const toggleMenu = () => setMenuVisible(!menuVisible);
+  const [isProfileMenuVisible, setProfileMenuVisible] = useState(false);
+  const toggleMenu = () => setProfileMenuVisible(!isProfileMenuVisible);
 
-  const [isMenuOpen, setIsMenuOpen] = useState(false);
+  const [isModalOpen, setIsModalOpen] = useState(false);
+  const toggleModal = () => setIsModalOpen(!isModalOpen);
 
-  const openMenu = () => {
-    setIsMenuOpen(true);
+  const profileRef = useRef<HTMLImageElement>(null);
+  const handleClickOutside = (event: MouseEvent) => {
+    if (
+      profileRef.current &&
+      !profileRef.current.contains(event.target as Node)
+    ) {
+      setProfileMenuVisible(false);
+    }
   };
 
-  const closeMenu = () => {
-    setIsMenuOpen(false);
-  };
+  useEffect(() => {
+    document.addEventListener("click", handleClickOutside);
+    return () => {
+      document.removeEventListener("click", handleClickOutside);
+    };
+  }, []);
 
   return (
     <nav className="border-b-[1px] border-gray-300 h-16 w-full flex items-center flex-row justify-between">
@@ -29,9 +39,9 @@ export default function Navbar() {
       </div>
 
       <div id="__create_class">
-        <ModalMenu isOpen={isMenuOpen} onRequestClose={closeMenu} />
+        <ModalMenu isOpen={isModalOpen} onRequestClose={toggleModal} />
         <button
-          onClick={openMenu}
+          onClick={toggleModal}
           className="bg-green-500 hover:bg-green-600 text-white font-bold py-2 px-4 rounded"
         >
           Criar Turma
@@ -42,11 +52,12 @@ export default function Navbar() {
         <img
           src="https://avatars.githubusercontent.com/u/25267506?v=4"
           alt="Foto de Perfil"
+          ref={profileRef}
           onClick={toggleMenu}
           className="cursor-pointer rounded-full h-10 w-10"
         />
 
-        {menuVisible && (
+        {isProfileMenuVisible && (
           <ul className="absolute right-4 bg-white border rounded-[10px] w-32 ">
             <li>Configurações</li>
             <li>

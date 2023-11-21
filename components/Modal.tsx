@@ -15,7 +15,7 @@ export default function ModalMenu({
   isOpen,
   onRequestClose,
 }: ModalMenuProps): React.ReactElement {
-  const [newClass, setNewClass] = useRecoilState(newClassAtom);
+  const [, setNewClass] = useRecoilState(newClassAtom);
   const [name, setName] = useState("");
 
   const customStyles = {
@@ -52,6 +52,7 @@ export default function ModalMenu({
       const res = await fetch("/api/classes");
       const data = await res.json();
       setNewClass(data);
+      setName("");
 
       onRequestClose();
     } catch (error) {

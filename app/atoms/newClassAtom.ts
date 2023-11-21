@@ -1,11 +1,19 @@
-import { atom } from "recoil";
+import { atom, selector } from "recoil";
 
 interface NewClassAtom {
   id: number;
   name: string;
 }
 
-export const newClassAtom = atom<NewClassAtom[] | null>({
+export const newClassAtom = atom<NewClassAtom[] | []>({
   key: "newClassAtom",
-  default: null,
+  default: [],
+});
+
+export const sortedNewClassSelector = selector<NewClassAtom[] | []>({
+  key: "sortedNewClassSelector",
+  get: ({ get }) => {
+    const newClasses = get(newClassAtom);
+    return [...newClasses].sort((a, b) => a.name.localeCompare(b.name));
+  },
 });

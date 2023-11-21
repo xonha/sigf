@@ -1,17 +1,18 @@
 "use client";
 
-import { FaEllipsisVertical, FaBookmark } from "react-icons/fa6";
-import { newClassAtom } from "@/app/atoms/newClassAtom";
-import { useRecoilState } from "recoil";
+import { sortedNewClassSelector } from "@/app/atoms/newClassAtom";
+import { FaBookmark, FaRegBookmark, FaEllipsisVertical } from "react-icons/fa6";
+import { useRecoilValue } from "recoil";
+import ClassesOptionsButton from "./ClassesOptionsButton";
 
 export default function Content() {
-  const [newClasses, setNewClasses] = useRecoilState(newClassAtom);
+  const sortedNewClasses = useRecoilValue(sortedNewClassSelector);
 
   return (
     <div className="w-full">
       <ol className="flex flex-wrap gap-6 p-6">
-        {newClasses &&
-          newClasses.map((classItem, index) => (
+        {sortedNewClasses &&
+          sortedNewClasses.map((classItem, index) => (
             <li
               key={index}
               className="w-[300px] h-[160px] border border-gray-300 rounded-[10px]"
@@ -21,8 +22,8 @@ export default function Content() {
               </div>
 
               <div className="flex flex-row-reverse gap-6 pt-5 px-4 relative border-t items-center">
-                <FaEllipsisVertical />
-                <FaBookmark />
+                <ClassesOptionsButton />
+                <FaRegBookmark />
               </div>
             </li>
           ))}
