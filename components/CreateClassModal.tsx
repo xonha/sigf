@@ -1,21 +1,20 @@
-import { ClassesPostBody } from "@/app/api/classes/route";
-import { newClassAtom } from "@/app/atoms/newClassAtom";
+import { classesAtom } from "@/app/atoms/classesAtom";
 import React, { useState, useEffect } from "react";
 import Modal from "react-modal";
 import { useRecoilState } from "recoil";
 
 Modal.setAppElement("#__create_class");
 
-interface ModalMenuProps {
+interface CreateClassModalProps {
   isOpen: boolean;
   onRequestClose: () => void;
 }
 
-export default function ModalMenu({
+export default function CreateClassModal({
   isOpen,
   onRequestClose,
-}: ModalMenuProps): React.ReactElement {
-  const [, setNewClass] = useRecoilState(newClassAtom);
+}: CreateClassModalProps): React.ReactElement {
+  const [, setClasses] = useRecoilState(classesAtom);
   const [name, setName] = useState("");
 
   const customStyles = {
@@ -31,7 +30,7 @@ export default function ModalMenu({
       try {
         const res = await fetch("/api/classes");
         const data = await res.json();
-        setNewClass(data);
+        setClasses(data);
       } catch (error) {
         console.error("Error fetching classes:", error);
       }
@@ -42,7 +41,7 @@ export default function ModalMenu({
 
   async function createClass(className: string) {
     try {
-      const body: ClassesPostBody = { name: className };
+      const body = { name: className };
 
       await fetch("/api/classes", {
         method: "POST",
@@ -51,7 +50,7 @@ export default function ModalMenu({
 
       const res = await fetch("/api/classes");
       const data = await res.json();
-      setNewClass(data);
+      setClasses(data);
       setName("");
 
       onRequestClose();

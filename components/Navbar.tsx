@@ -3,7 +3,7 @@
 import { useEffect, useRef, useState } from "react";
 import { FaBars } from "react-icons/fa";
 import LogoutButton from "./LogoutButton";
-import ModalMenu from "./Modal";
+import CreateClassModal from "./CreateClassModal";
 
 export default function Navbar() {
   const [isProfileMenuVisible, setProfileMenuVisible] = useState(false);
@@ -39,7 +39,7 @@ export default function Navbar() {
       </div>
 
       <div id="__create_class">
-        <ModalMenu isOpen={isModalOpen} onRequestClose={toggleModal} />
+        <CreateClassModal isOpen={isModalOpen} onRequestClose={toggleModal} />
         <button
           onClick={toggleModal}
           className="bg-green-500 hover:bg-green-600 text-white font-bold py-2 px-4 rounded"
@@ -58,9 +58,9 @@ export default function Navbar() {
         />
 
         {isProfileMenuVisible && (
-          <ul className="absolute right-4 bg-white border rounded-[10px] w-32 ">
-            <li>Configurações</li>
-            <li>
+          <ul className="absolute right-4 bg-white border rounded-[10px] w-[150px] pt-2 flex flex-col items-center">
+            <li className="pb-2">Configurações</li>
+            <li className="pb-2">
               <LogoutButton />{" "}
             </li>
           </ul>

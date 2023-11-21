@@ -1,6 +1,6 @@
 "use client";
 
-import { sortedNewClassSelector } from "@/app/atoms/newClassAtom";
+import { sortedClassesSelector } from "@/app/atoms/classesAtom";
 import { useState } from "react";
 import { FaAngleDown, FaAngleRight } from "react-icons/fa6";
 import { useRecoilValue } from "recoil";
@@ -8,7 +8,7 @@ import SideBarButton from "./SideBarButton";
 
 export default function ClassesMenu() {
   const [classesOpen, setClassesOpen] = useState(false);
-  const sortedNewClasses = useRecoilValue(sortedNewClassSelector);
+  const sortedNewClasses = useRecoilValue(sortedClassesSelector);
 
   const toggleClassesOpen = () => {
     setClassesOpen(!classesOpen);

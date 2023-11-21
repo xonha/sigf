@@ -1,16 +1,12 @@
 import { NextRequest, NextResponse } from "next/server";
 import supabase from "../db";
 
-export interface ClassesPostBody {
-  name: string;
-}
-
 export async function POST(request: NextRequest) {
-  const body: ClassesPostBody = await request.json();
+  const { name } = await request.json();
 
   const { data, error } = await supabase
     .from("classes")
-    .insert([{ name: body.name }])
+    .insert([{ name: name }])
     .select();
 
   if (error) {
