@@ -1,7 +1,9 @@
+import { useOutsideClick } from "@/Hooks/useClickOutside";
 import { classesAtom } from "@/app/atoms/classesAtom";
-import { useEffect, useRef, useState } from "react";
+import { useRef, useState } from "react";
 import { FaEllipsisVertical } from "react-icons/fa6";
 import { useRecoilState } from "recoil";
+import EditClassesModal from "./EditClassesModal";
 
 interface ClassesOptionsButtonProps {
   id: string;
@@ -10,28 +12,19 @@ interface ClassesOptionsButtonProps {
 export default function ClassesOptionsButton(props: ClassesOptionsButtonProps) {
   const { id } = props;
   const [classes, setClasses] = useRecoilState(classesAtom);
-
+  const [isModalOpen, setIsModalOpen] = useState(false);
   const [isOptionsMenuVisible, setOptionsMenuVisible] = useState(false);
+  const optionsMenuRef = useRef<HTMLDivElement>(null);
+
+  const openModal = () => {
+    setIsModalOpen(true);
+    setOptionsMenuVisible(false);
+  };
   const toggleOptionsMenu = () => {
-    setOptionsMenuVisible(!isOptionsMenuVisible);
+    setOptionsMenuVisible((prev) => !prev);
   };
 
-  const buttonRef = useRef<HTMLButtonElement>(null);
-  const handleClickOutside = (event: MouseEvent) => {
-    if (
-      buttonRef.current &&
-      !buttonRef.current.contains(event.target as Node)
-    ) {
-      setOptionsMenuVisible(false);
-    }
-  };
-
-  useEffect(() => {
-    document.addEventListener("click", handleClickOutside);
-    return () => {
-      document.removeEventListener("click", handleClickOutside);
-    };
-  }, []);
+  useOutsideClick(optionsMenuRef, toggleOptionsMenu);
 
   async function deleteClass(id: string) {
     try {
@@ -46,16 +39,26 @@ export default function ClassesOptionsButton(props: ClassesOptionsButtonProps) {
   }
 
   return (
-    <button ref={buttonRef} onClick={toggleOptionsMenu}>
-      <FaEllipsisVertical />
-      {isOptionsMenuVisible && (
-        <ul className="absolute right-4 bg-white border rounded-[10px] w-32 pt-2">
-          <li className="pb-2">Editar</li>
-          <li className="pb-2">
+    <>
+      <EditClassesModal
+        id={id}
+        isModalOpen={isModalOpen}
+        onRequestClose={() => setIsModalOpen(false)}
+      />
+      <div className="relative">
+        <button onClick={toggleOptionsMenu}>
+          <FaEllipsisVertical />
+        </button>
+        {isOptionsMenuVisible && (
+          <div
+            className="absolute right-4 bg-white border rounded-[10px] w-32 flex flex-col gap-2 p-2"
+            ref={optionsMenuRef}
+          >
+            <button onClick={openModal}>Editar</button>
             <button onClick={() => deleteClass(id)}>Excluir</button>
-          </li>
-        </ul>
-      )}
-    </button>
+          </div>
+        )}
+      </div>
+    </>
   );
 }

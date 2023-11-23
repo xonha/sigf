@@ -15,7 +15,10 @@ export default function RootLayout({
     <html lang="en">
       <body>
         <RecoilWrapper>
-          <main className="min-h-screen bg-background flex flex-col items-center">
+          <main
+            className="min-h-screen bg-background flex flex-col items-center"
+            id="__modal"
+          >
             {children}
           </main>
         </RecoilWrapper>

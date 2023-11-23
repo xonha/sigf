@@ -3,7 +3,10 @@
 import { useEffect, useRef, useState } from "react";
 import { FaBars } from "react-icons/fa";
 import LogoutButton from "./LogoutButton";
-import CreateClassModal from "./CreateClassModal";
+import MainModal from "./MainModal";
+import { classesAtom } from "@/app/atoms/classesAtom";
+import { useRecoilState } from "recoil";
+import CreateClassesModal from "./CreateClassesModal";
 
 export default function Navbar() {
   const [isProfileMenuVisible, setProfileMenuVisible] = useState(false);
@@ -38,14 +41,8 @@ export default function Navbar() {
         </a>
       </div>
 
-      <div id="__create_class">
-        <CreateClassModal isOpen={isModalOpen} onRequestClose={toggleModal} />
-        <button
-          onClick={toggleModal}
-          className="bg-green-500 hover:bg-green-600 text-white font-bold py-2 px-4 rounded"
-        >
-          Criar Turma
-        </button>
+      <div>
+        <CreateClassesModal />
       </div>
 
       <div className="pr-4 relative">
@@ -68,4 +65,7 @@ export default function Navbar() {
       </div>
     </nav>
   );
+}
+function onRequestClose() {
+  throw new Error("Function not implemented.");
 }
