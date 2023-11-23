@@ -2,11 +2,8 @@
 
 import { useEffect, useRef, useState } from "react";
 import { FaBars } from "react-icons/fa";
-import LogoutButton from "./LogoutButton";
-import MainModal from "./MainModal";
-import { classesAtom } from "@/app/atoms/classesAtom";
-import { useRecoilState } from "recoil";
 import CreateClassesModal from "./CreateClassesModal";
+import LogoutButton from "./LogoutButton";
 
 export default function Navbar() {
   const [isProfileMenuVisible, setProfileMenuVisible] = useState(false);
@@ -58,14 +55,11 @@ export default function Navbar() {
           <ul className="absolute right-4 bg-white border rounded-[10px] w-[150px] pt-2 flex flex-col items-center">
             <li className="pb-2">Configurações</li>
             <li className="pb-2">
-              <LogoutButton />{" "}
+              <LogoutButton />
             </li>
           </ul>
         )}
       </div>
     </nav>
   );
-}
-function onRequestClose() {
-  throw new Error("Function not implemented.");
 }
