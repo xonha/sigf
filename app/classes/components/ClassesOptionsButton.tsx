@@ -1,25 +1,17 @@
-import { useOutsideClick } from "@/Hooks/useClickOutside";
 import { classesAtom } from "@/app/atoms/classesAtom";
+import { useOutsideClick } from "@/hooks/useClickOutside";
 import { useRef, useState } from "react";
 import { FaEllipsisVertical } from "react-icons/fa6";
 import { useRecoilState } from "recoil";
-import EditClassesModal from "./EditClassesModal";
+import EditClassesModal, { EditClassesModalRef } from "./EditClassesModal";
 
-interface ClassesOptionsButtonProps {
-  id: string;
-}
-
-export default function ClassesOptionsButton(props: ClassesOptionsButtonProps) {
+export default function ClassesOptionsButton(props: { id: string }) {
   const { id } = props;
   const [classes, setClasses] = useRecoilState(classesAtom);
-  const [isModalOpen, setIsModalOpen] = useState(false);
   const [isOptionsMenuVisible, setOptionsMenuVisible] = useState(false);
   const optionsMenuRef = useRef<HTMLDivElement>(null);
+  const modalRef = useRef<EditClassesModalRef>(null);
 
-  const openModal = () => {
-    setIsModalOpen(true);
-    setOptionsMenuVisible(false);
-  };
   const toggleOptionsMenu = () => {
     setOptionsMenuVisible((prev) => !prev);
   };
@@ -38,13 +30,13 @@ export default function ClassesOptionsButton(props: ClassesOptionsButtonProps) {
     }
   }
 
+  function toggleModal() {
+    modalRef.current?.toggleModal();
+  }
+
   return (
     <>
-      <EditClassesModal
-        id={id}
-        isModalOpen={isModalOpen}
-        onRequestClose={() => setIsModalOpen(false)}
-      />
+      <EditClassesModal id={id} ref={modalRef} />
       <div className="relative">
         <button onClick={toggleOptionsMenu}>
           <FaEllipsisVertical />
@@ -54,7 +46,7 @@ export default function ClassesOptionsButton(props: ClassesOptionsButtonProps) {
             className="absolute right-4 bg-white border rounded-[10px] w-32 flex flex-col gap-2 p-2"
             ref={optionsMenuRef}
           >
-            <button onClick={openModal}>Editar</button>
+            <button onClick={toggleModal}>Editar</button>
             <button onClick={() => deleteClass(id)}>Excluir</button>
           </div>
         )}

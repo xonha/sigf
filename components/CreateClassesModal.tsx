@@ -1,21 +1,22 @@
 import { classesAtom } from "@/app/atoms/classesAtom";
-import React, { useEffect, useState } from "react";
-import { useRecoilState } from "recoil";
+import React, { useEffect, useImperativeHandle, useState } from "react";
+import { useSetRecoilState } from "recoil";
 import MainModal from "./MainModal";
-import { on } from "events";
 
-interface MainModalProps {
-  onRequestClose?: () => void;
+export interface CreateClassesModalRef {
+  toggleModal: () => void;
 }
 
-export default function CreateClassesModal({
-  onRequestClose,
-}: MainModalProps): React.ReactElement {
-  const [, setClasses] = useRecoilState(classesAtom);
+export default React.forwardRef<CreateClassesModalRef>((_, ref) => {
+  const setClasses = useSetRecoilState(classesAtom);
   const [name, setName] = useState("");
 
   const [isModalOpen, setIsModalOpen] = useState(false);
   const toggleModal = () => setIsModalOpen(!isModalOpen);
+
+  useImperativeHandle(ref, () => ({
+    toggleModal,
+  }));
 
   useEffect(() => {
     async function fetchClasses() {
@@ -42,10 +43,10 @@ export default function CreateClassesModal({
 
       const res = await fetch("/api/classes");
       const data = await res.json();
-      setClasses(data);
-      setName("");
 
-      onRequestClose?.();
+      setClasses(data);
+      setIsModalOpen(false);
+      setName("");
     } catch (error) {
       console.error("Error creating class:", error);
     }
@@ -67,7 +68,7 @@ export default function CreateClassesModal({
         <div className="flex justify-end gap-4 mt-4">
           <button
             className="border border-gray-700 rounded px-4 py-2 text-black"
-            onClick={onRequestClose}
+            onClick={() => setIsModalOpen(false)}
           >
             Fechar
           </button>
@@ -79,12 +80,6 @@ export default function CreateClassesModal({
           </button>
         </div>
       </MainModal>
-      <button
-        onClick={toggleModal}
-        className="bg-green-500 hover:bg-green-600 text-white font-bold py-2 px-4 rounded"
-      >
-        Criar Turma
-      </button>
     </>
   );
-}
+});
