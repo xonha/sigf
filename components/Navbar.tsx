@@ -38,7 +38,7 @@ export default function Navbar() {
     <nav className="border-b-[1px] border-gray-300 h-16 w-full flex items-center flex-row justify-between">
       <div className="flex flex-row items-center pl-4">
         <FaBars />
-        <a href="/home" className="pl-4">
+        <a href="/classes" className="pl-4">
           SIGF
         </a>
       </div>

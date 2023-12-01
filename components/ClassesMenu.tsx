@@ -37,7 +37,7 @@ export default function ClassesMenu() {
             key={classItem.id}
             text={classItem.name}
             icon={<FaAngleRight />}
-            href="/login"
+            href={`/classes/${classItem.id}`}
           />
         ))}
       </>

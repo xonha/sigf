@@ -26,7 +26,7 @@ export async function POST(request: Request) {
     );
   }
 
-  const homeUrl = `${requestUrl.origin}/home`;
+  const homeUrl = `${requestUrl.origin}/classes`;
   return NextResponse.redirect(homeUrl, {
     status: 301,
   });
