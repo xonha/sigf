@@ -11,7 +11,7 @@ export async function POST(request: Request) {
   const password = String(formData.get("password"));
   const supabase = createRouteHandlerClient({ cookies });
 
-  const { error } = await supabase.auth.signInWithPassword({
+  const { data, error } = await supabase.auth.signInWithPassword({
     email,
     password,
   });
@@ -29,5 +29,8 @@ export async function POST(request: Request) {
   const homeUrl = `${requestUrl.origin}/classes`;
   return NextResponse.redirect(homeUrl, {
     status: 301,
+    headers: {
+      "Set-Cookie": `access_token=${data.session.access_token}`,
+    },
   });
 }

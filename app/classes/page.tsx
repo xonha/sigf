@@ -1,5 +1,5 @@
-import Navbar from "@/components/Navbar";
-import SideBar from "@/components/SideBar";
+import Navbar from "@/app/components/Navbar";
+import SideBar from "@/app/components/SideBar";
 import Content from "./components/Content";
 
 export default function HomePage() {

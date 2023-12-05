@@ -1,4 +1,4 @@
-import RecoilWrapper from "@/components/RecoilWrapper";
+import RecoilWrapper from "@/app/components/RecoilWrapper";
 import "./globals.css";
 
 export const metadata = {

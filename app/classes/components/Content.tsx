@@ -1,9 +1,9 @@
 "use client";
 
 import { sortedClassesSelector } from "@/app/atoms/classesAtom";
-import { FaRegBookmark } from "react-icons/fa6";
 import { useRecoilValue } from "recoil";
 import ClassesOptionsButton from "./ClassesOptionsButton";
+import EnrollButton from "./EnrollButton";
 
 export default function Content() {
   const sortedNewClasses = useRecoilValue(sortedClassesSelector);
@@ -23,7 +23,7 @@ export default function Content() {
 
               <div className="flex flex-row-reverse gap-6 pt-5 px-4 relative border-t items-center">
                 <ClassesOptionsButton id={classItem.id} />
-                <FaRegBookmark />
+                <EnrollButton id={classItem.id} />
               </div>
             </li>
           ))}
