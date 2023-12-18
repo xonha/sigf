@@ -64,7 +64,7 @@ export default function Navbar() {
 
         {isProfileMenuVisible && (
           <ul className="absolute right-4 bg-white border rounded-[10px] w-[150px] pt-2 flex flex-col items-center">
-            <li className="pb-2">Configurações</li>
+            <li className="pb-2"></li>
             <li className="pb-2">
               <LogoutButton />
             </li>

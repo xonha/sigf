@@ -6,7 +6,7 @@ export async function POST(request: NextRequest) {
 
   const { data, error } = await supabase
     .from("enrollment")
-    .insert([{ user_id: userId, class_id: classId }])
+    .insert([{ userId, classId }])
     .select();
 
   if (error) {
@@ -17,6 +17,21 @@ export async function POST(request: NextRequest) {
 
 export async function GET() {
   const { data, error } = await supabase.from("enrollment").select();
+
+  if (error) {
+    return NextResponse.json(error, { status: 500 });
+  }
+  return NextResponse.json(data);
+}
+
+export async function DELETE(request: NextRequest) {
+  const { userId, classId } = await request.json();
+
+  const { data, error } = await supabase
+    .from("enrollment")
+    .delete()
+    .eq("userId", userId)
+    .eq("classId", classId);
 
   if (error) {
     return NextResponse.json(error, { status: 500 });

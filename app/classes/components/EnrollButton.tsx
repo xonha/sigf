@@ -1,37 +1,66 @@
 "use client";
 
-import jwt from "jsonwebtoken";
-import { useCookies } from "next-client-cookies";
-import { FaRegBookmark } from "react-icons/fa6";
+import { enrollmentsAtom } from "@/app/atoms/enrollmentsAtom";
+import { useUserId } from "@/app/hooks/useUserId";
+import { FaBookmark, FaRegBookmark } from "react-icons/fa6";
+import { useRecoilState } from "recoil";
 
-export default function EnrollButton(props: { id: string }) {
-  const cookies = useCookies();
+interface IEnrollButtonProps {
+  classId: string;
+  setUpdateEnrollments?: any;
+}
 
-  function getUserId() {
-    const accessToken = cookies.get("access_token");
-    const decoded = accessToken ? jwt.decode(accessToken) : null;
-    return decoded?.sub;
-  }
+export default function EnrollButton({
+  classId,
+  setUpdateEnrollments,
+}: IEnrollButtonProps) {
+  const userId = useUserId();
+  const [userEnrollments, setUserEnrollments] = useRecoilState(enrollmentsAtom);
+  const isEnrolled = userEnrollments.includes(classId as never);
 
   async function enroll() {
     try {
-      const body = {
-        userId: getUserId(),
-        classId: props.id,
-      };
       const response = await fetch(`/api/enrollment`, {
         method: "POST",
-        body: JSON.stringify(body),
+        body: JSON.stringify({ userId, classId }),
       });
       const data = await response.json();
+      setUserEnrollments([...userEnrollments, data[0].classId]);
+      setUpdateEnrollments(true);
     } catch (error) {
       console.error("Error enrolling class:", error);
     }
   }
 
+  async function unenroll() {
+    try {
+      const response = await fetch(`/api/enrollment`, {
+        method: "DELETE",
+        body: JSON.stringify({ userId, classId }),
+      });
+      const data = await response.json();
+      const filteredEnrollments = userEnrollments.filter(
+        (item) => item.classId === classId
+      );
+
+      setUserEnrollments(filteredEnrollments);
+      setUpdateEnrollments(true);
+    } catch (error) {
+      console.error("Error unenrolling class:", error);
+    }
+  }
+
+  async function toggleEnroll() {
+    if (isEnrolled) {
+      await unenroll();
+    } else {
+      await enroll();
+    }
+  }
+
   return (
-    <button onClick={enroll}>
-      <FaRegBookmark />
+    <button onClick={toggleEnroll}>
+      {isEnrolled ? <FaBookmark /> : <FaRegBookmark />}
     </button>
   );
 }
