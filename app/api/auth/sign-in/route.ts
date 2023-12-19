@@ -29,8 +29,5 @@ export async function POST(request: Request) {
   const homeUrl = `${requestUrl.origin}/classes`;
   return NextResponse.redirect(homeUrl, {
     status: 301,
-    headers: {
-      "Set-Cookie": `access_token=${data.session.access_token}`,
-    },
   });
 }

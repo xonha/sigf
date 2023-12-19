@@ -1,7 +1,7 @@
 "use client";
 
 import { enrollmentsAtom } from "@/app/atoms/enrollmentsAtom";
-import { useUserId } from "@/app/hooks/useUserId";
+import useUser from "@/app/hooks/useUser";
 import { FaBookmark, FaRegBookmark } from "react-icons/fa6";
 import { useRecoilState } from "recoil";
 
@@ -14,18 +14,22 @@ export default function EnrollButton({
   classId,
   setUpdateEnrollments,
 }: IEnrollButtonProps) {
-  const userId = useUserId();
   const [userEnrollments, setUserEnrollments] = useRecoilState(enrollmentsAtom);
   const isEnrolled = userEnrollments.includes(classId as never);
 
   async function enroll() {
     try {
-      const response = await fetch(`/api/enrollment`, {
+      const { data, error } = await useUser();
+      if (error) {
+        console.error("Error getting user:", error);
+        return;
+      }
+      const res = await fetch(`/api/enrollment`, {
         method: "POST",
-        body: JSON.stringify({ userId, classId }),
+        body: JSON.stringify({ userId: data.user.id, classId }),
       });
-      const data = await response.json();
-      setUserEnrollments([...userEnrollments, data[0].classId]);
+      const resData = await res.json();
+      setUserEnrollments([...userEnrollments, resData[0].classId]);
       setUpdateEnrollments(true);
     } catch (error) {
       console.error("Error enrolling class:", error);
@@ -34,11 +38,17 @@ export default function EnrollButton({
 
   async function unenroll() {
     try {
+      const { data, error } = await useUser();
+
+      if (error) {
+        console.error("Error getting user:", error);
+        return;
+      }
       const response = await fetch(`/api/enrollment`, {
         method: "DELETE",
-        body: JSON.stringify({ userId, classId }),
+        body: JSON.stringify({ userId: data.user.id, classId }),
       });
-      const data = await response.json();
+      await response.json();
       const filteredEnrollments = userEnrollments.filter(
         (item) => item.classId === classId
       );

@@ -1,8 +1,8 @@
 "use client";
 
-import supabase from "@/app/api/db";
 import { sortedClassesSelector } from "@/app/atoms/classesAtom";
 import { enrollmentsAtom } from "@/app/atoms/enrollmentsAtom";
+import useUser from "@/app/hooks/useUser";
 import { useEffect, useState } from "react";
 import { useRecoilValue, useSetRecoilState } from "recoil";
 import ClassesOptionsButton from "./ClassesOptionsButton";
@@ -14,17 +14,18 @@ export default function Content() {
   const [updateEnrollments, setUpdateEnrollments] = useState(false);
 
   async function fetchEnrollments() {
-    const { data, error } = await supabase.auth.refreshSession();
-    const { session, user } = data;
+    const { data, error } = await useUser();
+
+    if (error) {
+      console.error("Error getting user:", error);
+      return;
+    }
 
     try {
-      // TODO: get user id from session
-      const response = await fetch(
-        `/api/enrollment/422de8aa-3562-455c-8b21-cc68e2ffb184`
-      );
-      const data = await response.json();
+      const res = await fetch(`/api/enrollment/${data.user.id}`);
+      const resData = await res.json();
 
-      const classesEnrolled = await data.map(
+      const classesEnrolled = await resData.map(
         (enrollment: { classId: string }) => enrollment.classId
       );
       setUserEnrollments(classesEnrolled);
