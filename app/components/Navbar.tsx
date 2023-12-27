@@ -69,7 +69,9 @@ export default function Navbar() {
       <div className="pr-4 relative">
         <img
           // TODO: fix profile picture
-          src={session?.user?.profile_picture_url}
+          src={
+            "https://media.licdn.com/dms/image/D4D03AQHbQ1DyxBl_FA/profile-displayphoto-shrink_800_800/0/1665669429401?e=1709164800&v=beta&t=UGPvNBJZX92-zc8a-YDwTpimPLqI5DJ2dmXnfabRKM4"
+          }
           alt="Foto de Perfil"
           ref={profileRef}
           onClick={toggleMenu}
