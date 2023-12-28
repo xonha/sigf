@@ -24,7 +24,7 @@ export default function EnrollButton({
         console.error("Error getting user:", error);
         return;
       }
-      const res = await fetch(`/api/enrollment`, {
+      const res = await fetch(`/api/enrollments`, {
         method: "POST",
         body: JSON.stringify({ userId: data.user.id, classId }),
       });
@@ -44,7 +44,7 @@ export default function EnrollButton({
         console.error("Error getting user:", error);
         return;
       }
-      const response = await fetch(`/api/enrollment`, {
+      const response = await fetch(`/api/enrollments`, {
         method: "DELETE",
         body: JSON.stringify({ userId: data.user.id, classId }),
       });
