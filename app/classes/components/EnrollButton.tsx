@@ -1,7 +1,7 @@
 "use client";
 
-import { enrollmentsAtom } from "@/app/atoms/enrollmentsAtom";
-import useUser from "@/app/hooks/useUser";
+import { enrollmentsAtom } from "@/app/utils/atoms/enrollmentsAtom";
+import useUser from "@/app/utils/hooks/useUser";
 import { FaBookmark, FaRegBookmark } from "react-icons/fa6";
 import { useRecoilState } from "recoil";
 

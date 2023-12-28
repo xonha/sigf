@@ -3,7 +3,7 @@
 import { Session } from "@supabase/auth-helpers-nextjs";
 import { useEffect, useRef, useState } from "react";
 import { FaBars } from "react-icons/fa";
-import supabase from "../api/db";
+import supabase from "../utils/db";
 import CreateClassesModal, {
   CreateClassesModalRef,
 } from "./CreateClassesModal";

@@ -1,8 +1,8 @@
 "use client";
 
-import { sortedClassesSelector } from "@/app/atoms/classesAtom";
-import { enrollmentsAtom } from "@/app/atoms/enrollmentsAtom";
-import useUser from "@/app/hooks/useUser";
+import { sortedClassesSelector } from "@/app/utils/atoms/classesAtom";
+import { enrollmentsAtom } from "@/app/utils/atoms/enrollmentsAtom";
+import useUser from "@/app/utils/hooks/useUser";
 import Link from "next/link";
 import { useEffect, useState } from "react";
 import { useRecoilValue, useSetRecoilState } from "recoil";

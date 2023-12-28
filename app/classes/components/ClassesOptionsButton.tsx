@@ -1,5 +1,5 @@
-import { classesAtom } from "@/app/atoms/classesAtom";
-import { useOutsideClick } from "@/app/hooks/useClickOutside";
+import { classesAtom } from "@/app/utils/atoms/classesAtom";
+import { useOutsideClick } from "@/app/utils/hooks/useClickOutside";
 import { useRef, useState } from "react";
 import { FaEllipsisVertical } from "react-icons/fa6";
 import { useRecoilState } from "recoil";
