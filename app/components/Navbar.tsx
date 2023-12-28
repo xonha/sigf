@@ -1,8 +1,8 @@
 "use client";
-
 import { Session } from "@supabase/auth-helpers-nextjs";
 import { useEffect, useRef, useState } from "react";
 import { FaBars } from "react-icons/fa";
+import profilePicture from "../profile.png";
 import supabase from "../utils/db";
 import CreateClassesModal, {
   CreateClassesModalRef,
@@ -68,10 +68,7 @@ export default function Navbar() {
 
       <div className="pr-4 relative">
         <img
-          // TODO: fix profile picture
-          src={
-            "https://media.licdn.com/dms/image/D4D03AQHbQ1DyxBl_FA/profile-displayphoto-shrink_800_800/0/1665669429401?e=1709164800&v=beta&t=UGPvNBJZX92-zc8a-YDwTpimPLqI5DJ2dmXnfabRKM4"
-          }
+          src={session?.user?.user_metadata?.avatar_url || profilePicture.src}
           alt="Foto de Perfil"
           ref={profileRef}
           onClick={toggleMenu}
@@ -79,7 +76,7 @@ export default function Navbar() {
         />
 
         {isProfileMenuVisible && (
-          <ul className="absolute right-4 bg-white border rounded-[10px] pt-2 px-2 flex flex-col items-center">
+          <ul className="absolute right-4 bg-white border rounded-[10px] pt-2 px-2 flex flex-col items-center z-50">
             <li className="pb-2">{session?.user?.email}</li>
             <li className="pb-2">
               <LogoutButton />

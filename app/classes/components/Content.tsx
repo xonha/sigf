@@ -23,7 +23,7 @@ export default function Content() {
     }
 
     try {
-      const res = await fetch(`/api/enrollments/${data.user.id}`);
+      const res = await fetch(`/api/enrollments/userId/${data.user.id}`);
       const resData = await res.json();
 
       const classesEnrolled = await resData.map(

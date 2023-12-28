@@ -4,38 +4,42 @@ import { ColDef } from "ag-grid-community";
 import "ag-grid-community/styles/ag-grid.css";
 import "ag-grid-community/styles/ag-theme-quartz.css";
 import { AgGridReact } from "ag-grid-react";
-import { useState } from "react";
+import { useParams } from "next/navigation";
+import { useEffect, useState } from "react";
 
 interface IRow {
-  nome: string;
-  company: string;
-  location: string;
+  classId: string;
+  userId: string;
+  status: string;
+  users_view: {
+    name: string;
+    email: string;
+  };
 }
 
 export default function Content() {
-  const [rowData, setRowData] = useState<IRow[]>([
-    {
-      nome: "Voyager",
-      company: "NASA",
-      location: "Cape Canaveral",
-    },
-    {
-      nome: "Apollo 13",
-      company: "NASA",
-      location: "Kennedy Space Center",
-    },
-    {
-      nome: "Falcon 9",
-      company: "SpaceX",
-      location: "Cape Canaveral",
-    },
+  const route = useParams();
+  const [rowData, setRowData] = useState<IRow[]>([]);
+  const [colDefs, _] = useState<ColDef<IRow>[]>([
+    { field: "users_view.name", headerName: "Nome", flex: 2 },
+    { field: "users_view.email", headerName: "Email", flex: 2 },
+    { field: "status", headerName: "Inscrição", flex: 2 },
   ]);
 
-  const [colDefs, setColDefs] = useState<ColDef<IRow>[]>([
-    { field: "nome", flex: 3 },
-    { field: "company", flex: 2 },
-    { field: "location", flex: 2 },
-  ]);
+  async function fetchEnrollments() {
+    try {
+      const res = await fetch(`/api/enrollments/classId/${route.id}`);
+      const res_data = await res.json();
+
+      setRowData(res_data);
+    } catch (error) {
+      console.error("Error fetching enrollments:", error);
+    }
+  }
+
+  useEffect(() => {
+    fetchEnrollments();
+  }, []);
 
   return (
     <div
