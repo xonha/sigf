@@ -1,38 +1,51 @@
 "use client";
-
+import { Session } from "@supabase/auth-helpers-nextjs";
 import { useEffect, useRef, useState } from "react";
 import { FaBars } from "react-icons/fa";
+import profilePicture from "../profile.png";
+import supabase from "../utils/db";
 import CreateClassesModal, {
   CreateClassesModalRef,
 } from "./CreateClassesModal";
 import LogoutButton from "./LogoutButton";
 
 export default function Navbar() {
-  const [isProfileMenuVisible, setProfileMenuVisible] = useState(false);
-
-  const modalRef = useRef<CreateClassesModalRef>(null);
-  const toggleMenu = () => setProfileMenuVisible(!isProfileMenuVisible);
-
   const profileRef = useRef<HTMLImageElement>(null);
-  const handleClickOutside = (event: MouseEvent) => {
+  const modalRef = useRef<CreateClassesModalRef>(null);
+  const [isProfileMenuVisible, setProfileMenuVisible] = useState(false);
+  const [session, setSession] = useState<Session | null>(null);
+
+  function toggleMenu() {
+    setProfileMenuVisible(!isProfileMenuVisible);
+  }
+  function toggleModal() {
+    modalRef.current?.toggleModal();
+  }
+  function handleClickOutside(event: MouseEvent) {
     if (
       profileRef.current &&
       !profileRef.current.contains(event.target as Node)
     ) {
       setProfileMenuVisible(false);
     }
-  };
-
-  useEffect(() => {
+  }
+  function addRemoveEventListeners() {
     document.addEventListener("click", handleClickOutside);
     return () => {
       document.removeEventListener("click", handleClickOutside);
     };
-  }, []);
-
-  function toggleModal() {
-    modalRef.current?.toggleModal();
   }
+  function handleGetSession() {
+    supabase.auth
+      .getSession()
+      .then((session) => setSession(session.data.session ?? null))
+      .catch((err) => {
+        console.log("ERROR GET SESSION: ", err);
+      });
+  }
+
+  useEffect(handleGetSession, []);
+  useEffect(addRemoveEventListeners, []);
 
   return (
     <nav className="border-b-[1px] border-gray-300 h-16 w-full flex items-center flex-row justify-between">
@@ -55,7 +68,7 @@ export default function Navbar() {
 
       <div className="pr-4 relative">
         <img
-          src="https://avatars.githubusercontent.com/u/25267506?v=4"
+          src={session?.user?.user_metadata?.avatar_url || profilePicture.src}
           alt="Foto de Perfil"
           ref={profileRef}
           onClick={toggleMenu}
@@ -63,8 +76,8 @@ export default function Navbar() {
         />
 
         {isProfileMenuVisible && (
-          <ul className="absolute right-4 bg-white border rounded-[10px] w-[150px] pt-2 flex flex-col items-center">
-            <li className="pb-2"></li>
+          <ul className="absolute right-4 bg-white border rounded-[10px] pt-2 px-2 flex flex-col items-center z-50">
+            <li className="pb-2">{session?.user?.email}</li>
             <li className="pb-2">
               <LogoutButton />
             </li>

@@ -17,7 +17,7 @@ export default function LogoutButton() {
       className="py-2 px-4 rounded-md no-underline bg-green-500 hover:bg-btn-background-hover text-white"
       onClick={logout}
     >
-      Logout
+      Sair
     </button>
   );
 }

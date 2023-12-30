@@ -1,6 +1,6 @@
 "use client";
 
-import { sortedClassesSelector } from "@/app/atoms/classesAtom";
+import { sortedClassesSelector } from "@/app/utils/atoms/classesAtom";
 import { useState } from "react";
 import { FaAngleDown, FaAngleRight } from "react-icons/fa6";
 import { useRecoilValue } from "recoil";

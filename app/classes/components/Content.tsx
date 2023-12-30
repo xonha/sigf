@@ -1,8 +1,9 @@
 "use client";
 
-import { sortedClassesSelector } from "@/app/atoms/classesAtom";
-import { enrollmentsAtom } from "@/app/atoms/enrollmentsAtom";
-import useUser from "@/app/hooks/useUser";
+import { sortedClassesSelector } from "@/app/utils/atoms/classesAtom";
+import { enrollmentsAtom } from "@/app/utils/atoms/enrollmentsAtom";
+import useUser from "@/app/utils/hooks/useUser";
+import Link from "next/link";
 import { useEffect, useState } from "react";
 import { useRecoilValue, useSetRecoilState } from "recoil";
 import ClassesOptionsButton from "./ClassesOptionsButton";
@@ -22,7 +23,7 @@ export default function Content() {
     }
 
     try {
-      const res = await fetch(`/api/enrollment/${data.user.id}`);
+      const res = await fetch(`/api/enrollments/userId/${data.user.id}`);
       const resData = await res.json();
 
       const classesEnrolled = await resData.map(
@@ -48,9 +49,12 @@ export default function Content() {
               key={classItem.id}
               className="w-[300px] h-[160px] border border-gray-300 rounded-[10px]"
             >
-              <div className="h-[100px] flex flex-row p-4 items-center justify-center">
+              <Link
+                href={`/classes/${classItem.id}`}
+                className="h-[100px] flex flex-row p-4 items-center justify-center"
+              >
                 {classItem.name}
-              </div>
+              </Link>
 
               <div className="flex flex-row-reverse gap-6 pt-5 px-4 relative border-t items-center">
                 <ClassesOptionsButton id={classItem.id} />

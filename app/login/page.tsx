@@ -58,6 +58,13 @@ export default function Login() {
         >
           Registrar
         </button>
+        <button
+          formAction="/api/auth/sign-in-google"
+          formNoValidate
+          className="bg-blue-500 rounded px-4 py-2 text-white mb-2 mt-10"
+        >
+          Entrar com Google
+        </button>
         <Messages />
       </form>
     </div>

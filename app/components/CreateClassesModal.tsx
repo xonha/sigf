@@ -1,4 +1,4 @@
-import { classesAtom } from "@/app/atoms/classesAtom";
+import { classesAtom } from "@/app/utils/atoms/classesAtom";
 import React, { useEffect, useImperativeHandle, useState } from "react";
 import { useSetRecoilState } from "recoil";
 import MainModal from "./MainModal";
