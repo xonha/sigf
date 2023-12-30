@@ -6,7 +6,7 @@ import "ag-grid-community/styles/ag-theme-quartz.css";
 import { AgGridReact } from "ag-grid-react";
 import { useParams } from "next/navigation";
 import { useEffect, useState } from "react";
-import AttendanceCellRenderer from "./AttendanceCellRenderer";
+import AttendanceCellRenderer from "./components/AttendanceCellRenderer";
 
 interface IRow {
   classId: string;
@@ -21,7 +21,7 @@ interface IRow {
   actionButton?: React.ReactNode;
 }
 
-export default function Content() {
+export default function ClassesIdPage() {
   const route = useParams();
   const [rowData, setRowData] = useState<IRow[]>([]);
   const [columnDefs, _] = useState<ColDef<IRow>[]>([
@@ -37,36 +37,12 @@ export default function Content() {
     },
   ]);
 
-  function formatDateString(dateString: string | number | Date) {
-    const dateObject = new Date(dateString);
-
-    const formattedDate = new Intl.DateTimeFormat("en-GB", {
-      day: "2-digit",
-      month: "2-digit",
-      year: "numeric",
-      hour: "2-digit",
-      minute: "2-digit",
-      second: "2-digit",
-    }).format(dateObject);
-
-    console.log(formattedDate);
-
-    return formattedDate;
-  }
-
   async function fetchEnrollments() {
     try {
       const res = await fetch(`/api/enrollments/classId/${route.id}`);
       const res_data = await res.json();
 
-      const formattedData = res_data.map(
-        (row: { createdAt: string | number | Date }) => ({
-          ...row,
-          createdAt: formatDateString(row.createdAt),
-        })
-      );
-
-      setRowData(formattedData);
+      setRowData(res_data);
     } catch (error) {
       console.error("Error fetching enrollments:", error);
     }

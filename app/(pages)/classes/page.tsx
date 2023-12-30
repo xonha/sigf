@@ -6,10 +6,10 @@ import useUser from "@/app/utils/hooks/useUser";
 import Link from "next/link";
 import { useEffect, useState } from "react";
 import { useRecoilValue, useSetRecoilState } from "recoil";
-import ClassesOptionsButton from "./ClassesOptionsButton";
-import EnrollButton from "./EnrollButton";
+import ClassesOptionsButton from "./components/ClassesOptionsButton";
+import EnrollButton from "./components/EnrollButton";
 
-export default function Content() {
+export default function ClassesPage() {
   const sortedClasses = useRecoilValue(sortedClassesSelector);
   const setUserEnrollments = useSetRecoilState(enrollmentsAtom);
   const [updateEnrollments, setUpdateEnrollments] = useState(false);
