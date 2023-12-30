@@ -1,25 +1,20 @@
 "use client";
+
 import { Session } from "@supabase/auth-helpers-nextjs";
 import { useEffect, useRef, useState } from "react";
 import { FaBars } from "react-icons/fa";
 import profilePicture from "../profile.png";
 import supabase from "../utils/db";
-import CreateClassesModal, {
-  CreateClassesModalRef,
-} from "./CreateClassesModal";
 import LogoutButton from "./LogoutButton";
+import NavbarCreateButton from "./NavbarCreateButton";
 
 export default function Navbar() {
   const profileRef = useRef<HTMLImageElement>(null);
-  const modalRef = useRef<CreateClassesModalRef>(null);
   const [isProfileMenuVisible, setProfileMenuVisible] = useState(false);
   const [session, setSession] = useState<Session | null>(null);
 
   function toggleMenu() {
     setProfileMenuVisible(!isProfileMenuVisible);
-  }
-  function toggleModal() {
-    modalRef.current?.toggleModal();
   }
   function handleClickOutside(event: MouseEvent) {
     if (
@@ -56,15 +51,7 @@ export default function Navbar() {
         </a>
       </div>
 
-      <div>
-        <CreateClassesModal ref={modalRef} />
-        <button
-          onClick={toggleModal}
-          className="bg-green-500 hover:bg-green-600 text-white font-bold py-2 px-4 rounded"
-        >
-          Criar Turma
-        </button>
-      </div>
+      <NavbarCreateButton />
 
       <div className="pr-4 relative">
         <img

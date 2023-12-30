@@ -6,7 +6,7 @@ export async function POST(request: NextRequest) {
 
   const { data, error } = await supabase
     .from("classes")
-    .insert([{ name: name }])
+    .insert([{ name }])
     .select();
 
   if (error) {
