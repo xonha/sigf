@@ -3,11 +3,11 @@ import React, { useEffect, useImperativeHandle, useState } from "react";
 import { useSetRecoilState } from "recoil";
 import MainModal from "./MainModal";
 
-export interface CreateClassesModalRef {
+export interface ModalCreateClassesRef {
   toggleModal: () => void;
 }
 
-export default React.forwardRef<CreateClassesModalRef>((_, ref) => {
+export default React.forwardRef<ModalCreateClassesRef>((_, ref) => {
   const setClasses = useSetRecoilState(classesAtom);
   const [name, setName] = useState("");
 

@@ -30,7 +30,6 @@ export default function PeriodsPage() {
     try {
       const res = await fetch(`/api/periods`);
       const res_data = await res.json();
-      console.log(res_data);
 
       setRowData(res_data);
     } catch (error) {

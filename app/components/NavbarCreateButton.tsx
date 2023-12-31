@@ -1,25 +1,35 @@
 "use client";
 import { useRef } from "react";
-import CreateClassesModal, {
-  CreateClassesModalRef,
-} from "./CreateClassesModal";
+import ModalCreateClasses, {
+  ModalCreateClassesRef,
+} from "./ModalCreateClasses";
+import ModalCreatePeriod, { ModalCreatePeriodRef } from "./ModalCreatePeriod";
+
+import { usePathname } from "next/navigation";
 
 export default function NavbarCreateButton() {
-  const modalRef = useRef<CreateClassesModalRef>(null);
+  const modalClassesRef = useRef<ModalCreateClassesRef>(null);
+  const modalPeriodRef = useRef<ModalCreatePeriodRef>(null);
+  const pathname = usePathname();
 
   function toggleModal() {
-    modalRef.current?.toggleModal();
+    if (pathname === "/classes") {
+      modalClassesRef.current?.toggleModal();
+    } else if (pathname === "/periods") {
+      modalPeriodRef.current?.toggleModal();
+    }
   }
 
   return (
-    <div>
-      <CreateClassesModal ref={modalRef} />
+    <>
+      <ModalCreateClasses ref={modalClassesRef} />
+      <ModalCreatePeriod ref={modalPeriodRef} />
       <button
         onClick={toggleModal}
         className="bg-green-500 hover:bg-green-600 text-white font-bold py-2 px-4 rounded"
       >
-        Criar Turma
+        {pathname === "/classes" ? "Criar Turma" : "Criar Período"}
       </button>
-    </div>
+    </>
   );
 }
