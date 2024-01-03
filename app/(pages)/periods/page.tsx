@@ -1,24 +1,23 @@
 "use client";
 
+import { periodsAtom } from "@/app/utils/atoms/periodsAtom";
+import { Database } from "@/database.types";
 import { ColDef } from "ag-grid-community";
 import "ag-grid-community/styles/ag-grid.css";
 import "ag-grid-community/styles/ag-theme-quartz.css";
 import { AgGridReact } from "ag-grid-react";
 import { useEffect, useState } from "react";
-
-interface IRow {
-  createdAt: string;
-  semester: string;
-  year: string;
-  active: boolean;
-  startDate: string;
-  endDate: string;
-  actionButton?: React.ReactNode;
-}
+import { useRecoilState } from "recoil";
 
 export default function PeriodsPage() {
-  const [rowData, setRowData] = useState<IRow[]>([]);
-  const [columnDefs, _] = useState<ColDef<IRow>[]>([
+  const [periods, setPeriods] =
+    useRecoilState<Database["public"]["Tables"]["period"]["Insert"][]>(
+      periodsAtom
+    );
+
+  const [columnDefs, _] = useState<
+    ColDef<Database["public"]["Tables"]["period"]["Insert"]>[]
+  >([
     { field: "active", headerName: "Ativo", flex: 1 },
     { field: "semester", headerName: "Semestre", flex: 2 },
     { field: "year", headerName: "Ano", flex: 2 },
@@ -31,7 +30,7 @@ export default function PeriodsPage() {
       const res = await fetch(`/api/periods`);
       const res_data = await res.json();
 
-      setRowData(res_data);
+      setPeriods(res_data);
     } catch (error) {
       console.error("Error fetching enrollments:", error);
     }
@@ -46,7 +45,7 @@ export default function PeriodsPage() {
       className="ag-theme-quartz m-4"
       style={{ width: "100%", fontFamily: "monospace" }}
     >
-      <AgGridReact rowData={rowData} columnDefs={columnDefs} />
+      <AgGridReact rowData={periods} columnDefs={columnDefs} />
     </div>
   );
 }

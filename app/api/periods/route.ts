@@ -11,9 +11,9 @@ export async function GET() {
 }
 
 export async function POST(request: Request) {
-  const formData = await request.formData();
+  const body = await request.json();
 
-  const { data, error } = await supabase.from("period").insert(request.body);
+  const { data, error } = await supabase.from("period").insert(body);
 
   if (error) {
     return NextResponse.json(error, { status: 500 });

@@ -18,19 +18,15 @@ export default React.forwardRef<ModalCreateClassesRef>((_, ref) => {
     toggleModal,
   }));
 
-  useEffect(() => {
-    async function fetchClasses() {
-      try {
-        const res = await fetch("/api/classes");
-        const data = await res.json();
-        setClasses(data);
-      } catch (error) {
-        console.error("Error fetching classes:", error);
-      }
+  async function fetchClasses() {
+    try {
+      const res = await fetch("/api/classes");
+      const data = await res.json();
+      setClasses(data);
+    } catch (error) {
+      console.error("Error fetching classes:", error);
     }
-
-    fetchClasses();
-  }, []);
+  }
 
   async function createClass(className: string) {
     try {
@@ -51,6 +47,10 @@ export default React.forwardRef<ModalCreateClassesRef>((_, ref) => {
       console.error("Error creating class:", error);
     }
   }
+
+  useEffect(() => {
+    fetchClasses();
+  }, []);
 
   return (
     <>

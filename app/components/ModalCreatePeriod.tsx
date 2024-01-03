@@ -1,4 +1,8 @@
+import { Database } from "@/database.types";
 import React, { useImperativeHandle, useState } from "react";
+import DatePicker from "react-datepicker";
+import { useSetRecoilState } from "recoil";
+import { periodsAtom } from "../utils/atoms/periodsAtom";
 import MainModal from "./MainModal";
 
 export interface ModalCreatePeriodRef {
@@ -6,14 +10,46 @@ export interface ModalCreatePeriodRef {
 }
 
 export default React.forwardRef<ModalCreatePeriodRef>((_, ref) => {
-  const [name, setName] = useState("");
-
+  const setPeriods = useSetRecoilState(periodsAtom);
   const [isModalOpen, setIsModalOpen] = useState(false);
   const toggleModal = () => setIsModalOpen(!isModalOpen);
+
+  const [startDate, setStartDate] = useState(new Date());
+  const [endDate, setEndDate] = useState(new Date());
+  const [year, setYear] = useState(new Date());
+  const [semester, setSemester] =
+    useState<Database["public"]["Enums"]["semesterEnum"]>("first");
 
   useImperativeHandle(ref, () => ({
     toggleModal,
   }));
+
+  async function createPeriod(
+    year: Date,
+    semester: Database["public"]["Enums"]["semesterEnum"],
+    startDate: Date,
+    endDate: Date
+  ) {
+    try {
+      const body = {
+        year: year.getFullYear(),
+        semester,
+        startDate: startDate.toISOString(),
+        endDate: endDate.toISOString(),
+      };
+      await fetch("/api/periods", {
+        method: "POST",
+        body: JSON.stringify(body),
+      });
+
+      const res = await fetch("/api/periods");
+      const data = await res.json();
+
+      setPeriods(data);
+    } catch (error) {
+      console.error("Error creating period:", error);
+    }
+  }
 
   return (
     <>
@@ -24,48 +60,59 @@ export default React.forwardRef<ModalCreatePeriodRef>((_, ref) => {
           method="post"
           onSubmit={(e) => {
             e.preventDefault();
-            // print all form data to console
-            const data = new FormData(e.target as HTMLFormElement);
-            for (const [key, value] of data.entries()) {
-              console.log(key, value);
-            }
+            createPeriod(year, semester, startDate, endDate);
+            setIsModalOpen(false);
           }}
         >
           <label className="text-md" htmlFor="year">
             Ano
           </label>
-          <input
+          <DatePicker
             className="rounded-md px-4 py-2 bg-inherit border mb-6"
-            name="year"
-            placeholder="2024"
-            required
+            selected={year}
+            onChange={(date) => {
+              setYear(date || new Date());
+            }}
+            showYearPicker
+            dateFormat="yyyy"
           />
           <label className="text-md" htmlFor="semester">
             Semestre
           </label>
-          <input
+          <select
             className="rounded-md px-4 py-2 bg-inherit border mb-6"
-            name="semester"
-            placeholder="primeiro"
+            value={semester}
+            onChange={(e) => {
+              setSemester(
+                e.target.value as Database["public"]["Enums"]["semesterEnum"]
+              );
+            }}
             required
-          />
+          >
+            <option value="first">Primeiro</option>
+            <option value="second">Segundo</option>
+            <option value="firstVacation">Primeiro Férias</option>
+            <option value="secondVacation">Segundo Férias</option>
+          </select>
           <label className="text-md" htmlFor="startDate">
             Data de Início
           </label>
-          <input
+          <DatePicker
             className="rounded-md px-4 py-2 bg-inherit border mb-6"
-            name="startDate"
-            placeholder="2024-03-24"
-            required
+            selected={startDate}
+            onChange={(date) => {
+              setStartDate(date || new Date());
+            }}
           />
           <label className="text-md" htmlFor="endDate">
             Data de Término
           </label>
-          <input
+          <DatePicker
             className="rounded-md px-4 py-2 bg-inherit border mb-6"
-            name="endDate"
-            placeholder="2024-07-24"
-            required
+            selected={endDate}
+            onChange={(date) => {
+              setEndDate(date || new Date());
+            }}
           />
           <div className="flex flex-row-reverse gap-4">
             <button className="bg-green-500 hover:bg-green-600 text-white font-bold py-2 px-4 rounded">

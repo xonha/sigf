@@ -51,6 +51,7 @@ export interface Database {
           createdAt: string;
           date: string;
           id: string;
+          periodId: string | null;
           presence: boolean;
           userId: string;
         };
@@ -59,6 +60,7 @@ export interface Database {
           createdAt?: string;
           date: string;
           id?: string;
+          periodId?: string | null;
           presence?: boolean;
           userId: string;
         };
@@ -67,6 +69,7 @@ export interface Database {
           createdAt?: string;
           date?: string;
           id?: string;
+          periodId?: string | null;
           presence?: boolean;
           userId?: string;
         };
@@ -79,10 +82,24 @@ export interface Database {
             referencedColumns: ["id"];
           },
           {
+            foreignKeyName: "attendance_periodId_fkey";
+            columns: ["periodId"];
+            isOneToOne: false;
+            referencedRelation: "period";
+            referencedColumns: ["id"];
+          },
+          {
             foreignKeyName: "attendance_userId_fkey";
             columns: ["userId"];
             isOneToOne: false;
             referencedRelation: "users";
+            referencedColumns: ["id"];
+          },
+          {
+            foreignKeyName: "attendance_userId_fkey";
+            columns: ["userId"];
+            isOneToOne: false;
+            referencedRelation: "users_view";
             referencedColumns: ["id"];
           }
         ];
@@ -136,16 +153,19 @@ export interface Database {
         Row: {
           classId: string;
           createdAt: string;
+          status: Database["public"]["Enums"]["enrollmentStatus"];
           userId: string;
         };
         Insert: {
           classId: string;
           createdAt?: string;
+          status?: Database["public"]["Enums"]["enrollmentStatus"];
           userId: string;
         };
         Update: {
           classId?: string;
           createdAt?: string;
+          status?: Database["public"]["Enums"]["enrollmentStatus"];
           userId?: string;
         };
         Relationships: [
@@ -161,6 +181,13 @@ export interface Database {
             columns: ["userId"];
             isOneToOne: false;
             referencedRelation: "users";
+            referencedColumns: ["id"];
+          },
+          {
+            foreignKeyName: "enrollment_userId_fkey";
+            columns: ["userId"];
+            isOneToOne: false;
+            referencedRelation: "users_view";
             referencedColumns: ["id"];
           }
         ];
@@ -196,36 +223,61 @@ export interface Database {
       };
       period: {
         Row: {
+          active: boolean;
           createdAt: string;
+          endDate: string;
           id: string;
-          period: number;
-          vacation: boolean;
+          semester: Database["public"]["Enums"]["semesterEnum"];
+          startDate: string;
           year: number;
         };
         Insert: {
+          active?: boolean;
           createdAt?: string;
           id?: string;
-          period: number;
-          vacation?: boolean;
+          semester: Database["public"]["Enums"]["semesterEnum"];
+          startDate: string;
+          endDate: string;
           year: number;
         };
         Update: {
+          active?: boolean;
           createdAt?: string;
+          endDate?: string;
           id?: string;
-          period?: number;
-          vacation?: boolean;
+          semester?: Database["public"]["Enums"]["semesterEnum"];
+          startDate?: string;
           year?: number;
         };
         Relationships: [];
       };
     };
     Views: {
-      [_ in never]: never;
+      users_view: {
+        Row: {
+          email: string | null;
+          id: string | null;
+          name: string | null;
+        };
+        Insert: {
+          email?: string | null;
+          id?: string | null;
+          name?: never;
+        };
+        Update: {
+          email?: string | null;
+          id?: string | null;
+          name?: never;
+        };
+        Relationships: [];
+      };
     };
     Functions: {
       [_ in never]: never;
     };
     Enums: {
+      enrollmentStatus: "pending" | "active" | "inactive";
+      semesterEnum: "first" | "second" | "firstVacation" | "secondVacation";
       state:
         | "AC"
         | "AL"
