@@ -12,24 +12,37 @@ export default function NavbarCreateButton() {
   const modalPeriodRef = useRef<ModalCreatePeriodRef>(null);
   const pathname = usePathname();
 
-  function toggleModal() {
-    if (pathname === "/classes") {
-      modalClassesRef.current?.toggleModal();
-    } else if (pathname === "/periods") {
+  if (pathname === "/periods") {
+    function toggleModal() {
       modalPeriodRef.current?.toggleModal();
     }
+    return (
+      <>
+        <ModalCreatePeriod ref={modalPeriodRef} />
+        <button
+          onClick={toggleModal}
+          className="bg-green-500 hover:bg-green-600 text-white font-bold py-2 px-4 rounded"
+        >
+          Criar Período
+        </button>
+      </>
+    );
+  } else if (pathname === "/classes") {
+    function toggleModal() {
+      modalClassesRef.current?.toggleModal();
+    }
+    return (
+      <>
+        <ModalCreateClasses ref={modalClassesRef} />
+        <button
+          onClick={toggleModal}
+          className="bg-green-500 hover:bg-green-600 text-white font-bold py-2 px-4 rounded"
+        >
+          Criar Turma
+        </button>
+      </>
+    );
   }
 
-  return (
-    <>
-      <ModalCreateClasses ref={modalClassesRef} />
-      <ModalCreatePeriod ref={modalPeriodRef} />
-      <button
-        onClick={toggleModal}
-        className="bg-green-500 hover:bg-green-600 text-white font-bold py-2 px-4 rounded"
-      >
-        {pathname === "/classes" ? "Criar Turma" : "Criar Período"}
-      </button>
-    </>
-  );
+  return;
 }
