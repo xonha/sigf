@@ -13,7 +13,6 @@ import ModalEditPeriods, {
 } from "./components/ModalEditPeriods";
 
 export default function PeriodsPage() {
-  const modalPeriodsRef = useRef<ModalEditPeriodRef>(null);
   const [periods, setPeriods] =
     useRecoilState<Database["public"]["Tables"]["period"]["Insert"][]>(
       periodsAtom
@@ -30,10 +29,6 @@ export default function PeriodsPage() {
     { headerName: "Ações", minWidth: 150, cellRenderer: actionCellRenderer },
   ]);
 
-  function toggleModal() {
-    modalPeriodsRef.current?.toggleModal();
-  }
-
   async function deletePeriod(id: string) {
     try {
       await fetch(`/api/periods`, {
@@ -47,34 +42,20 @@ export default function PeriodsPage() {
     }
   }
 
-  async function updatePeriod(
-    data: Database["public"]["Tables"]["period"]["Row"]
-  ) {
-    try {
-      await fetch(`/api/periods`, {
-        method: "PATCH",
-        body: JSON.stringify(data),
-      });
-
-      await fetchPeriods();
-    } catch (error) {
-      console.error("Error updating class:", error);
-    }
-  }
-
   function actionCellRenderer({
     data,
   }: {
     data: Database["public"]["Tables"]["period"]["Row"];
   }) {
+    const modalPeriodsRef = useRef<ModalEditPeriodRef>(null);
+
     return (
       <div className="flex gap-2 w-full">
         <ModalEditPeriods ref={modalPeriodsRef} data={data} />
 
         <button
           className="action-button edit bg-green-500 hover:bg-green-600 text-white font-bold px-4 rounded h-full"
-          // onClick={() => updatePeriod(data)}
-          onClick={toggleModal}
+          onClick={() => modalPeriodsRef.current?.toggleModal()}
           data-action="edit"
         >
           Editar
