@@ -1,6 +1,7 @@
 import { classesAtom } from "@/app/utils/atoms/classesAtom";
 import React, { useEffect, useImperativeHandle, useState } from "react";
-import { useSetRecoilState } from "recoil";
+import { useRecoilState, useSetRecoilState } from "recoil";
+import { periodsAtom } from "../utils/atoms/periodsAtom";
 import MainModal from "./MainModal";
 
 export interface ModalCreateClassesRef {
@@ -9,14 +10,28 @@ export interface ModalCreateClassesRef {
 
 export default React.forwardRef<ModalCreateClassesRef>((_, ref) => {
   const setClasses = useSetRecoilState(classesAtom);
+  const [periods, setPeriods] = useRecoilState(periodsAtom);
+  const [isModalOpen, setIsModalOpen] = useState(false);
   const [name, setName] = useState("");
 
-  const [isModalOpen, setIsModalOpen] = useState(false);
-  const toggleModal = () => setIsModalOpen(!isModalOpen);
+  function toggleModal() {
+    setIsModalOpen(!isModalOpen);
+  }
+  function handleFormSubmit(e) {
+    e.preventDefault();
+    fetchPeriods();
+    createClass(name, e.target[1].value);
+  }
 
-  useImperativeHandle(ref, () => ({
-    toggleModal,
-  }));
+  async function fetchPeriods() {
+    try {
+      const res = await fetch("/api/periods");
+      const data = await res.json();
+      setPeriods(data);
+    } catch (error) {
+      console.error("Error fetching periods:", error);
+    }
+  }
 
   async function fetchClasses() {
     try {
@@ -28,9 +43,9 @@ export default React.forwardRef<ModalCreateClassesRef>((_, ref) => {
     }
   }
 
-  async function createClass(className: string) {
+  async function createClass(name: string, periodId: string) {
     try {
-      const body = { name: className };
+      const body = { name, periodId };
 
       await fetch("/api/classes", {
         method: "POST",
@@ -49,36 +64,56 @@ export default React.forwardRef<ModalCreateClassesRef>((_, ref) => {
   }
 
   useEffect(() => {
+    fetchPeriods();
     fetchClasses();
   }, []);
+
+  useImperativeHandle(ref, () => ({
+    toggleModal,
+  }));
 
   return (
     <>
       <MainModal isOpen={isModalOpen} onRequestClose={toggleModal}>
-        <div className="flex gap-4">
-          <h2>Nome:</h2>
+        <form
+          className="flex-1 flex flex-col w-full justify-center gap-2 text-foreground"
+          onSubmit={handleFormSubmit}
+        >
+          <label className="text-md" htmlFor="name">
+            Nome
+          </label>
           <input
+            className="border rounded-md px-4 py-2 pl-2"
             type="text"
             placeholder="Avançada 1"
             value={name}
             onChange={(e) => setName(e.target.value)}
-            className="w-[160px] border rounded pl-2"
           />
-        </div>
-        <div className="flex justify-end gap-4 mt-4">
-          <button
-            className="border border-gray-700 rounded px-4 py-2 text-black"
-            onClick={() => setIsModalOpen(false)}
+          <label className="text-md" htmlFor="semester">
+            Semestre
+          </label>
+          <select
+            className="rounded-md px-4 py-2 bg-inherit border mb-6"
+            name="periodId"
           >
-            Fechar
-          </button>
-          <button
-            className="bg-green-500 hover:bg-green-600 text-white font-bold py-2 px-4 rounded"
-            onClick={() => createClass(name)}
-          >
-            Criar
-          </button>
-        </div>
+            {periods.map((period) => (
+              <option key={period.id} value={period.id}>
+                {period.year} - {period.semester}
+              </option>
+            ))}
+          </select>
+          <div className="flex justify-end gap-4 mt-4">
+            <button
+              className="border border-gray-700 rounded px-4 py-2 text-black"
+              onClick={() => setIsModalOpen(false)}
+            >
+              Fechar
+            </button>
+            <button className="bg-green-500 hover:bg-green-600 text-white font-bold py-2 px-4 rounded">
+              Criar
+            </button>
+          </div>
+        </form>
       </MainModal>
     </>
   );

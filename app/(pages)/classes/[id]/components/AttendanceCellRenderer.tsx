@@ -9,8 +9,16 @@ export default function AttendanceCellRenderer() {
   }
 
   return (
-    <button className="0 text-blue-500 font-bold" onClick={onClick}>
-      Presença
-    </button>
+    <div className="flex gap-4">
+      <button className="text-green-500 font-bold" onClick={onClick}>
+        Aprovar
+      </button>
+      <button className="text-red-500 font-bold" onClick={onClick}>
+        Revogar
+      </button>
+      <button className="text-blue-500 font-bold" onClick={onClick}>
+        Editar
+      </button>
+    </div>
   );
 }

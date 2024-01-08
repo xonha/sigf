@@ -27,11 +27,11 @@ export default function ClassesIdPage() {
   const [columnDefs, _] = useState<ColDef<IRow>[]>([
     { field: "users_view.name", headerName: "Nome", flex: 2 },
     { field: "users_view.email", headerName: "Email", flex: 2 },
-    { field: "status", headerName: "Inscrição", flex: 2 },
-    { field: "createdAt", headerName: "Data", flex: 2 },
+    { field: "status", headerName: "Status da Inscrição", flex: 2 },
+    { field: "createdAt", headerName: "Data da Inscrição", flex: 2 },
     {
       field: "attendance",
-      headerName: "Presença",
+      headerName: "Ações",
       flex: 2,
       cellRenderer: AttendanceCellRenderer,
     },

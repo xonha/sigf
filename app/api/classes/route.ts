@@ -2,11 +2,11 @@ import { NextRequest, NextResponse } from "next/server";
 import supabase from "../../utils/db";
 
 export async function POST(request: NextRequest) {
-  const { name } = await request.json();
+  const body = await request.json();
 
   const { data, error } = await supabase
     .from("classes")
-    .insert([{ name }])
+    .insert([body])
     .select();
 
   if (error) {

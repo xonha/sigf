@@ -64,18 +64,6 @@ export default React.forwardRef<ModalCreatePeriodRef>((_, ref) => {
             setIsModalOpen(false);
           }}
         >
-          <label className="text-md" htmlFor="year">
-            Ano
-          </label>
-          <DatePicker
-            className="rounded-md px-4 py-2 bg-inherit border mb-6"
-            selected={year}
-            onChange={(date) => {
-              setYear(date || new Date());
-            }}
-            showYearPicker
-            dateFormat="yyyy"
-          />
           <label className="text-md" htmlFor="semester">
             Semestre
           </label>
@@ -94,6 +82,18 @@ export default React.forwardRef<ModalCreatePeriodRef>((_, ref) => {
             <option value="firstVacation">Primeiro Férias</option>
             <option value="secondVacation">Segundo Férias</option>
           </select>
+          <label className="text-md" htmlFor="year">
+            Ano
+          </label>
+          <DatePicker
+            className="rounded-md px-4 py-2 bg-inherit border mb-6"
+            selected={year}
+            onChange={(date) => {
+              setYear(date || new Date());
+            }}
+            showYearPicker
+            dateFormat="yyyy"
+          />
           <label className="text-md" htmlFor="startDate">
             Data de Início
           </label>

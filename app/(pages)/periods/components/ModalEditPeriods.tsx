@@ -65,32 +65,21 @@ export default React.forwardRef<ModalEditPeriodRef, ModalEditPeriodProps>(
       }
     }
 
+    function handleFormSubmit(e: React.FormEvent<HTMLFormElement>) {
+      e.preventDefault();
+      editPeriod(year, semester, startDate, endDate);
+      setIsModalOpen(false);
+    }
+
     return (
       <>
         <MainModal isOpen={isModalOpen} onRequestClose={toggleModal}>
           <form
             className="flex-1 flex flex-col w-full justify-center gap-2 text-foreground"
-            onSubmit={(e) => {
-              e.preventDefault();
-              editPeriod(year, semester, startDate, endDate);
-              setIsModalOpen(false);
-            }}
+            onSubmit={handleFormSubmit}
           >
-            <h1>{semester}</h1>
-            <label className="text-md" htmlFor="year">
-              Ano
-            </label>
-            <DatePicker
-              className="rounded-md px-4 py-2 bg-inherit border mb-6"
-              selected={year}
-              onChange={(date) => {
-                setYear(date || new Date());
-              }}
-              showYearPicker
-              dateFormat="yyyy"
-            />
             <label className="text-md" htmlFor="semester">
-              Semestre2113
+              Semestre
             </label>
             <select
               className="rounded-md px-4 py-2 bg-inherit border mb-6"
@@ -107,6 +96,18 @@ export default React.forwardRef<ModalEditPeriodRef, ModalEditPeriodProps>(
               <option value="firstVacation">Primeiro Férias</option>
               <option value="secondVacation">Segundo Férias</option>
             </select>
+            <label className="text-md" htmlFor="year">
+              Ano
+            </label>
+            <DatePicker
+              className="rounded-md px-4 py-2 bg-inherit border mb-6"
+              selected={year}
+              onChange={(date) => {
+                setYear(date || new Date());
+              }}
+              showYearPicker
+              dateFormat="yyyy"
+            />
             <label className="text-md" htmlFor="startDate">
               Data de Início
             </label>
