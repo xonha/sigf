@@ -112,7 +112,7 @@ export interface Database {
           id: string;
           isActive: boolean;
           name: string;
-          periodId: string | null;
+          periodId: string;
         };
         Insert: {
           createdAt?: string;
@@ -121,7 +121,7 @@ export interface Database {
           id?: string;
           isActive?: boolean;
           name: string;
-          periodId?: string | null;
+          periodId: string;
         };
         Update: {
           createdAt?: string;
@@ -130,7 +130,7 @@ export interface Database {
           id?: string;
           isActive?: boolean;
           name?: string;
-          periodId?: string | null;
+          periodId?: string;
         };
         Relationships: [
           {
@@ -234,10 +234,10 @@ export interface Database {
         Insert: {
           active?: boolean;
           createdAt?: string;
+          endDate: string;
           id?: string;
           semester: Database["public"]["Enums"]["semesterEnum"];
           startDate: string;
-          endDate: string;
           year: number;
         };
         Update: {
@@ -250,6 +250,39 @@ export interface Database {
           year?: number;
         };
         Relationships: [];
+      };
+      users: {
+        Row: {
+          createdAt: string;
+          id: string;
+          role: Database["public"]["Enums"]["userRole"];
+        };
+        Insert: {
+          createdAt?: string;
+          id: string;
+          role?: Database["public"]["Enums"]["userRole"];
+        };
+        Update: {
+          createdAt?: string;
+          id?: string;
+          role?: Database["public"]["Enums"]["userRole"];
+        };
+        Relationships: [
+          {
+            foreignKeyName: "users_id_fkey";
+            columns: ["id"];
+            isOneToOne: true;
+            referencedRelation: "users";
+            referencedColumns: ["id"];
+          },
+          {
+            foreignKeyName: "users_id_fkey";
+            columns: ["id"];
+            isOneToOne: true;
+            referencedRelation: "users_view";
+            referencedColumns: ["id"];
+          }
+        ];
       };
     };
     Views: {
@@ -276,7 +309,7 @@ export interface Database {
       [_ in never]: never;
     };
     Enums: {
-      enrollmentStatus: "pending" | "active" | "inactive";
+      enrollmentStatus: "pending" | "approved" | "rejected";
       semesterEnum: "first" | "second" | "firstVacation" | "secondVacation";
       state:
         | "AC"
@@ -305,6 +338,7 @@ export interface Database {
         | "SP"
         | "SE"
         | "TO";
+      userRole: "student" | "teacher" | "admin";
     };
     CompositeTypes: {
       [_ in never]: never;
