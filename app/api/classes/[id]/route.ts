@@ -26,3 +26,15 @@ export async function PATCH(request: NextRequest, { params }: any) {
   }
   return NextResponse.json(data);
 }
+
+export async function GET(_, { params }) {
+  const { data, error } = await supabase
+    .from("classes")
+    .select("*, period(*)")
+    .eq("id", params.id);
+
+  if (error) {
+    return NextResponse.json(error, { status: 500 });
+  }
+  return NextResponse.json(data[0]);
+}

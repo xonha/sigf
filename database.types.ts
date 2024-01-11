@@ -47,47 +47,24 @@ export interface Database {
       }
       attendance: {
         Row: {
-          classId: string
           createdAt: string
-          date: string
           id: string
-          periodId: string | null
           presence: boolean
           userId: string
         }
         Insert: {
-          classId: string
           createdAt?: string
-          date: string
           id?: string
-          periodId?: string | null
           presence?: boolean
           userId: string
         }
         Update: {
-          classId?: string
           createdAt?: string
-          date?: string
           id?: string
-          periodId?: string | null
           presence?: boolean
           userId?: string
         }
         Relationships: [
-          {
-            foreignKeyName: "attendance_classId_fkey"
-            columns: ["classId"]
-            isOneToOne: false
-            referencedRelation: "classes"
-            referencedColumns: ["id"]
-          },
-          {
-            foreignKeyName: "attendance_periodId_fkey"
-            columns: ["periodId"]
-            isOneToOne: false
-            referencedRelation: "period"
-            referencedColumns: ["id"]
-          },
           {
             foreignKeyName: "attendance_userId_fkey"
             columns: ["userId"]
@@ -104,6 +81,35 @@ export interface Database {
           }
         ]
       }
+      classDates: {
+        Row: {
+          classId: string
+          createdAt: string
+          date: string
+          id: string
+        }
+        Insert: {
+          classId: string
+          createdAt?: string
+          date: string
+          id?: string
+        }
+        Update: {
+          classId?: string
+          createdAt?: string
+          date?: string
+          id?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "classDates_classId_fkey"
+            columns: ["classId"]
+            isOneToOne: false
+            referencedRelation: "classes"
+            referencedColumns: ["id"]
+          }
+        ]
+      }
       classes: {
         Row: {
           createdAt: string
@@ -113,6 +119,8 @@ export interface Database {
           isActive: boolean
           name: string
           periodId: string
+          teacherId: string | null
+          week_days: string
         }
         Insert: {
           createdAt?: string
@@ -122,6 +130,8 @@ export interface Database {
           isActive?: boolean
           name: string
           periodId: string
+          teacherId?: string | null
+          week_days: string
         }
         Update: {
           createdAt?: string
@@ -131,6 +141,8 @@ export interface Database {
           isActive?: boolean
           name?: string
           periodId?: string
+          teacherId?: string | null
+          week_days?: string
         }
         Relationships: [
           {
@@ -145,6 +157,20 @@ export interface Database {
             columns: ["periodId"]
             isOneToOne: false
             referencedRelation: "period"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "classes_teacherId_fkey"
+            columns: ["teacherId"]
+            isOneToOne: false
+            referencedRelation: "users"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "classes_teacherId_fkey"
+            columns: ["teacherId"]
+            isOneToOne: false
+            referencedRelation: "users_view"
             referencedColumns: ["id"]
           }
         ]

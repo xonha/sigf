@@ -2,6 +2,7 @@ import { classesAtom } from "@/app/utils/atoms/classesAtom";
 import React, { useEffect, useImperativeHandle, useState } from "react";
 import { useRecoilState, useSetRecoilState } from "recoil";
 import { periodsAtom } from "../utils/atoms/periodsAtom";
+import { validWeekDays } from "../utils/types/WeekDays";
 import MainModal from "./MainModal";
 
 export interface ModalCreateClassesRef {
@@ -11,8 +12,10 @@ export interface ModalCreateClassesRef {
 export default React.forwardRef<ModalCreateClassesRef>((_, ref) => {
   const setClasses = useSetRecoilState(classesAtom);
   const [periods, setPeriods] = useRecoilState(periodsAtom);
+  const [selectedWeekdays, setSelectedWeekdays] = useState<string[]>([]);
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [name, setName] = useState("");
+
 
   function toggleModal() {
     setIsModalOpen(!isModalOpen);
@@ -20,8 +23,15 @@ export default React.forwardRef<ModalCreateClassesRef>((_, ref) => {
   function handleFormSubmit(e) {
     e.preventDefault();
     fetchPeriods();
-    createClass(name, e.target[1].value);
+    createClass(name, e.target[1].value, selectedWeekdays);
+    setSelectedWeekdays([]);
   }
+  function handleWeekDaysCheckboxChange(weekday) {
+    const updatedWeekdays = selectedWeekdays.includes(weekday)
+      ? selectedWeekdays.filter((day) => day !== weekday)
+      : [...selectedWeekdays, weekday];
+    setSelectedWeekdays(updatedWeekdays);
+  };
 
   async function fetchPeriods() {
     try {
@@ -43,9 +53,11 @@ export default React.forwardRef<ModalCreateClassesRef>((_, ref) => {
     }
   }
 
-  async function createClass(name: string, periodId: string) {
+  async function createClass(name: string, periodId: string, weekDays: string[]) {
+    const week_days = weekDays.join(",");
+
     try {
-      const body = { name, periodId };
+      const body = { name, periodId, week_days };
 
       await fetch("/api/classes", {
         method: "POST",
@@ -102,6 +114,26 @@ export default React.forwardRef<ModalCreateClassesRef>((_, ref) => {
               </option>
             ))}
           </select>
+          <label className="text-md" htmlFor="weekdays">
+          Dias da Semana
+        </label>
+        <div className="flex gap-4">
+          {validWeekDays.map((weekday) => (
+            <div key={weekday} className="flex items-center">
+              <input
+                type="checkbox"
+                id={weekday}
+                name="weekdays"
+                value={weekday}
+                checked={selectedWeekdays.includes(weekday)}
+                onChange={() => handleWeekDaysCheckboxChange(weekday)}
+              />
+              <label className="ml-2" htmlFor={weekday}>
+                {weekday}
+              </label>
+            </div>
+          ))}
+        </div>
           <div className="flex justify-end gap-4 mt-4">
             <button
               className="border border-gray-700 rounded px-4 py-2 text-black"

@@ -28,13 +28,13 @@ export default function ClassesIdPage() {
   const columnDefs: ColDef<IRow>[] = [
     { field: "users_view.name", headerName: "Nome", flex: 3 },
     { field: "users_view.email", headerName: "Email", flex: 3 },
-    { field: "createdAt", headerName: "Data", flex: 2 },
+    { field: "createdAt", headerName: "Data da inscrição", flex: 3 },
     { field: "danceRole", headerName: "Papel", flex: 2 },
     { field: "status", headerName: "Inscrição", flex: 2 },
     {
       field: "actionButton",
       headerName: "Ações",
-      flex: 2,
+      flex: 3,
       cellRenderer: actionButtonRenderer,
     },
   ];
