@@ -11,6 +11,9 @@ export default function NavbarCreateButton() {
   const modalClassesRef = useRef<ModalCreateClassesRef>(null);
   const modalPeriodRef = useRef<ModalCreatePeriodRef>(null);
   const pathname = usePathname();
+  const classesIdRegex = new RegExp(
+    /\/classes\/[0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{12}$/
+  );
 
   if (pathname === "/periods") {
     function toggleModal() {
@@ -41,6 +44,17 @@ export default function NavbarCreateButton() {
           Criar Turma
         </button>
       </>
+    );
+  } else if (pathname.match(classesIdRegex)) {
+    return (
+      <div>
+        <a
+          className="bg-green-500 hover:bg-green-600 text-white font-bold py-2 px-4 rounded"
+          href={`${pathname}/attendance`}
+        >
+          Presenças
+        </a>
+      </div>
     );
   }
 

@@ -13,6 +13,7 @@ interface IRow {
   userId: string;
   status: Database["public"]["Enums"]["enrollmentStatus"];
   attendance: string;
+  danceRole: Database["public"]["Enums"]["danceRole"];
   createdAt: Date;
   users_view: {
     name: string;
@@ -27,27 +28,12 @@ export default function ClassesIdPage() {
   const columnDefs: ColDef<IRow>[] = [
     { field: "users_view.name", headerName: "Nome", flex: 3 },
     { field: "users_view.email", headerName: "Email", flex: 3 },
-    {
-      field: "createdAt",
-      headerName: "Data da Inscrição",
-      cellDataType: "date",
-      flex: 2,
-      editable: true,
-      cellEditor: "agDateCellEditor",
-    },
-    {
-      field: "status",
-      headerName: "Inscrição",
-      flex: 2,
-      editable: true,
-      cellEditor: "agSelectCellEditor",
-      cellEditorParams: {
-        values: ["pending", "approved", "rejected"],
-      },
-    },
+    { field: "createdAt", headerName: "Data", flex: 2 },
+    { field: "danceRole", headerName: "Papel", flex: 2 },
+    { field: "status", headerName: "Inscrição", flex: 2 },
     {
       field: "actionButton",
-      headerName: "Ação",
+      headerName: "Ações",
       flex: 2,
       cellRenderer: actionButtonRenderer,
     },
@@ -56,8 +42,80 @@ export default function ClassesIdPage() {
   function actionButtonRenderer(params) {
     if (params.data.status === "approved") {
       return (
+        <div className="flex gap-2">
+          <button
+            className="text-blue-500 hover:text-blue-400 font-bold"
+            onClick={() => {
+              updateEnrollment(
+                params.data.classId,
+                params.data.userId,
+                "pending"
+              );
+            }}
+          >
+            Resetar
+          </button>
+          <button
+            className="text-red-500 hover:text-red-400 font-bold"
+            onClick={() => {
+              updateEnrollment(
+                params.data.classId,
+                params.data.userId,
+                "rejected"
+              );
+            }}
+          >
+            Rejeitar
+          </button>
+        </div>
+      );
+    } else if (params.data.status === "rejected") {
+      return (
+        <div className="flex gap-2">
+          <button
+            className="text-green-500 hover:text-green-400 font-bold"
+            onClick={() => {
+              updateEnrollment(
+                params.data.classId,
+                params.data.userId,
+                "approved"
+              );
+            }}
+          >
+            Aprovar
+          </button>
+          <button
+            className="text-blue-500 hover:text-blue-400 font-bold"
+            onClick={() => {
+              updateEnrollment(
+                params.data.classId,
+                params.data.userId,
+                "pending"
+              );
+            }}
+          >
+            Resetar
+          </button>
+        </div>
+      );
+    }
+
+    return (
+      <div className="flex gap-2">
         <button
-          className="text-red-500 hover:text-red-700 font-bold"
+          className="text-green-500 hover:text-green-400 font-bold"
+          onClick={() => {
+            updateEnrollment(
+              params.data.classId,
+              params.data.userId,
+              "approved"
+            );
+          }}
+        >
+          Aprovar
+        </button>
+        <button
+          className="text-red-500 hover:text-red-400 font-bold"
           onClick={() => {
             updateEnrollment(
               params.data.classId,
@@ -68,18 +126,7 @@ export default function ClassesIdPage() {
         >
           Rejeitar
         </button>
-      );
-    }
-
-    return (
-      <button
-        className="text-green-500 hover:text-green-700 font-bold"
-        onClick={() => {
-          updateEnrollment(params.data.classId, params.data.userId, "approved");
-        }}
-      >
-        Aprovar
-      </button>
+      </div>
     );
   }
 

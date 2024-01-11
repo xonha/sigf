@@ -54,14 +54,14 @@ export default function PeriodsPage() {
         <ModalEditPeriods ref={modalPeriodsRef} data={data} />
 
         <button
-          className="action-button edit bg-green-500 hover:bg-green-600 text-white font-bold px-4 rounded h-full"
+          className="text-blue-500 hover:text-blue-400 font-bold"
           onClick={() => modalPeriodsRef.current?.toggleModal()}
           data-action="edit"
         >
           Editar
         </button>
         <button
-          className="action-button delete bg-red-500 hover:bg-red-600 text-white font-bold px-4 rounded h-full"
+          className="text-red-500 hover:text-red-400 font-bold"
           onClick={() => deletePeriod(data.id)}
           data-action="delete"
         >
