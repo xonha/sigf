@@ -1,44 +1,67 @@
 "use client";
 
+import { classDatesAtom } from "@/app/utils/atoms/classDatesAtom";
 import { ColDef } from "ag-grid-community";
 import "ag-grid-community/styles/ag-grid.css";
 import "ag-grid-community/styles/ag-theme-quartz.css";
 import { AgGridReact } from "ag-grid-react";
-import { useParams } from "next/navigation";
-import { useEffect, useState } from "react";
+import Link from "next/link";
+import { useParams, usePathname } from "next/navigation";
+import { useEffect } from "react";
+import { useRecoilState } from "recoil";
 
-interface IRow {
+export interface IClassDatesRow {
   id: string;
   date: string;
   day: string;
-  classes: {
-    id: string;
-    name: string;
-  };
 }
 
 export default function AttendancePage() {
+  const pathname = usePathname();
   const classId = useParams().id;
-  const [rowData, setRowData] = useState<IRow[]>([]);
-  const columnDefs: ColDef<IRow>[] = [
-    { field: "classes.name", headerName: "Nome", flex: 1 },
+  const [rowData, setRowData] =
+    useRecoilState<IClassDatesRow[]>(classDatesAtom);
+  const columnDefs: ColDef<IClassDatesRow>[] = [
     { field: "day", headerName: "Dia", flex: 1 },
     { field: "date", headerName: "Data", flex: 1 },
     { headerName: "Ações", flex: 1, cellRenderer: actionsCellRenderer },
   ];
 
   function actionsCellRenderer(params: any) {
-    const data: IRow = params.data;
+    const data: IClassDatesRow = params.data;
     return (
-      <div className="flex justify-content-center">
-        <a
+      <div className="flex justify-content-center gap-4">
+        <Link
           className="text-blue-500 hover:text-blue-400 font-bold"
-          href={`/classes/${data.classes.id}/attendance/${data.id}`}
+          href={`${pathname}/${data.id}`}
         >
           Editar
-        </a>
+        </Link>
+        <button
+          className="text-red-500 hover:text-red-400 font-bold"
+          onClick={() => deleteClassDate(params.data.id)}
+        >
+          Deletar
+        </button>
       </div>
     );
+  }
+
+  async function deleteClassDate(classDateId: string) {
+    try {
+      const res = await fetch(`/api/classDates/${classDateId}`, {
+        method: "DELETE",
+      });
+
+      const res_data = await res.json();
+
+      // remove deleted class date from table
+      const new_res_data = rowData.filter((row) => row.id !== classDateId);
+
+      setRowData(new_res_data);
+    } catch (error) {
+      console.error("Error deleting class date:", error);
+    }
   }
 
   async function fetchClassDates() {

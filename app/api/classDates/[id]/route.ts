@@ -14,3 +14,15 @@ export async function GET(_, { params }) {
   }
   return NextResponse.json(data);
 }
+
+export async function DELETE(_, { params }) {
+  const { data, error } = await supabase
+    .from(tableName)
+    .delete()
+    .eq("id", params.id);
+
+  if (error) {
+    return NextResponse.json(error, { status: 500 });
+  }
+  return NextResponse.json(data);
+}
