@@ -11,7 +11,7 @@ export async function middleware(req: any) {
 
   if (data.session) return res;
 
-  return NextResponse.redirect(`${requestUrl.origin}/login`);
+  return NextResponse.redirect(`${requestUrl.origin}`);
 }
 
 // Ensure the middleware is only called for relevant paths.

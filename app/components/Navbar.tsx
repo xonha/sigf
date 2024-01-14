@@ -1,6 +1,7 @@
 "use client";
 
 import { Session } from "@supabase/auth-helpers-nextjs";
+import Link from "next/link";
 import { useEffect, useRef, useState } from "react";
 import { FaBars } from "react-icons/fa";
 import profilePicture from "../profile.png";
@@ -46,9 +47,9 @@ export default function Navbar() {
     <nav className="border-b-[1px] border-gray-300 h-16 w-full flex items-center flex-row justify-between">
       <div className="flex flex-row items-center pl-4">
         <FaBars />
-        <a href="/classes" className="pl-4">
+        <Link href="/classes" className="pl-4">
           SIGF
-        </a>
+        </Link>
       </div>
 
       <NavbarCreateButton />
