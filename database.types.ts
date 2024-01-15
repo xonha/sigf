@@ -47,24 +47,34 @@ export interface Database {
       }
       attendance: {
         Row: {
+          classDateId: string
           createdAt: string
           id: string
-          presence: boolean
+          presence: Database["public"]["Enums"]["presenceEnum"]
           userId: string
         }
         Insert: {
+          classDateId: string
           createdAt?: string
           id?: string
-          presence?: boolean
+          presence?: Database["public"]["Enums"]["presenceEnum"]
           userId: string
         }
         Update: {
+          classDateId?: string
           createdAt?: string
           id?: string
-          presence?: boolean
+          presence?: Database["public"]["Enums"]["presenceEnum"]
           userId?: string
         }
         Relationships: [
+          {
+            foreignKeyName: "attendance_classDateId_fkey"
+            columns: ["classDateId"]
+            isOneToOne: false
+            referencedRelation: "classDates"
+            referencedColumns: ["id"]
+          },
           {
             foreignKeyName: "attendance_userId_fkey"
             columns: ["userId"]
@@ -280,39 +290,6 @@ export interface Database {
         }
         Relationships: []
       }
-      users: {
-        Row: {
-          createdAt: string
-          id: string
-          role: Database["public"]["Enums"]["userRole"]
-        }
-        Insert: {
-          createdAt?: string
-          id: string
-          role?: Database["public"]["Enums"]["userRole"]
-        }
-        Update: {
-          createdAt?: string
-          id?: string
-          role?: Database["public"]["Enums"]["userRole"]
-        }
-        Relationships: [
-          {
-            foreignKeyName: "users_id_fkey"
-            columns: ["id"]
-            isOneToOne: true
-            referencedRelation: "users"
-            referencedColumns: ["id"]
-          },
-          {
-            foreignKeyName: "users_id_fkey"
-            columns: ["id"]
-            isOneToOne: true
-            referencedRelation: "users_view"
-            referencedColumns: ["id"]
-          }
-        ]
-      }
     }
     Views: {
       users_view: {
@@ -340,6 +317,7 @@ export interface Database {
     Enums: {
       danceRole: "indifferent" | "led" | "leader"
       enrollmentStatus: "pending" | "approved" | "rejected"
+      presenceEnum: "notRegistered" | "present" | "absent" | "justified"
       semesterEnum: "first" | "second" | "firstVacation" | "secondVacation"
       state:
         | "AC"

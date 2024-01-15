@@ -24,19 +24,22 @@ export default function AttendancePage() {
   const columnDefs: ColDef<IClassDatesRow>[] = [
     { field: "day", headerName: "Dia", flex: 1 },
     { field: "date", headerName: "Data", flex: 1 },
+    { headerName: "Presenças", flex: 1, cellRenderer: attendanceCellRenderer },
     { headerName: "Ações", flex: 1, cellRenderer: actionsCellRenderer },
   ];
 
   function actionsCellRenderer(params: any) {
     const data: IClassDatesRow = params.data;
     return (
-      <div className="flex justify-content-center gap-4">
-        <Link
+      <div className="flex gap-4">
+        <button
           className="text-blue-500 hover:text-blue-400 font-bold"
-          href={`${pathname}/${data.id}`}
+          onClick={() => {
+            console.log("Editando", data.id);
+          }}
         >
           Editar
-        </Link>
+        </button>
         <button
           className="text-red-500 hover:text-red-400 font-bold"
           onClick={() => deleteClassDate(params.data.id)}
@@ -47,15 +50,25 @@ export default function AttendancePage() {
     );
   }
 
+  function attendanceCellRenderer(params: any) {
+    const classDateData: IClassDatesRow = params.data;
+    return (
+      <Link
+        className="text-green-500 hover:text-green-400 font-bold"
+        href={`${pathname}/${classDateData.id}`}
+      >
+        Registrar
+      </Link>
+    );
+  }
+
   async function deleteClassDate(classDateId: string) {
     try {
       const res = await fetch(`/api/classDates/${classDateId}`, {
         method: "DELETE",
       });
 
-      const res_data = await res.json();
-
-      // remove deleted class date from table
+      await res.json();
       const new_res_data = rowData.filter((row) => row.id !== classDateId);
 
       setRowData(new_res_data);

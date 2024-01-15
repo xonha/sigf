@@ -1,5 +1,5 @@
 import { classDatesAtom } from "@/app/utils/atoms/classDatesAtom";
-import { usePathname } from "next/navigation";
+import { useParams } from "next/navigation";
 import { useRef } from "react";
 import { useRecoilState } from "recoil";
 import CreateClassDateModal, {
@@ -9,8 +9,7 @@ import CreateClassDateModal, {
 export default function GenerateClassDates() {
   const createClassDateModalRef = useRef<CreateClassDateModalRef>(null);
   const [classDates, setClassDates] = useRecoilState(classDatesAtom);
-  const pathname = usePathname();
-  const classId = pathname.split("/")[2];
+  const classId = useParams().id;
 
   async function createClassDates(dates: Date[]) {
     const body = dates.map((date) => {
@@ -33,6 +32,7 @@ export default function GenerateClassDates() {
         return { ...row, day };
       });
       setClassDates(new_res_data);
+      return new_res_data;
     } catch (error) {
       console.error("Error creating class date:", error);
     }
@@ -82,6 +82,30 @@ export default function GenerateClassDates() {
     setClassDates([]);
   }
 
+  async function createAttendance(attendances: any[]) {
+    try {
+      const res = await fetch(`/api/attendance`, {
+        method: "POST",
+        body: JSON.stringify(attendances),
+      });
+
+      const res_data = await res.json();
+      return res_data;
+    } catch (error) {
+      console.error("Error creating attendance:", error);
+    }
+  }
+
+  async function fetchApprovedEnrollments() {
+    try {
+      const res = await fetch(`/api/enrollments/classId/${classId}/approved`);
+      const data = await res.json();
+      return data;
+    } catch (error) {
+      console.error("Error fetching enrollments:", error);
+    }
+  }
+
   async function handleCreateAllClassDates() {
     const classData = await fetchClass();
 
@@ -90,7 +114,16 @@ export default function GenerateClassDates() {
     const endDate = new Date(classData.period.endDate + "EDT");
 
     const weekDaysDates = getWeekDays(startDate, endDate, weekDays);
-    createClassDates(weekDaysDates);
+    const classDates = await createClassDates(weekDaysDates);
+    const approvedEnrollments = await fetchApprovedEnrollments();
+
+    const attendances = classDates.flatMap((classDate) => {
+      return approvedEnrollments.map((enrollment) => {
+        return { classDateId: classDate.id, userId: enrollment.userId };
+      });
+    });
+
+    await createAttendance(attendances);
   }
 
   function toggleCreateClassDateModal() {

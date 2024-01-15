@@ -1,6 +1,6 @@
 import MainModal from "@/app/components/MainModal";
 import { classDatesAtom } from "@/app/utils/atoms/classDatesAtom";
-import { usePathname } from "next/navigation";
+import { useParams } from "next/navigation";
 import React, { useImperativeHandle, useState } from "react";
 import DatePicker from "react-datepicker";
 import { useRecoilState } from "recoil";
@@ -10,8 +10,8 @@ export interface CreateClassDateModalRef {
 }
 
 export default React.forwardRef<CreateClassDateModalRef>((_, ref) => {
-  const pathname = usePathname();
-  const classId = pathname.split("/")[2];
+  const classId = useParams().id;
+
   const [classDates, setClassDates] = useRecoilState(classDatesAtom);
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [startDate, setStartDate] = useState(new Date());
@@ -44,9 +44,52 @@ export default React.forwardRef<CreateClassDateModalRef>((_, ref) => {
       const newClassDates = [...classDates, ...new_res_data];
 
       setClassDates(newClassDates);
+      return new_res_data;
     } catch (error) {
       console.error("Error creating class date:", error);
     }
+  }
+
+  async function createAttendance(attendances: any[]) {
+    try {
+      const res = await fetch(`/api/attendance`, {
+        method: "POST",
+        body: JSON.stringify(attendances),
+      });
+
+      const res_data = await res.json();
+      return res_data;
+    } catch (error) {
+      console.error("Error creating attendance:", error);
+    }
+  }
+
+  async function fetchApprovedEnrollments() {
+    try {
+      const res = await fetch(`/api/enrollments/classId/${classId}/approved`);
+      const data = await res.json();
+      return data;
+    } catch (error) {
+      console.error("Error fetching enrollments:", error);
+    }
+  }
+
+  async function handleCreateClassDate(
+    event: React.FormEvent<HTMLFormElement>
+  ) {
+    event.preventDefault();
+    const classDates = await createClassDates([startDate]);
+
+    const approvedEnrollments = await fetchApprovedEnrollments();
+
+    const attendances = classDates.flatMap((classDate) => {
+      return approvedEnrollments.map((enrollment) => {
+        return { classDateId: classDate.id, userId: enrollment.userId };
+      });
+    });
+
+    await createAttendance(attendances);
+    setIsModalOpen(false);
   }
 
   useImperativeHandle(ref, () => ({
@@ -60,11 +103,7 @@ export default React.forwardRef<CreateClassDateModalRef>((_, ref) => {
           className="flex-1 flex flex-col w-full justify-center gap-2 text-foreground"
           action="/api/periods"
           method="post"
-          onSubmit={(e) => {
-            e.preventDefault();
-            createClassDates([startDate]);
-            setIsModalOpen(false);
-          }}
+          onSubmit={handleCreateClassDate}
         >
           <label className="text-md" htmlFor="startDate">
             Data da aula
