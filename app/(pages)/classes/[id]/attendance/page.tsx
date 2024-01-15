@@ -5,7 +5,6 @@ import { ColDef } from "ag-grid-community";
 import "ag-grid-community/styles/ag-grid.css";
 import "ag-grid-community/styles/ag-theme-quartz.css";
 import { AgGridReact } from "ag-grid-react";
-import Link from "next/link";
 import { useParams, usePathname } from "next/navigation";
 import { useEffect } from "react";
 import { useRecoilState } from "recoil";
@@ -53,12 +52,12 @@ export default function AttendancePage() {
   function attendanceCellRenderer(params: any) {
     const classDateData: IClassDatesRow = params.data;
     return (
-      <Link
+      <a
         className="text-green-500 hover:text-green-400 font-bold"
         href={`${pathname}/${classDateData.id}`}
       >
         Registrar
-      </Link>
+      </a>
     );
   }
 
