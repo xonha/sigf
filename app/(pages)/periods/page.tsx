@@ -91,7 +91,11 @@ export default function PeriodsPage() {
       className="ag-theme-quartz m-4"
       style={{ width: "100%", fontFamily: "monospace" }}
     >
-      <AgGridReact rowData={periods} columnDefs={columnDefs} />
+      <AgGridReact
+        rowData={periods}
+        columnDefs={columnDefs}
+        overlayNoRowsTemplate="ㅤ"
+      />
     </div>
   );
 }

@@ -155,7 +155,7 @@ export default function AttendancePage() {
       className="ag-theme-quartz m-4"
       style={{ width: "100%", fontFamily: "monospace" }}
     >
-      <AgGridReact rowData={rowData} columnDefs={columnDefs} />
+      <AgGridReact rowData={rowData} columnDefs={columnDefs} overlayNoRowsTemplate="ㅤ"/>
     </div>
   );
 }

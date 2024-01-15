@@ -16,7 +16,6 @@ export default React.forwardRef<ModalCreateClassesRef>((_, ref) => {
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [name, setName] = useState("");
 
-
   function toggleModal() {
     setIsModalOpen(!isModalOpen);
   }
@@ -31,7 +30,7 @@ export default React.forwardRef<ModalCreateClassesRef>((_, ref) => {
       ? selectedWeekdays.filter((day) => day !== weekday)
       : [...selectedWeekdays, weekday];
     setSelectedWeekdays(updatedWeekdays);
-  };
+  }
 
   async function fetchPeriods() {
     try {
@@ -53,7 +52,11 @@ export default React.forwardRef<ModalCreateClassesRef>((_, ref) => {
     }
   }
 
-  async function createClass(name: string, periodId: string, weekDays: string[]) {
+  async function createClass(
+    name: string,
+    periodId: string,
+    weekDays: string[]
+  ) {
     const week_days = weekDays.join(",");
 
     try {
@@ -115,25 +118,25 @@ export default React.forwardRef<ModalCreateClassesRef>((_, ref) => {
             ))}
           </select>
           <label className="text-md" htmlFor="weekdays">
-          Dias da Semana
-        </label>
-        <div className="flex gap-4">
-          {validWeekDays.map((weekday) => (
-            <div key={weekday} className="flex items-center">
-              <input
-                type="checkbox"
-                id={weekday}
-                name="weekdays"
-                value={weekday}
-                checked={selectedWeekdays.includes(weekday)}
-                onChange={() => handleWeekDaysCheckboxChange(weekday)}
-              />
-              <label className="ml-2" htmlFor={weekday}>
-                {weekday}
-              </label>
-            </div>
-          ))}
-        </div>
+            Dias da Semana
+          </label>
+          <div className="flex gap-4">
+            {validWeekDays.map((weekday) => (
+              <div key={weekday} className="flex items-center">
+                <input
+                  type="checkbox"
+                  id={weekday}
+                  name="weekdays"
+                  value={weekday}
+                  checked={selectedWeekdays.includes(weekday)}
+                  onChange={() => handleWeekDaysCheckboxChange(weekday)}
+                />
+                <label className="ml-2" htmlFor={weekday}>
+                  {weekday}
+                </label>
+              </div>
+            ))}
+          </div>
           <div className="flex justify-end gap-4 mt-4">
             <button
               className="border border-gray-700 rounded px-4 py-2 text-black"

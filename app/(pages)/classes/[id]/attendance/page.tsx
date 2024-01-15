@@ -82,7 +82,9 @@ export default function AttendancePage() {
       const res_data = await res.json();
 
       const new_res_data = res_data.map((row) => {
-        const date = new Date(row.date);
+        const date = new Date(row.date + "EDT");
+        console.log(date);
+
         const day = date.toLocaleDateString("pt-BR", { weekday: "long" });
         return { ...row, day };
       });
@@ -102,7 +104,11 @@ export default function AttendancePage() {
       className="ag-theme-quartz m-4"
       style={{ width: "100%", fontFamily: "monospace" }}
     >
-      <AgGridReact rowData={rowData} columnDefs={columnDefs} />
+      <AgGridReact
+        rowData={rowData}
+        columnDefs={columnDefs}
+        overlayNoRowsTemplate="ㅤ"
+      />
     </div>
   );
 }

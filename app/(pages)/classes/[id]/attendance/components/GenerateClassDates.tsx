@@ -27,7 +27,7 @@ export default function GenerateClassDates() {
 
       const res_data = await res.json();
       const new_res_data = res_data.map((row) => {
-        const date = new Date(row.date);
+        const date = new Date(row.date + "EDT");
         const day = date.toLocaleDateString("pt-BR", { weekday: "long" });
         return { ...row, day };
       });

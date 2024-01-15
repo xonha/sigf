@@ -19,6 +19,7 @@ export default function MainModal({
       width: "fit-content",
       height: "fit-content",
       margin: "auto",
+      overflow: "visible",
     },
   };
 
