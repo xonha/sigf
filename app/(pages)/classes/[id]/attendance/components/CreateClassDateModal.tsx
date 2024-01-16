@@ -5,6 +5,7 @@ import {
   readApprovedEnrollments,
 } from "@/app/controllers/Attendance";
 import { createClassDates } from "@/app/controllers/ClassDates";
+import { readClass } from "@/app/controllers/Classes";
 import { classDatesAtom } from "@/app/utils/atoms/classDatesAtom";
 import { useParams } from "next/navigation";
 import React, { useImperativeHandle, useState } from "react";
@@ -19,7 +20,7 @@ export default React.forwardRef<CreateClassDateModalRef>((_, ref) => {
   const classId = useParams().id;
   const [classDates, setClassDates] = useRecoilState(classDatesAtom);
   const [isModalOpen, setIsModalOpen] = useState(false);
-  const [startDate, setStartDate] = useState(new Date());
+  const [selectedDate, setSelectedDate] = useState(new Date());
   const toggleModal = () => setIsModalOpen(!isModalOpen);
 
   useImperativeHandle(ref, () => ({
@@ -30,11 +31,29 @@ export default React.forwardRef<CreateClassDateModalRef>((_, ref) => {
     event: React.FormEvent<HTMLFormElement>
   ) {
     event.preventDefault();
+    const classData = await readClass(classId);
+
+    if (!classData?.week_days) {
+      throw new Error("Class has no week days");
+    }
+
+    const classWeekDays = classData.week_days.split(",");
+    const selectedDateWeekDay = selectedDate.toLocaleDateString("en-US", {
+      weekday: "short",
+    });
+    const isDateInClassWeekDays = classWeekDays.includes(
+      selectedDateWeekDay.toLowerCase()
+    );
+
+    if (!isDateInClassWeekDays) {
+      throw new Error("Date is not in class week days");
+    }
 
     const approvedEnrollments = await readApprovedEnrollments(classId);
+
     const newClassDates = await createClassDates(
       classId,
-      [startDate],
+      [selectedDate],
       classDates
     );
     const attendances = newClassDates.flatMap((classDate) => {
@@ -62,9 +81,9 @@ export default React.forwardRef<CreateClassDateModalRef>((_, ref) => {
           </label>
           <DatePicker
             className="rounded-md px-4 py-2 bg-inherit border mb-6"
-            selected={startDate}
+            selected={selectedDate}
             onChange={(date) => {
-              setStartDate(date || new Date());
+              setSelectedDate(date || new Date());
             }}
           />
           <div className="flex flex-row-reverse gap-4">

@@ -21,7 +21,7 @@ export async function createClassDates(
     const createdClassDates: TClassDates[] = await res.json();
 
     const newCreatedClassDates = createdClassDates.map((row) => {
-      const date = new Date(row.date);
+      const date = new Date(row.date + "EDT");
       const day = date.toLocaleDateString("pt-BR", { weekday: "long" });
       return { ...row, day };
     });

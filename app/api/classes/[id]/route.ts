@@ -1,5 +1,11 @@
+import supabase from "@/app/utils/db";
+import { Database } from "@/database.types";
 import { NextRequest, NextResponse } from "next/server";
-import supabase from "../../../utils/db";
+
+export type TClasses = Database["public"]["Tables"]["classes"]["Insert"];
+export type TClassAndPeriod = TClasses & {
+  period: Database["public"]["Tables"]["period"]["Insert"];
+};
 
 export async function DELETE(_: NextRequest, { params }: any) {
   const { data, error } = await supabase
@@ -36,5 +42,5 @@ export async function GET(_, { params }) {
   if (error) {
     return NextResponse.json(error, { status: 500 });
   }
-  return NextResponse.json(data[0]);
+  return NextResponse.json(data[0] as TClassAndPeriod);
 }

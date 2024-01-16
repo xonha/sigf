@@ -36,7 +36,7 @@ export default function Navbar() {
       .getSession()
       .then((session) => setSession(session.data.session ?? null))
       .catch((err) => {
-        console.log("ERROR GET SESSION: ", err);
+        console.error("ERROR GET SESSION: ", err);
       });
   }
 

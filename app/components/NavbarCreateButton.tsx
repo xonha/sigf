@@ -7,7 +7,7 @@ import ModalCreatePeriod, { ModalCreatePeriodRef } from "./ModalCreatePeriod";
 
 import Link from "next/link";
 import { usePathname } from "next/navigation";
-import GenerateClassDates from "../(pages)/classes/[id]/attendance/components/GenerateClassDates";
+import GenerateClassDates from "../(pages)/classes/[id]/attendance/components/CreateClassDates";
 
 export default function NavbarCreateButton() {
   const modalClassesRef = useRef<ModalCreateClassesRef>(null);
