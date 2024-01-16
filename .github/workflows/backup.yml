@@ -3,7 +3,7 @@ name: Backup
 on:
   workflow_dispatch:
   schedule:
-    - cron: '*/5 * * * *'
+    - cron: '35 1 * * *'
 
 jobs:
   backup:
