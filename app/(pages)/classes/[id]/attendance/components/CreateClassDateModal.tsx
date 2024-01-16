@@ -37,13 +37,13 @@ export default React.forwardRef<CreateClassDateModalRef>((_, ref) => {
       [startDate],
       classDates
     );
-    const attendances: TAttendance[] = newClassDates.flatMap((classDate) => {
+    const attendances = newClassDates.flatMap((classDate) => {
       return approvedEnrollments.map((enrollment) => {
         return { classDateId: classDate.id, userId: enrollment.userId };
       });
     });
 
-    createAttendances(attendances);
+    createAttendances(attendances as TAttendance[]);
     setClassDates(newClassDates);
     setIsModalOpen(false);
   }

@@ -1,13 +1,10 @@
-import { Database } from "@/database.types";
 import { TClassDates } from "../api/classDates/route";
-
-type ClassDatesRow = Database["public"]["Tables"]["classDates"]["Row"];
 
 export async function createClassDates(
   classId: string | string[],
   dates: Date[],
-  currentClassDates: ClassDatesRow[] = []
-): Promise<ClassDatesRow[]> {
+  currentClassDates: TClassDates[] = []
+): Promise<TClassDates[]> {
   const body = dates.map((date) => {
     return {
       date: date.toISOString(),
@@ -21,7 +18,7 @@ export async function createClassDates(
       body: JSON.stringify(body),
     });
 
-    const createdClassDates: ClassDatesRow[] = await res.json();
+    const createdClassDates: TClassDates[] = await res.json();
 
     const newCreatedClassDates = createdClassDates.map((row) => {
       const date = new Date(row.date);

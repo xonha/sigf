@@ -1,3 +1,4 @@
+import { TAttendance } from "@/app/api/attendance/route";
 import {
   createAttendances,
   readApprovedEnrollments,
@@ -45,7 +46,7 @@ export default function GenerateClassDates() {
     });
 
     setClassDates(classDates);
-    createAttendances(attendances);
+    createAttendances(attendances as TAttendance[]);
   }
 
   return (
