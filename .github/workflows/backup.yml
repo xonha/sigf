@@ -1,0 +1,26 @@
+name: Backup
+
+on:
+  schedule:
+    - cron: "*/5 * * * *"
+
+jobs:
+  backup:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Install pg_dump
+        run: sudo apt-get install postgresql-client
+
+      - name: Backup
+        run: |
+          pg_dump postgres://postgres.${{ secrets.DEV_SUPABASE_REFERENCE_ID }}:${{ secrets.DEV_SUPABASE_PASSWORD }}@aws-0-sa-east-1.pooler.supabase.com:6543/postgres --format=c > $(date).dump
+          echo "Backup created at $(date)"
+
+      - name: Upload Backup
+        uses: actions/upload-artifact@v2
+        with:
+          name: backup
+          path: ./
