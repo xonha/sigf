@@ -6,8 +6,10 @@ jobs:
   backup:
     runs-on: ubuntu-latest
     steps:
-      - name: Install pg_dump
-        uses: ikalnytskyi/action-setup-postgres@v5
+      - name: Setup Postgres
+        uses: ankane/setup-postgres@v1
+        with:
+          postgres-version: 16
 
       - name: Backup
         run: |
