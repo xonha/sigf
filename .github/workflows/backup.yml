@@ -17,11 +17,14 @@ jobs:
 
       - name: Backup
         run: |
-          pg_dump postgres://postgres.${{ secrets.DEV_SUPABASE_REFERENCE_ID }}:${{ secrets.DEV_SUPABASE_PASSWORD }}@aws-0-sa-east-1.pooler.supabase.com:6543/postgres --format=c > $(date +'%Y-%m-%d').dump
+          pg_dump postgres://postgres.${{ secrets.DEV_SUPABASE_REFERENCE_ID }}:${{ secrets.DEV_SUPABASE_PASSWORD }}@aws-0-sa-east-1.pooler.supabase.com:6543/postgres --format=c > backup.dump
           echo "Backup created at $(date)"
 
-      - name: Upload Backup
-        uses: actions/upload-artifact@v2
-        with:
-          name: $(date +'%Y-%m-%d')
-          path: ./
+      - name: Upload a file to Google Drive
+      uses: willo32/google-drive-upload-action@v1
+      with:
+        target: ./backup.dump
+        credentials: ${{ secrets.GOOGLE_DRIVE_CREDENTIALS }}
+        parent_folder_id: backup_supabase
+        name: $(date +'%Y-%m-%d').dump
+
