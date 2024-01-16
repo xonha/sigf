@@ -1,9 +1,9 @@
 import { classesAtom } from "@/app/utils/atoms/classesAtom";
 import React, { useEffect, useImperativeHandle, useState } from "react";
 import { useRecoilState, useSetRecoilState } from "recoil";
-import { periodsAtom } from "../utils/atoms/periodsAtom";
-import { validWeekDays } from "../utils/types/WeekDays";
-import MainModal from "./MainModal";
+import MainModal from "../../../components/MainModal";
+import { periodsAtom } from "../../../utils/atoms/periodsAtom";
+import { validWeekDays } from "../../../utils/types/WeekDays";
 
 export interface ModalCreateClassesRef {
   toggleModal: () => void;
@@ -15,14 +15,16 @@ export default React.forwardRef<ModalCreateClassesRef>((_, ref) => {
   const [selectedWeekdays, setSelectedWeekdays] = useState<string[]>([]);
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [name, setName] = useState("");
+  const [classSize, setClassSize] = useState(30);
 
   function toggleModal() {
     setIsModalOpen(!isModalOpen);
   }
   function handleFormSubmit(e) {
+    const periodId = e.target[2].value;
     e.preventDefault();
     fetchPeriods();
-    createClass(name, e.target[1].value, selectedWeekdays);
+    createClass(name, periodId, selectedWeekdays, classSize);
     setSelectedWeekdays([]);
   }
   function handleWeekDaysCheckboxChange(weekday) {
@@ -55,12 +57,13 @@ export default React.forwardRef<ModalCreateClassesRef>((_, ref) => {
   async function createClass(
     name: string,
     periodId: string,
-    weekDays: string[]
+    weekDays: string[],
+    size: number
   ) {
     const week_days = weekDays.join(",");
 
     try {
-      const body = { name, periodId, week_days };
+      const body = { name, periodId, week_days, size };
 
       await fetch("/api/classes", {
         method: "POST",
@@ -103,6 +106,15 @@ export default React.forwardRef<ModalCreateClassesRef>((_, ref) => {
             placeholder="Avançada 1"
             value={name}
             onChange={(e) => setName(e.target.value)}
+          />
+          <label className="text-md" htmlFor="name">
+            Tamanho da Turma
+          </label>
+          <input
+            className="border rounded-md px-4 py-2 pl-2"
+            type="number"
+            value={classSize}
+            onChange={(e) => setClassSize(Number(e.target.value))}
           />
           <label className="text-md" htmlFor="semester">
             Semestre

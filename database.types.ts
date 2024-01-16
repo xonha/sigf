@@ -129,6 +129,7 @@ export interface Database {
           isActive: boolean
           name: string
           periodId: string
+          size: number
           teacherId: string | null
           week_days: string
         }
@@ -140,6 +141,7 @@ export interface Database {
           isActive?: boolean
           name: string
           periodId: string
+          size: number
           teacherId?: string | null
           week_days: string
         }
@@ -151,6 +153,7 @@ export interface Database {
           isActive?: boolean
           name?: string
           periodId?: string
+          size?: number
           teacherId?: string | null
           week_days?: string
         }

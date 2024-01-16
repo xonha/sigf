@@ -82,7 +82,6 @@ export default function ClassesPage() {
         (enrollment: { classId: string }) => enrollment.classId
       );
       setUserEnrollments(classesEnrolled);
-      console.log("sortedClasses:", sortedClasses);
     } catch (error) {
       console.error("Error getting enrollments:", error);
     }

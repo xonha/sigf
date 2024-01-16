@@ -2,7 +2,7 @@
 import { useRef } from "react";
 import ModalCreateClasses, {
   ModalCreateClassesRef,
-} from "./ModalCreateClasses";
+} from "../(pages)/classes/components/ModalCreateClasses";
 import ModalCreatePeriod, { ModalCreatePeriodRef } from "./ModalCreatePeriod";
 
 import Link from "next/link";
