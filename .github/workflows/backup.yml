@@ -2,6 +2,10 @@ name: Backup
 
 on: [push]
 
+# on:
+#   schedule:
+#     - cron: "*/5 * * * *"
+
 jobs:
   backup:
     runs-on: ubuntu-latest
@@ -19,5 +23,5 @@ jobs:
       - name: Upload Backup
         uses: actions/upload-artifact@v2
         with:
-          name: backup
-          path: ./
+          name: dump.dump
+          path: ./dump.dump
