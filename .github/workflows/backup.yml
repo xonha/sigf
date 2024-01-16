@@ -23,5 +23,5 @@ jobs:
       - name: Upload Backup
         uses: actions/upload-artifact@v2
         with:
-          name: backup
+          name: $(date +'%Y-%m-%d')
           path: ./
