@@ -2,18 +2,17 @@
 
 import { enrollmentsAtom } from "@/app/utils/atoms/enrollmentsAtom";
 import useUser from "@/app/utils/hooks/useUser";
-import { FaBookmark, FaRegBookmark } from "react-icons/fa6";
 import { useRecoilState } from "recoil";
 
-interface IEnrollButtonProps {
+interface IButtonEnrollProps {
   classId: string;
   setUpdateEnrollments?: any;
 }
 
-export default function EnrollButton({
+export default function ButtonEnroll({
   classId,
   setUpdateEnrollments,
-}: IEnrollButtonProps) {
+}: IButtonEnrollProps) {
   const [userEnrollments, setUserEnrollments] = useRecoilState(enrollmentsAtom);
   const isEnrolled = userEnrollments.includes(classId as never);
 
@@ -68,9 +67,23 @@ export default function EnrollButton({
     }
   }
 
+  if (!isEnrolled) {
+    return (
+      <button
+        className="text-green-500 hover:text-green-400 font-bold"
+        onClick={toggleEnroll}
+      >
+        Inscrever
+      </button>
+    );
+  }
+
   return (
-    <button onClick={toggleEnroll}>
-      {isEnrolled ? <FaBookmark /> : <FaRegBookmark />}
+    <button
+      className="text-red-500 hover:text-red-400 font-bold"
+      onClick={toggleEnroll}
+    >
+      Desinscrever
     </button>
   );
 }

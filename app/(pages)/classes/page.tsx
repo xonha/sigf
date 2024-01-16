@@ -1,18 +1,63 @@
 "use client";
 
-import { sortedClassesSelector } from "@/app/utils/atoms/classesAtom";
+import {
+  IClassesAtom,
+  sortedClassesSelector,
+} from "@/app/utils/atoms/classesAtom";
 import { enrollmentsAtom } from "@/app/utils/atoms/enrollmentsAtom";
 import useUser from "@/app/utils/hooks/useUser";
+import { ColDef } from "ag-grid-community";
+import "ag-grid-community/styles/ag-grid.css";
+import "ag-grid-community/styles/ag-theme-quartz.css";
+import { AgGridReact } from "ag-grid-react";
 import Link from "next/link";
 import { useEffect, useState } from "react";
 import { useRecoilValue, useSetRecoilState } from "recoil";
-import ClassesOptionsButton from "./components/ClassesOptionsButton";
-import EnrollButton from "./components/EnrollButton";
+import ButtonEnroll from "./components/ButtonEnroll";
+import ButtonOptions from "./components/ButtonOptions";
 
 export default function ClassesPage() {
   const sortedClasses = useRecoilValue(sortedClassesSelector);
   const setUserEnrollments = useSetRecoilState(enrollmentsAtom);
   const [updateEnrollments, setUpdateEnrollments] = useState(false);
+
+  const columnDefs: ColDef<IClassesAtom>[] = [
+    {
+      headerName: "Nome",
+      flex: 1,
+      sortIndex: 0,
+      cellRenderer: handleClassName,
+    },
+    { headerName: "Inscrição", flex: 1, cellRenderer: handleEnroll },
+    { headerName: "Ações", flex: 1, cellRenderer: handleActions },
+  ];
+
+  function handleClassName(params) {
+    const classData = params.data;
+
+    return (
+      <Link className=" font-bold" href={`/classes/${classData.id}`}>
+        {classData.name}
+      </Link>
+    );
+  }
+
+  function handleActions(params) {
+    const classData = params.data;
+
+    return <ButtonOptions id={classData.id} />;
+  }
+
+  function handleEnroll(params) {
+    const classData = params.data;
+
+    return (
+      <ButtonEnroll
+        classId={classData.id}
+        setUpdateEnrollments={setUpdateEnrollments}
+      />
+    );
+  }
 
   async function fetchEnrollments() {
     const { data, error } = await useUser();
@@ -41,31 +86,15 @@ export default function ClassesPage() {
   }, [updateEnrollments]);
 
   return (
-    <div className="w-full">
-      <ol className="flex flex-wrap gap-6 p-6">
-        {sortedClasses &&
-          sortedClasses.map((classItem) => (
-            <li
-              key={classItem.id}
-              className="w-[300px] h-[160px] border border-gray-300 rounded-[10px]"
-            >
-              <Link
-                href={`/classes/${classItem.id}`}
-                className="h-[100px] flex flex-row p-4 items-center justify-center"
-              >
-                {classItem.name}
-              </Link>
-
-              <div className="flex flex-row-reverse gap-6 pt-5 px-4 relative border-t items-center">
-                <ClassesOptionsButton id={classItem.id} />
-                <EnrollButton
-                  classId={classItem.id}
-                  setUpdateEnrollments={setUpdateEnrollments}
-                />
-              </div>
-            </li>
-          ))}
-      </ol>
+    <div
+      className="ag-theme-quartz m-4"
+      style={{ width: "100%", fontFamily: "monospace" }}
+    >
+      <AgGridReact
+        rowData={sortedClasses}
+        columnDefs={columnDefs}
+        overlayNoRowsTemplate="ㅤ"
+      />
     </div>
   );
 }
