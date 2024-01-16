@@ -17,7 +17,7 @@ jobs:
 
       - name: Backup
         run: |
-          pg_dump postgres://postgres.${{ secrets.DEV_SUPABASE_REFERENCE_ID }}:${{ secrets.DEV_SUPABASE_PASSWORD }}@aws-0-sa-east-1.pooler.supabase.com:6543/postgres --format=c > $(date).dump
+          pg_dump postgres://postgres.${{ secrets.DEV_SUPABASE_REFERENCE_ID }}:${{ secrets.DEV_SUPABASE_PASSWORD }}@aws-0-sa-east-1.pooler.supabase.com:6543/postgres --format=c > $(date +'%Y-%m-%d').dump
           echo "Backup created at $(date)"
 
       - name: Upload Backup
