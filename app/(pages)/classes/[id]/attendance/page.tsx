@@ -18,8 +18,10 @@ export interface IClassDatesRow {
 export default function AttendancePage() {
   const pathname = usePathname();
   const classId = useParams().id;
-  const [rowData, setRowData] =
-    useRecoilState<IClassDatesRow[]>(classDatesAtom);
+  // TODO: Fix this any, using classDatesAtom but types are incorrect
+  const [rowData, setRowData] = useRecoilState<IClassDatesRow[]>(
+    classDatesAtom as any
+  );
   const columnDefs: ColDef<IClassDatesRow>[] = [
     { field: "day", headerName: "Dia", flex: 1 },
     { field: "date", headerName: "Data", flex: 1 },

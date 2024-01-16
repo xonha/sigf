@@ -1,9 +1,9 @@
 import { Database } from "@/database.types";
 import { atom } from "recoil";
 
-type TClassDatesRow = Database["public"]["Tables"]["classDates"]["Row"];
+type TClassDates = Database["public"]["Tables"]["classDates"]["Insert"];
 
-export const classDatesAtom = atom<TClassDatesRow[] | []>({
+export const classDatesAtom = atom<TClassDates[] | []>({
   key: "classDatesAtom",
   default: [],
 });
