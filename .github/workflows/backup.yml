@@ -1,0 +1,31 @@
+name: Backup
+
+on:
+  workflow_dispatch:
+  schedule:
+    - cron: "*/1 * * * *"
+
+jobs:
+  backup:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Set Date Environment Variable
+        run: echo "DATE_VARIABLE=$(date +'%Y-%m-%d')" >> $GITHUB_ENV
+
+      - name: Setup Postgres
+        uses: ankane/setup-postgres@v1
+        with:
+          postgres-version: 16
+
+      - name: Backup Supabase Database
+        run: |
+          pg_dump postgres://postgres.${{ secrets.DEV_SUPABASE_REFERENCE_ID }}:${{ secrets.DEV_SUPABASE_PASSWORD }}@aws-0-sa-east-1.pooler.supabase.com:6543/postgres --format=c > backup.dump
+          echo "Backup created at $(date)"
+
+      - name: Upload a file to Google Drive
+        uses: willo32/google-drive-upload-action@v1
+        with:
+          target: ./backup.dump
+          credentials: ${{ secrets.GOOGLE_DRIVE_CREDENTIALS }}
+          parent_folder_id: 1Oa_hOZt--x9A2kfoczt2p6B0CA0EJ_wH # Google Drive folder: backup_supabase
+          name: ${{ env.DATE_VARIABLE }}.dump
