@@ -1,9 +1,7 @@
 "use client";
 
-import {
-  IClassesAtom,
-  sortedClassesSelector,
-} from "@/app/utils/atoms/classesAtom";
+import { TClasses } from "@/app/api/classes/[id]/route";
+import { sortedClassesSelector } from "@/app/utils/atoms/classesAtom";
 import { enrollmentsAtom } from "@/app/utils/atoms/enrollmentsAtom";
 import useUser from "@/app/utils/hooks/useUser";
 import { ColDef } from "ag-grid-community";
@@ -21,12 +19,17 @@ export default function ClassesPage() {
   const setUserEnrollments = useSetRecoilState(enrollmentsAtom);
   const [updateEnrollments, setUpdateEnrollments] = useState(false);
 
-  const columnDefs: ColDef<IClassesAtom>[] = [
+  const columnDefs: ColDef<TClasses>[] = [
     {
       headerName: "Nome",
       flex: 1,
       sortIndex: 0,
       cellRenderer: cellRendererClassName,
+    },
+    {
+      headerName: "Dias de Aula",
+      field: "week_days",
+      flex: 1,
     },
     {
       headerName: "Inscrição",
@@ -79,6 +82,7 @@ export default function ClassesPage() {
         (enrollment: { classId: string }) => enrollment.classId
       );
       setUserEnrollments(classesEnrolled);
+      console.log("sortedClasses:", sortedClasses);
     } catch (error) {
       console.error("Error getting enrollments:", error);
     }

@@ -7,9 +7,11 @@ export type TClassAndPeriod = TClasses & {
   period: Database["public"]["Tables"]["period"]["Insert"];
 };
 
+const table = "classes";
+
 export async function DELETE(_: NextRequest, { params }: any) {
   const { data, error } = await supabase
-    .from("classes")
+    .from(table)
     .delete()
     .eq("id", params.id);
 
@@ -20,11 +22,11 @@ export async function DELETE(_: NextRequest, { params }: any) {
 }
 
 export async function PATCH(request: NextRequest, { params }: any) {
-  const { name } = await request.json();
+  const { name, week_days } = await request.json();
 
   const { data, error } = await supabase
-    .from("classes")
-    .update({ name: name })
+    .from(table)
+    .update({ name, week_days })
     .eq("id", params.id);
 
   if (error) {
@@ -35,7 +37,7 @@ export async function PATCH(request: NextRequest, { params }: any) {
 
 export async function GET(_, { params }) {
   const { data, error } = await supabase
-    .from("classes")
+    .from(table)
     .select("*, period(*)")
     .eq("id", params.id);
 

@@ -1,12 +1,12 @@
 import { classesAtom } from "@/app/utils/atoms/classesAtom";
 import { useRef } from "react";
 import { useRecoilState } from "recoil";
-import EditClassesModal, { EditClassesModalRef } from "./ModalEdit";
+import ModalEditClasses, { ModalEditClassesRef } from "./ModalEditClasses";
 
 export default function ButtonOptions(props: { id: string }) {
   const { id } = props;
   const [classes, setClasses] = useRecoilState(classesAtom);
-  const modalRef = useRef<EditClassesModalRef>(null);
+  const modalRef = useRef<ModalEditClassesRef>(null);
 
   async function deleteClass(id: string) {
     try {
@@ -26,7 +26,7 @@ export default function ButtonOptions(props: { id: string }) {
 
   return (
     <>
-      <EditClassesModal id={id} ref={modalRef} />
+      <ModalEditClasses id={id} ref={modalRef} />
       <div className="flex gap-2">
         <button
           className="text-blue-500 hover:text-blue-400 font-bold"
