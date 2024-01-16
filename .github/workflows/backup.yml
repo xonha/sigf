@@ -29,4 +29,4 @@ jobs:
           target: ./backup.dump
           credentials: ${{ secrets.GOOGLE_DRIVE_CREDENTIALS }}
           parent_folder_id: 1Oa_hOZt--x9A2kfoczt2p6B0CA0EJ_wH # Google Drive folder: backup_supabase
-          name: $DATE_VARIABLE.dump
+          name: ${{ env.DATE_VARIABLE }}.dump
