@@ -1,5 +1,5 @@
+import supabase from "@/app/utils/db";
 import { NextRequest, NextResponse } from "next/server";
-import supabase from "../../utils/db";
 
 export async function POST(request: NextRequest) {
   const body = await request.json();

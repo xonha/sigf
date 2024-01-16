@@ -1,4 +1,14 @@
+import {
+  createAttendances,
+  readApprovedEnrollments,
+} from "@/app/controllers/Attendance";
+import {
+  createClassDates,
+  deleteClassDates,
+} from "@/app/controllers/ClassDates";
+import { readClass } from "@/app/controllers/Classes";
 import { classDatesAtom } from "@/app/utils/atoms/classDatesAtom";
+import { getWeekDays } from "@/app/utils/functions";
 import { useParams } from "next/navigation";
 import { useRef } from "react";
 import { useRecoilState } from "recoil";
@@ -10,112 +20,23 @@ export default function GenerateClassDates() {
   const createClassDateModalRef = useRef<CreateClassDateModalRef>(null);
   const [classDates, setClassDates] = useRecoilState(classDatesAtom);
   const classId = useParams().id;
+  const toggleModal = () => createClassDateModalRef.current?.toggleModal();
 
-  async function createClassDates(dates: Date[]) {
-    const body = dates.map((date) => {
-      return {
-        date: date.toISOString(),
-        classId: classId,
-      };
-    });
-
-    try {
-      const res = await fetch("/api/classDates", {
-        method: "POST",
-        body: JSON.stringify(body),
-      });
-
-      const res_data = await res.json();
-      const new_res_data = res_data.map((row) => {
-        const date = new Date(row.date + "EDT");
-        const day = date.toLocaleDateString("pt-BR", { weekday: "long" });
-        return { ...row, day };
-      });
-      setClassDates(new_res_data);
-      return new_res_data;
-    } catch (error) {
-      console.error("Error creating class date:", error);
-    }
-  }
-
-  async function fetchClass() {
-    try {
-      const res = await fetch(`/api/classes/${classId}`);
-      const res_data = await res.json();
-      return res_data;
-    } catch (error) {
-      console.error("Error fetching classes:", error);
-    }
-  }
-
-  function getWeekDays(startDate: Date, endDate: Date, weekDays: string[]) {
-    const currentDate = new Date(startDate);
-
-    const classDates: Date[] = [];
-    while (currentDate <= endDate) {
-      if (
-        weekDays.includes(
-          currentDate
-            .toLocaleDateString("en-US", { weekday: "short" })
-            .toLowerCase()
-        )
-      ) {
-        classDates.push(new Date(currentDate));
-      }
-      currentDate.setDate(currentDate.getDate() + 1);
-    }
-    return classDates;
-  }
-
-  async function deleteClassDates() {
-    const body = { classId };
-    try {
-      const res = await fetch(`/api/classDates`, {
-        method: "DELETE",
-        body: JSON.stringify(body),
-      });
-
-      await res.json();
-    } catch (error) {
-      console.error("Error deleting class date:", error);
-    }
+  async function handleDeleteAllClassDates() {
+    deleteClassDates(classId);
     setClassDates([]);
   }
 
-  async function createAttendance(attendances: any[]) {
-    try {
-      const res = await fetch(`/api/attendance`, {
-        method: "POST",
-        body: JSON.stringify(attendances),
-      });
-
-      const res_data = await res.json();
-      return res_data;
-    } catch (error) {
-      console.error("Error creating attendance:", error);
-    }
-  }
-
-  async function fetchApprovedEnrollments() {
-    try {
-      const res = await fetch(`/api/enrollments/classId/${classId}/approved`);
-      const data = await res.json();
-      return data;
-    } catch (error) {
-      console.error("Error fetching enrollments:", error);
-    }
-  }
-
   async function handleCreateAllClassDates() {
-    const classData = await fetchClass();
+    const classData = await readClass(classId);
 
     const weekDays = classData.week_days;
     const startDate = new Date(classData.period.startDate + "EDT");
     const endDate = new Date(classData.period.endDate + "EDT");
 
     const weekDaysDates = getWeekDays(startDate, endDate, weekDays);
-    const classDates = await createClassDates(weekDaysDates);
-    const approvedEnrollments = await fetchApprovedEnrollments();
+    const classDates = await createClassDates(classId, weekDaysDates);
+    const approvedEnrollments = await readApprovedEnrollments(classId);
 
     const attendances = classDates.flatMap((classDate) => {
       return approvedEnrollments.map((enrollment) => {
@@ -123,11 +44,8 @@ export default function GenerateClassDates() {
       });
     });
 
-    await createAttendance(attendances);
-  }
-
-  function toggleCreateClassDateModal() {
-    createClassDateModalRef.current?.toggleModal();
+    setClassDates(classDates);
+    createAttendances(attendances);
   }
 
   return (
@@ -135,9 +53,9 @@ export default function GenerateClassDates() {
       <CreateClassDateModal ref={createClassDateModalRef} />
       <button
         className="bg-blue-500 hover:bg-blue-400 text-white font-bold py-2 px-4 rounded"
-        onClick={toggleCreateClassDateModal}
+        onClick={toggleModal}
       >
-        Gerar Uma
+        Criar Aula
       </button>
       {classDates.length === 0 && (
         <button
@@ -149,7 +67,7 @@ export default function GenerateClassDates() {
       )}
       <button
         className="bg-red-500 hover:bg-red-400 text-white font-bold py-2 px-4 rounded"
-        onClick={deleteClassDates}
+        onClick={handleDeleteAllClassDates}
       >
         Deletar Todas
       </button>

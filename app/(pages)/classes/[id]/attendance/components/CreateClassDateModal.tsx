@@ -1,4 +1,10 @@
+import { TAttendance } from "@/app/api/attendance/route";
 import MainModal from "@/app/components/MainModal";
+import {
+  createAttendances,
+  readApprovedEnrollments,
+} from "@/app/controllers/Attendance";
+import { createClassDates } from "@/app/controllers/ClassDates";
 import { classDatesAtom } from "@/app/utils/atoms/classDatesAtom";
 import { useParams } from "next/navigation";
 import React, { useImperativeHandle, useState } from "react";
@@ -11,90 +17,36 @@ export interface CreateClassDateModalRef {
 
 export default React.forwardRef<CreateClassDateModalRef>((_, ref) => {
   const classId = useParams().id;
-
   const [classDates, setClassDates] = useRecoilState(classDatesAtom);
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [startDate, setStartDate] = useState(new Date());
+  const toggleModal = () => setIsModalOpen(!isModalOpen);
 
-  function toggleModal() {
-    setIsModalOpen(!isModalOpen);
-  }
-
-  async function createClassDates(dates: Date[]) {
-    const body = dates.map((date) => {
-      return {
-        date: date.toISOString(),
-        classId: classId,
-      };
-    });
-
-    try {
-      const res = await fetch("/api/classDates", {
-        method: "POST",
-        body: JSON.stringify(body),
-      });
-
-      const res_data = await res.json();
-      const new_res_data = res_data.map((row) => {
-        const date = new Date(row.date);
-        const day = date.toLocaleDateString("pt-BR", { weekday: "long" });
-        return { ...row, day };
-      });
-
-      const newClassDates = [...classDates, ...new_res_data];
-
-      setClassDates(newClassDates);
-      return new_res_data;
-    } catch (error) {
-      console.error("Error creating class date:", error);
-    }
-  }
-
-  async function createAttendance(attendances: any[]) {
-    try {
-      const res = await fetch(`/api/attendance`, {
-        method: "POST",
-        body: JSON.stringify(attendances),
-      });
-
-      const res_data = await res.json();
-      return res_data;
-    } catch (error) {
-      console.error("Error creating attendance:", error);
-    }
-  }
-
-  async function fetchApprovedEnrollments() {
-    try {
-      const res = await fetch(`/api/enrollments/classId/${classId}/approved`);
-      const data = await res.json();
-      return data;
-    } catch (error) {
-      console.error("Error fetching enrollments:", error);
-    }
-  }
+  useImperativeHandle(ref, () => ({
+    toggleModal,
+  }));
 
   async function handleCreateClassDate(
     event: React.FormEvent<HTMLFormElement>
   ) {
     event.preventDefault();
-    const classDates = await createClassDates([startDate]);
 
-    const approvedEnrollments = await fetchApprovedEnrollments();
-
-    const attendances = classDates.flatMap((classDate) => {
+    const approvedEnrollments = await readApprovedEnrollments(classId);
+    const newClassDates = await createClassDates(
+      classId,
+      [startDate],
+      classDates
+    );
+    const attendances: TAttendance[] = newClassDates.flatMap((classDate) => {
       return approvedEnrollments.map((enrollment) => {
         return { classDateId: classDate.id, userId: enrollment.userId };
       });
     });
 
-    await createAttendance(attendances);
+    createAttendances(attendances);
+    setClassDates(newClassDates);
     setIsModalOpen(false);
   }
-
-  useImperativeHandle(ref, () => ({
-    toggleModal,
-  }));
 
   return (
     <>

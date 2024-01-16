@@ -1,7 +1,9 @@
-import { IClassDatesRow } from "@/app/(pages)/classes/[id]/attendance/page";
+import { Database } from "@/database.types";
 import { atom } from "recoil";
 
-export const classDatesAtom = atom<IClassDatesRow[] | []>({
+type TClassDatesRow = Database["public"]["Tables"]["classDates"]["Row"];
+
+export const classDatesAtom = atom<TClassDatesRow[] | []>({
   key: "classDatesAtom",
   default: [],
 });

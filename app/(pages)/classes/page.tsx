@@ -26,13 +26,21 @@ export default function ClassesPage() {
       headerName: "Nome",
       flex: 1,
       sortIndex: 0,
-      cellRenderer: handleClassName,
+      cellRenderer: cellRendererClassName,
     },
-    { headerName: "Inscrição", flex: 1, cellRenderer: handleEnroll },
-    { headerName: "Ações", flex: 1, cellRenderer: handleActions },
+    {
+      headerName: "Inscrição",
+      flex: 1,
+      cellRenderer: cellRendererEnroll,
+    },
+    {
+      headerName: "Ações",
+      flex: 1,
+      cellRenderer: cellRendererActions,
+    },
   ];
 
-  function handleClassName(params) {
+  function cellRendererClassName(params) {
     const classData = params.data;
 
     return (
@@ -42,18 +50,14 @@ export default function ClassesPage() {
     );
   }
 
-  function handleActions(params) {
-    const classData = params.data;
-
-    return <ButtonOptions id={classData.id} />;
+  function cellRendererActions(params) {
+    return <ButtonOptions id={params.data.id} />;
   }
 
-  function handleEnroll(params) {
-    const classData = params.data;
-
+  function cellRendererEnroll(params) {
     return (
       <ButtonEnroll
-        classId={classData.id}
+        classId={params.data.id}
         setUpdateEnrollments={setUpdateEnrollments}
       />
     );
