@@ -1,9 +1,13 @@
 "use client";
 
 import { TClasses } from "@/app/api/classes/[id]/route";
-import { sortedClassesSelector } from "@/app/utils/atoms/classesAtom";
+import { readClasses } from "@/app/controllers/Classes";
+import { readEnrollments } from "@/app/controllers/Enrollments";
+import {
+  classesAtom,
+  sortedClassesSelector,
+} from "@/app/utils/atoms/classesAtom";
 import { enrollmentsAtom } from "@/app/utils/atoms/enrollmentsAtom";
-import useUser from "@/app/utils/hooks/useUser";
 import { ColDef } from "ag-grid-community";
 import "ag-grid-community/styles/ag-grid.css";
 import "ag-grid-community/styles/ag-theme-quartz.css";
@@ -15,9 +19,10 @@ import ButtonEnroll from "./components/ButtonEnroll";
 import ButtonOptions from "./components/ButtonOptions";
 
 export default function ClassesPage() {
-  const sortedClasses = useRecoilValue(sortedClassesSelector);
-  const setUserEnrollments = useSetRecoilState(enrollmentsAtom);
   const [updateEnrollments, setUpdateEnrollments] = useState(false);
+  const setUserEnrollments = useSetRecoilState(enrollmentsAtom);
+  const setClasses = useSetRecoilState(classesAtom);
+  const sortedClasses = useRecoilValue(sortedClassesSelector);
 
   const columnDefs: ColDef<TClasses>[] = [
     {
@@ -66,30 +71,17 @@ export default function ClassesPage() {
     );
   }
 
-  async function fetchEnrollments() {
-    const { data, error } = await useUser();
+  async function handleUpdateGlobalStates() {
+    const classes = await readClasses();
+    const enrollments = await readEnrollments();
 
-    if (error) {
-      console.error("Error getting user:", error);
-      return;
-    }
-
-    try {
-      const res = await fetch(`/api/enrollments/userId/${data.user.id}`);
-      const resData = await res.json();
-
-      const classesEnrolled = await resData.map(
-        (enrollment: { classId: string }) => enrollment.classId
-      );
-      setUserEnrollments(classesEnrolled);
-    } catch (error) {
-      console.error("Error getting enrollments:", error);
-    }
+    setClasses(classes);
+    setUserEnrollments(enrollments);
+    setUpdateEnrollments(false);
   }
 
   useEffect(() => {
-    fetchEnrollments();
-    setUpdateEnrollments(false);
+    handleUpdateGlobalStates();
   }, [updateEnrollments]);
 
   return (

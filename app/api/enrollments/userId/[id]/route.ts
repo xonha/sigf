@@ -1,9 +1,12 @@
+import supabase from "@/app/utils/db";
+import { Database } from "@/database.types";
 import { NextResponse } from "next/server";
-import supabase from "../../../../utils/db";
 
 interface IParams {
   id: string;
 }
+
+export type TEnrollment = Database["public"]["Tables"]["enrollment"]["Insert"];
 
 export async function GET(_: any, { params }: { params: IParams }) {
   const { data, error } = await supabase
@@ -14,5 +17,5 @@ export async function GET(_: any, { params }: { params: IParams }) {
   if (error) {
     return NextResponse.json(error, { status: 500 });
   }
-  return NextResponse.json(data);
+  return NextResponse.json(data as unknown as TEnrollment[]);
 }

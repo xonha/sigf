@@ -1,9 +1,7 @@
-import { Database } from "@/database.types";
+import { TPeriod } from "@/app/api/periods/route";
 import { atom } from "recoil";
 
-export const periodsAtom = atom<
-  Database["public"]["Tables"]["period"]["Insert"][] | []
->({
+export const periodsAtom = atom<TPeriod[] | []>({
   key: "periodsAtom",
   default: [],
 });

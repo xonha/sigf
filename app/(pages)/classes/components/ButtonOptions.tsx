@@ -1,7 +1,7 @@
 import { classesAtom } from "@/app/utils/atoms/classesAtom";
 import { useRef } from "react";
 import { useRecoilState } from "recoil";
-import ModalEditClasses, { ModalEditClassesRef } from "./ModalEditClasses";
+import { ModalEditClassesRef } from "./ModalEditClasses";
 
 export default function ButtonOptions(props: { id: string }) {
   const { id } = props;
@@ -26,7 +26,7 @@ export default function ButtonOptions(props: { id: string }) {
 
   return (
     <>
-      <ModalEditClasses id={id} ref={modalRef} />
+      {/* <ModalEditClasses id={id} ref={modalRef} /> */}
       <div className="flex gap-2">
         <button
           className="text-blue-500 hover:text-blue-400 font-bold"

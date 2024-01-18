@@ -1,19 +1,14 @@
-import React from "react";
+import React, { useImperativeHandle, useState } from "react";
 import Modal from "react-modal";
+import ModalCreateClasses from "../(pages)/classes/components/ModalCreateClasses";
 
 Modal.setAppElement("#__modal");
 
-interface MainModalProps {
-  isOpen: boolean;
-  onRequestClose: () => void;
-  children: React.ReactNode;
+export interface MainModalRef {
+  openModal: () => void;
 }
 
-export default function MainModal({
-  isOpen,
-  onRequestClose,
-  children,
-}: MainModalProps): React.ReactElement {
+export default React.forwardRef<MainModalRef>((_, ref) => {
   const customStyles = {
     content: {
       width: "fit-content",
@@ -22,15 +17,20 @@ export default function MainModal({
       overflow: "visible",
     },
   };
+  const [isModalOpen, setIsModalOpen] = useState(false);
+
+  useImperativeHandle(ref, () => ({
+    openModal: () => setIsModalOpen(true),
+  }));
 
   return (
     <Modal
-      isOpen={isOpen}
-      onRequestClose={onRequestClose}
+      isOpen={isModalOpen}
+      onRequestClose={() => setIsModalOpen(false)}
       contentLabel="Example Modal Menu"
       style={customStyles}
     >
-      {children}
+      <ModalCreateClasses setIsModalOpen={setIsModalOpen} />
     </Modal>
   );
-}
+});
