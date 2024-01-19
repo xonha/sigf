@@ -9,10 +9,7 @@ import {
 } from "@/app/utils/atoms/modalAtom";
 import { periodsAtom } from "@/app/utils/atoms/periodsAtom";
 import { ColDef } from "ag-grid-community";
-import "ag-grid-community/styles/ag-grid.css";
-import "ag-grid-community/styles/ag-theme-quartz.css";
 import { AgGridReact } from "ag-grid-react";
-import { useState } from "react";
 import { useRecoilState, useSetRecoilState } from "recoil";
 
 async function deletePeriod(id: string) {
@@ -29,20 +26,20 @@ async function deletePeriod(id: string) {
   }
 }
 
-export default function PeriodsPage() {
+export default function () {
   const setIsModalOpen = useSetRecoilState(modalIsOpenAtom);
   const setModalOption = useSetRecoilState(modalOptionsAtom);
   const setModalId = useSetRecoilState(modalIdAtom);
   const [periods, setPeriods] = useRecoilState<TPeriod[]>(periodsAtom);
 
-  const [columnDefs, _] = useState<ColDef<TPeriod>[]>([
+  const columnDefs: ColDef<TPeriod>[] = [
     { field: "active", headerName: "Ativo", flex: 1 },
     { field: "semester", headerName: "Semestre", flex: 2 },
     { field: "year", headerName: "Ano", flex: 2 },
     { field: "startDate", headerName: "Início", flex: 2 },
     { field: "endDate", headerName: "Fim", flex: 2 },
     { headerName: "Ações", minWidth: 150, cellRenderer: actionCellRenderer },
-  ]);
+  ];
 
   function openModal(modalOption: TModalOptions, periodId: string) {
     setModalOption(modalOption);

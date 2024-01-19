@@ -1,4 +1,9 @@
-import { FaBoxArchive, FaCalendar, FaHourglassHalf } from "react-icons/fa6";
+import {
+  FaBoxArchive,
+  FaCalendar,
+  FaHourglassHalf,
+  FaUserGear,
+} from "react-icons/fa6";
 import ClassesMenu from "./ClassesMenu";
 import SideBarButton from "./SideBarButton";
 
@@ -7,12 +12,13 @@ export default function SideBar() {
     <aside className="sticky bg-white w-[300px] h-[calc(100vh-64px)] border-gray-300 border-r-[1px]">
       <ClassesMenu />
       <SideBarButton text="Agenda" icon={<FaCalendar />} href="/calendar" />
-      <SideBarButton text="Arquivadas" icon={<FaBoxArchive />} />
       <SideBarButton
         text="Períodos"
         icon={<FaHourglassHalf />}
         href="/periods"
       />
+      <SideBarButton text="Usuários" icon={<FaUserGear />} href="/users" />
+      <SideBarButton text="Arquivadas" icon={<FaBoxArchive />} />
     </aside>
   );
 }

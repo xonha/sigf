@@ -9,8 +9,6 @@ import {
 } from "@/app/utils/atoms/classesAtom";
 import { enrollmentsAtom } from "@/app/utils/atoms/enrollmentsAtom";
 import { ColDef } from "ag-grid-community";
-import "ag-grid-community/styles/ag-grid.css";
-import "ag-grid-community/styles/ag-theme-quartz.css";
 import { AgGridReact } from "ag-grid-react";
 import Link from "next/link";
 import { useEffect, useState } from "react";

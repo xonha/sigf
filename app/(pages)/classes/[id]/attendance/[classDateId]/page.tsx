@@ -2,8 +2,6 @@
 
 import { Database } from "@/database.types";
 import { ColDef } from "ag-grid-community";
-import "ag-grid-community/styles/ag-grid.css";
-import "ag-grid-community/styles/ag-theme-quartz.css";
 import { AgGridReact } from "ag-grid-react";
 import { useParams, usePathname } from "next/navigation";
 import { useEffect, useState } from "react";
@@ -155,7 +153,11 @@ export default function AttendancePage() {
       className="ag-theme-quartz m-4"
       style={{ width: "100%", fontFamily: "monospace" }}
     >
-      <AgGridReact rowData={rowData} columnDefs={columnDefs} overlayNoRowsTemplate="ㅤ"/>
+      <AgGridReact
+        rowData={rowData}
+        columnDefs={columnDefs}
+        overlayNoRowsTemplate="ㅤ"
+      />
     </div>
   );
 }
