@@ -1,46 +1,56 @@
 import { classesAtom } from "@/app/utils/atoms/classesAtom";
-import { useRef } from "react";
-import { useRecoilState } from "recoil";
-import { ModalEditClassesRef } from "./ModalEditClasses";
+import {
+  TModalOptions,
+  modalIdAtom,
+  modalIsOpenAtom,
+  modalOptionsAtom,
+} from "@/app/utils/atoms/modalAtom";
+import { useRecoilState, useSetRecoilState } from "recoil";
+
+async function deleteClass(id: string) {
+  try {
+    const res = await fetch(`/api/classes/${id}`, {
+      method: "DELETE",
+    });
+    return res;
+  } catch (error) {
+    console.error("Error deleting class:", error);
+    throw error;
+  }
+}
 
 export default function ButtonOptions(props: { id: string }) {
-  const { id } = props;
   const [classes, setClasses] = useRecoilState(classesAtom);
-  const modalRef = useRef<ModalEditClassesRef>(null);
+  const setIsModalOpen = useSetRecoilState(modalIsOpenAtom);
+  const setModalOption = useSetRecoilState(modalOptionsAtom);
+  const setModalId = useSetRecoilState(modalIdAtom);
 
-  async function deleteClass(id: string) {
-    try {
-      await fetch(`/api/classes/${id}`, {
-        method: "DELETE",
-      });
-      const newClasses = classes.filter((classItem) => classItem.id !== id);
-      setClasses(newClasses);
-    } catch (error) {
-      console.error("Error deleting class:", error);
-    }
+  function openModal(modalOption: TModalOptions) {
+    setModalOption(modalOption);
+    setModalId(props.id);
+    setIsModalOpen(true);
   }
 
-  function toggleModal() {
-    modalRef.current?.toggleModal();
+  function handleDeleteClass() {
+    deleteClass(props.id);
+    const newClasses = classes.filter((classItem) => classItem.id !== props.id);
+    setClasses(newClasses);
   }
 
   return (
-    <>
-      {/* <ModalEditClasses id={id} ref={modalRef} /> */}
-      <div className="flex gap-2">
-        <button
-          className="text-blue-500 hover:text-blue-400 font-bold"
-          onClick={toggleModal}
-        >
-          Editar
-        </button>
-        <button
-          className="text-red-500 hover:text-red-400 font-bold"
-          onClick={() => deleteClass(id)}
-        >
-          Excluir
-        </button>
-      </div>
-    </>
+    <div className="flex gap-2">
+      <button
+        className="text-blue-500 hover:text-blue-400 font-bold"
+        onClick={() => openModal("classes")}
+      >
+        Editar
+      </button>
+      <button
+        className="text-red-500 hover:text-red-400 font-bold"
+        onClick={handleDeleteClass}
+      >
+        Excluir
+      </button>
+    </div>
   );
 }

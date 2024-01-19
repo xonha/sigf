@@ -5,6 +5,7 @@ import SideBar from "@/app/components/SideBar";
 import { useEffect } from "react";
 import { useSetRecoilState } from "recoil";
 import { TPeriod } from "../api/periods/route";
+import MainModal from "../components/MainModal";
 import { periodsAtom } from "../utils/atoms/periodsAtom";
 
 async function fetchPeriods() {
@@ -36,6 +37,7 @@ export default function PagesLayout({
 
   return (
     <div className="bg-white w-full h-screen">
+      <MainModal />
       <Navbar />
       <div className="flex">
         <SideBar />

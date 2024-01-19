@@ -1,14 +1,18 @@
-import React, { useImperativeHandle, useState } from "react";
 import Modal from "react-modal";
-import ModalCreateClasses from "../(pages)/classes/components/ModalCreateClasses";
+import { useRecoilState, useRecoilValue } from "recoil";
+import ModalClasses from "../(pages)/classes/components/ModalClasses";
+import ModalPeriods from "../(pages)/periods/components/ModalPeriods";
+import { modalIsOpenAtom, modalOptionsAtom } from "../utils/atoms/modalAtom";
 
 Modal.setAppElement("#__modal");
 
-export interface MainModalRef {
-  openModal: () => void;
+export interface MainModalProps {
+  setIsModalOpen: (value: boolean) => void;
 }
 
-export default React.forwardRef<MainModalRef>((_, ref) => {
+export default function MainModal() {
+  const [isModalOpen, setIsModalOpen] = useRecoilState(modalIsOpenAtom);
+  const modalOption = useRecoilValue(modalOptionsAtom);
   const customStyles = {
     content: {
       width: "fit-content",
@@ -17,20 +21,19 @@ export default React.forwardRef<MainModalRef>((_, ref) => {
       overflow: "visible",
     },
   };
-  const [isModalOpen, setIsModalOpen] = useState(false);
-
-  useImperativeHandle(ref, () => ({
-    openModal: () => setIsModalOpen(true),
-  }));
 
   return (
     <Modal
       isOpen={isModalOpen}
       onRequestClose={() => setIsModalOpen(false)}
-      contentLabel="Example Modal Menu"
       style={customStyles}
     >
-      <ModalCreateClasses setIsModalOpen={setIsModalOpen} />
+      {
+        {
+          classes: <ModalClasses />,
+          periods: <ModalPeriods />,
+        }[modalOption]
+      }
     </Modal>
   );
-});
+}

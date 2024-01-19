@@ -1,12 +1,10 @@
+import { readClass } from "@/app/controllers/Classes";
 import { classesAtom } from "@/app/utils/atoms/classesAtom";
-import { useState } from "react";
+import { modalIdAtom, modalIsOpenAtom } from "@/app/utils/atoms/modalAtom";
+import { useEffect, useState } from "react";
 import { useRecoilValue, useSetRecoilState } from "recoil";
 import { periodsAtom } from "../../../utils/atoms/periodsAtom";
 import { validWeekDays } from "../../../utils/types/WeekDays";
-
-interface ModalCreateClassesProps {
-  setIsModalOpen: (value: boolean) => void;
-}
 
 async function createClass(
   name: string,
@@ -35,27 +33,53 @@ async function createClass(
   return data;
 }
 
-export default function ModalCreateClasses(props: ModalCreateClassesProps) {
+async function editClass(id: string, className: string, weekDays: string[]) {
+  try {
+    const body = { id, name: className, week_days: weekDays.join(",") };
+
+    await fetch(`/api/classes`, {
+      method: "PATCH",
+      body: JSON.stringify(body),
+    });
+
+    const response = await fetch("/api/classes");
+    const newClasses = await response.json();
+
+    return newClasses;
+  } catch (error) {
+    console.error("Error creating class:", error);
+    throw error;
+  }
+}
+
+export default function ModalClasses() {
   const [selectedWeekdays, setSelectedWeekdays] = useState<string[]>([]);
   const [classSize, setClassSize] = useState(30);
   const [name, setName] = useState("");
-  const periods = useRecoilValue(periodsAtom);
+  const setIsModalOpen = useSetRecoilState(modalIsOpenAtom);
   const setClasses = useSetRecoilState(classesAtom);
+  const classId = useRecoilValue(modalIdAtom);
+  const periods = useRecoilValue(periodsAtom);
 
   async function handleFormSubmit(event: React.FormEvent<HTMLFormElement>) {
     const periodId = event.target[2].value;
     event.preventDefault();
-    const classData = await createClass(
-      name,
-      periodId,
-      selectedWeekdays,
-      classSize
-    );
-    setClasses(classData);
-    props.setIsModalOpen(false);
-    setName("");
 
+    let classData;
+    if (!classId) {
+      classData = await createClass(
+        name,
+        periodId,
+        selectedWeekdays,
+        classSize
+      );
+    } else {
+      classData = await editClass(classId, name, selectedWeekdays);
+    }
+    setName("");
+    setClasses(classData);
     setSelectedWeekdays([]);
+    setIsModalOpen(false);
   }
 
   function handleWeekDaysCheckboxChange(weekday) {
@@ -63,6 +87,18 @@ export default function ModalCreateClasses(props: ModalCreateClassesProps) {
       ? selectedWeekdays.filter((day) => day !== weekday)
       : [...selectedWeekdays, weekday];
     setSelectedWeekdays(updatedWeekdays);
+  }
+
+  if (classId) {
+    useEffect(() => {
+      async function readCurrentSelectedWeekdays() {
+        const classData = await readClass(classId);
+        const currentSelectedWeekdays = classData.week_days.split(",");
+        setSelectedWeekdays(currentSelectedWeekdays);
+        setName(classData.name);
+      }
+      readCurrentSelectedWeekdays();
+    }, []);
   }
 
   return (
@@ -126,12 +162,12 @@ export default function ModalCreateClasses(props: ModalCreateClassesProps) {
         <div className="flex justify-end gap-4 mt-4">
           <button
             className="border border-gray-700 rounded px-4 py-2 text-black"
-            onClick={() => props.setIsModalOpen(false)}
+            onClick={() => setIsModalOpen(false)}
           >
             Fechar
           </button>
           <button className="bg-green-500 hover:bg-green-600 text-white font-bold py-2 px-4 rounded">
-            Criar
+            {classId ? "Salvar" : "Criar"}
           </button>
         </div>
       </form>
