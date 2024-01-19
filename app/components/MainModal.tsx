@@ -1,3 +1,5 @@
+"use client";
+
 import Modal from "react-modal";
 import { useRecoilState, useRecoilValue } from "recoil";
 import FormClassDate from "../(pages)/classes/[id]/attendance/components/FormClassDate";
