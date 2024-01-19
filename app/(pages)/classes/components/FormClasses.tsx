@@ -54,7 +54,7 @@ async function editClass(id: string, className: string, weekDays: string[]) {
   }
 }
 
-export default function ModalClasses() {
+export default function FormClasses() {
   const [selectedWeekdays, setSelectedWeekdays] = useState<string[]>([]);
   const [classSize, setClassSize] = useState(30);
   const [name, setName] = useState("");

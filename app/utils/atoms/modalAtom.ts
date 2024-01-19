@@ -1,6 +1,6 @@
 import { atom } from "recoil";
 
-export type TModalOptions = "" | "classes" | "periods";
+export type TModalOptions = "" | "classes" | "periods" | "classDate";
 
 export const modalOptionsAtom = atom<TModalOptions>({
   key: "modalOptionsAtom",

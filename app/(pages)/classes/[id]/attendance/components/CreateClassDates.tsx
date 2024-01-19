@@ -9,19 +9,20 @@ import {
 } from "@/app/controllers/ClassDates";
 import { readClass } from "@/app/controllers/Classes";
 import { classDatesAtom } from "@/app/utils/atoms/classDatesAtom";
+import {
+  TModalOptions,
+  modalIsOpenAtom,
+  modalOptionsAtom,
+} from "@/app/utils/atoms/modalAtom";
 import { getWeekDays } from "@/app/utils/functions";
 import { useParams } from "next/navigation";
-import { useRef } from "react";
-import { useRecoilState } from "recoil";
-import CreateClassDateModal, {
-  CreateClassDateModalRef,
-} from "./CreateClassDateModal";
+import { useRecoilState, useSetRecoilState } from "recoil";
 
 export default function GenerateClassDates() {
-  const createClassDateModalRef = useRef<CreateClassDateModalRef>(null);
   const [classDates, setClassDates] = useRecoilState(classDatesAtom);
   const classId = useParams().id;
-  const toggleModal = () => createClassDateModalRef.current?.toggleModal();
+  const setIsModalOpen = useSetRecoilState(modalIsOpenAtom);
+  const setModalOption = useSetRecoilState(modalOptionsAtom);
 
   async function handleDeleteAllClassDates() {
     deleteClassDates(classId);
@@ -49,12 +50,16 @@ export default function GenerateClassDates() {
     createAttendances(attendances as TAttendance[]);
   }
 
+  function openModal(modalOption: TModalOptions) {
+    setModalOption(modalOption);
+    setIsModalOpen(true);
+  }
+
   return (
     <div className="flex gap-4">
-      <CreateClassDateModal ref={createClassDateModalRef} />
       <button
         className="bg-blue-500 hover:bg-blue-400 text-white font-bold py-2 px-4 rounded"
-        onClick={toggleModal}
+        onClick={() => openModal("classDate")}
       >
         Criar Aula
       </button>

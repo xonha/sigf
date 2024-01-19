@@ -1,5 +1,6 @@
+"use client";
+
 import { TAttendance } from "@/app/api/attendance/route";
-import MainModal from "@/app/components/MainModal";
 import {
   createAttendances,
   readApprovedEnrollments,
@@ -7,25 +8,17 @@ import {
 import { createClassDates } from "@/app/controllers/ClassDates";
 import { readClass } from "@/app/controllers/Classes";
 import { classDatesAtom } from "@/app/utils/atoms/classDatesAtom";
+import { modalIsOpenAtom } from "@/app/utils/atoms/modalAtom";
 import { useParams } from "next/navigation";
-import React, { useImperativeHandle, useState } from "react";
+import React, { useState } from "react";
 import DatePicker from "react-datepicker";
-import { useRecoilState } from "recoil";
+import { useRecoilState, useSetRecoilState } from "recoil";
 
-export interface CreateClassDateModalRef {
-  toggleModal: () => void;
-}
-
-export default React.forwardRef<CreateClassDateModalRef>((_, ref) => {
+export default function FormClassDate() {
   const classId = useParams().id;
   const [classDates, setClassDates] = useRecoilState(classDatesAtom);
-  const [isModalOpen, setIsModalOpen] = useState(false);
   const [selectedDate, setSelectedDate] = useState(new Date());
-  const toggleModal = () => setIsModalOpen(!isModalOpen);
-
-  useImperativeHandle(ref, () => ({
-    toggleModal,
-  }));
+  const setIsModalOpen = useSetRecoilState(modalIsOpenAtom);
 
   async function handleCreateClassDate(
     event: React.FormEvent<HTMLFormElement>
@@ -68,37 +61,33 @@ export default React.forwardRef<CreateClassDateModalRef>((_, ref) => {
   }
 
   return (
-    <>
-      <MainModal isOpen={isModalOpen} onRequestClose={toggleModal}>
-        <form
-          className="flex-1 flex flex-col w-full justify-center gap-2 text-foreground"
-          action="/api/periods"
-          method="post"
-          onSubmit={handleCreateClassDate}
+    <form
+      className="flex-1 flex flex-col w-full justify-center gap-2 text-foreground"
+      action="/api/periods"
+      method="post"
+      onSubmit={handleCreateClassDate}
+    >
+      <label className="text-md" htmlFor="startDate">
+        Data da aula
+      </label>
+      <DatePicker
+        className="rounded-md px-4 py-2 bg-inherit border mb-6"
+        selected={selectedDate}
+        onChange={(date) => {
+          setSelectedDate(date || new Date());
+        }}
+      />
+      <div className="flex flex-row-reverse gap-4">
+        <button className="bg-green-500 hover:bg-green-600 text-white font-bold py-2 px-4 rounded">
+          Criar
+        </button>
+        <button
+          className="border border-gray-700 rounded px-4 py-2 text-black"
+          onClick={() => setIsModalOpen(false)}
         >
-          <label className="text-md" htmlFor="startDate">
-            Data da aula
-          </label>
-          <DatePicker
-            className="rounded-md px-4 py-2 bg-inherit border mb-6"
-            selected={selectedDate}
-            onChange={(date) => {
-              setSelectedDate(date || new Date());
-            }}
-          />
-          <div className="flex flex-row-reverse gap-4">
-            <button className="bg-green-500 hover:bg-green-600 text-white font-bold py-2 px-4 rounded">
-              Criar
-            </button>
-            <button
-              className="border border-gray-700 rounded px-4 py-2 text-black"
-              onClick={() => setIsModalOpen(false)}
-            >
-              Fechar
-            </button>
-          </div>
-        </form>
-      </MainModal>
-    </>
+          Fechar
+        </button>
+      </div>
+    </form>
   );
-});
+}

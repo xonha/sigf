@@ -12,7 +12,7 @@ import DatePicker from "react-datepicker";
 import { useRecoilValue, useSetRecoilState } from "recoil";
 import { periodsAtom } from "../../../utils/atoms/periodsAtom";
 
-export default function ModalPeriods() {
+export default function FormPeriods() {
   const setPeriods = useSetRecoilState(periodsAtom);
   const setIsModalOpen = useSetRecoilState(modalIsOpenAtom);
   const periodId = useRecoilValue(modalIdAtom);

@@ -1,7 +1,8 @@
 import Modal from "react-modal";
 import { useRecoilState, useRecoilValue } from "recoil";
-import ModalClasses from "../(pages)/classes/components/ModalClasses";
-import ModalPeriods from "../(pages)/periods/components/ModalPeriods";
+import FormClassDate from "../(pages)/classes/[id]/attendance/components/FormClassDate";
+import FormClasses from "../(pages)/classes/components/FormClasses";
+import FormPeriods from "../(pages)/periods/components/FormPeriods";
 import { modalIsOpenAtom, modalOptionsAtom } from "../utils/atoms/modalAtom";
 
 Modal.setAppElement("#__modal");
@@ -30,8 +31,9 @@ export default function MainModal() {
     >
       {
         {
-          classes: <ModalClasses />,
-          periods: <ModalPeriods />,
+          classes: <FormClasses />,
+          periods: <FormPeriods />,
+          classDate: <FormClassDate />,
         }[modalOption]
       }
     </Modal>
