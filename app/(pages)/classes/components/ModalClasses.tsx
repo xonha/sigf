@@ -1,3 +1,5 @@
+"use client";
+
 import { readClass } from "@/app/controllers/Classes";
 import { classesAtom } from "@/app/utils/atoms/classesAtom";
 import { modalIdAtom, modalIsOpenAtom } from "@/app/utils/atoms/modalAtom";

@@ -1,44 +1,58 @@
-import { modalIsOpenAtom } from "@/app/utils/atoms/modalAtom";
+"use client";
+
+import {
+  createPeriod,
+  editPeriod,
+  readPeriod,
+} from "@/app/controllers/Periods";
+import { modalIdAtom, modalIsOpenAtom } from "@/app/utils/atoms/modalAtom";
 import { Database } from "@/database.types";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import DatePicker from "react-datepicker";
-import { useSetRecoilState } from "recoil";
+import { useRecoilValue, useSetRecoilState } from "recoil";
 import { periodsAtom } from "../../../utils/atoms/periodsAtom";
 
 export default function ModalPeriods() {
   const setPeriods = useSetRecoilState(periodsAtom);
   const setIsModalOpen = useSetRecoilState(modalIsOpenAtom);
+  const periodId = useRecoilValue(modalIdAtom);
   const [startDate, setStartDate] = useState(new Date());
   const [endDate, setEndDate] = useState(new Date());
   const [year, setYear] = useState(new Date());
   const [semester, setSemester] =
     useState<Database["public"]["Enums"]["semesterEnum"]>("first");
 
-  async function createPeriod(
-    year: Date,
-    semester: Database["public"]["Enums"]["semesterEnum"],
-    startDate: Date,
-    endDate: Date
-  ) {
-    try {
-      const body = {
-        year: year.getFullYear(),
+  async function handleFormSubmit(event: React.FormEvent<HTMLFormElement>) {
+    event.preventDefault();
+
+    let periodData;
+    if (!periodId) {
+      periodData = await createPeriod(year, semester, startDate, endDate);
+    } else {
+      periodData = await editPeriod(
+        periodId,
+        year,
         semester,
-        startDate: startDate.toISOString(),
-        endDate: endDate.toISOString(),
-      };
-      await fetch("/api/periods", {
-        method: "POST",
-        body: JSON.stringify(body),
-      });
-
-      const res = await fetch("/api/periods");
-      const data = await res.json();
-
-      setPeriods(data);
-    } catch (error) {
-      console.error("Error creating period:", error);
+        startDate,
+        endDate
+      );
     }
+
+    setPeriods(periodData);
+    setIsModalOpen(false);
+  }
+
+  if (periodId) {
+    useEffect(() => {
+      async function readCurrentSelectedPeriod() {
+        const periodData = await readPeriod(periodId);
+        setSemester(periodData.semester);
+        setYear(new Date(periodData.year.toString() + "EDT"));
+        setStartDate(new Date(periodData.startDate + "EDT"));
+        setEndDate(new Date(periodData.endDate + "EDT"));
+      }
+      readCurrentSelectedPeriod();
+    }, []);
   }
 
   return (
@@ -46,11 +60,7 @@ export default function ModalPeriods() {
       className="flex-1 flex flex-col w-full justify-center gap-2 text-foreground"
       action="/api/periods"
       method="post"
-      onSubmit={(e) => {
-        e.preventDefault();
-        createPeriod(year, semester, startDate, endDate);
-        setIsModalOpen(false);
-      }}
+      onSubmit={handleFormSubmit}
     >
       <label className="text-md" htmlFor="semester">
         Semestre
@@ -104,7 +114,7 @@ export default function ModalPeriods() {
       />
       <div className="flex flex-row-reverse gap-4">
         <button className="bg-green-500 hover:bg-green-600 text-white font-bold py-2 px-4 rounded">
-          Criar
+          {periodId ? "Salvar" : "Criar"}
         </button>
         <button
           className="border border-gray-700 rounded px-4 py-2 text-black"

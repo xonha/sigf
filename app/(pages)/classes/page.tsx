@@ -19,7 +19,7 @@ import ButtonEnroll from "./components/ButtonEnroll";
 import ButtonOptions from "./components/ButtonOptions";
 
 export default function ClassesPage() {
-  const [updateEnrollments, setUpdateEnrollments] = useState(false);
+  const [shouldUpdate, setShouldUpdate] = useState(false);
   const setUserEnrollments = useSetRecoilState(enrollmentsAtom);
   const setClasses = useSetRecoilState(classesAtom);
   const sortedClasses = useRecoilValue(sortedClassesSelector);
@@ -66,23 +66,23 @@ export default function ClassesPage() {
     return (
       <ButtonEnroll
         classId={params.data.id}
-        setUpdateEnrollments={setUpdateEnrollments}
+        setUpdateEnrollments={setShouldUpdate}
       />
     );
   }
 
-  async function handleUpdateGlobalStates() {
-    const classes = await readClasses();
-    const enrollments = await readEnrollments();
-
-    setClasses(classes);
-    setUserEnrollments(enrollments);
-    setUpdateEnrollments(false);
-  }
-
   useEffect(() => {
+    async function handleUpdateGlobalStates() {
+      const classes = await readClasses();
+      const enrollments = await readEnrollments();
+
+      setClasses(classes);
+      setUserEnrollments(enrollments);
+      setShouldUpdate(false);
+    }
+
     handleUpdateGlobalStates();
-  }, [updateEnrollments]);
+  }, [shouldUpdate]);
 
   return (
     <div
