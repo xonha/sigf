@@ -1,5 +1,4 @@
 import {
-  FaBoxArchive,
   FaCalendar,
   FaHourglassHalf,
   FaPeopleGroup,
@@ -29,10 +28,6 @@ export default function SideBar() {
         text="Usuários"
         icon={<FaUserGear className="shrink-0" />}
         href="/users"
-      />
-      <SideBarButton
-        text="Arquivadas"
-        icon={<FaBoxArchive className="shrink-0" />}
       />
     </aside>
   );

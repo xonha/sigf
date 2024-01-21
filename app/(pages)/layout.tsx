@@ -9,6 +9,7 @@ import { useSetRecoilState } from "recoil";
 import MainModal from "../components/MainModal";
 import { readPeriods } from "../controllers/Periods";
 import { periodsAtom } from "../utils/atoms/periodsAtom";
+import { usersAtom } from "../utils/atoms/usersAtom";
 
 export default function PagesLayout({
   children,
@@ -16,11 +17,15 @@ export default function PagesLayout({
   children: React.ReactNode;
 }) {
   const setPeriods = useSetRecoilState(periodsAtom);
+  const setUsers = useSetRecoilState(usersAtom);
 
   useEffect(() => {
     async function handleLoadGlobalStates() {
       const periods = await readPeriods();
+      // const user = await readUserWithRole();
+
       setPeriods(periods);
+      // setUsers(user);
     }
     handleLoadGlobalStates();
   }, []);

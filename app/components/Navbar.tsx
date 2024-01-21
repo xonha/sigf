@@ -1,18 +1,20 @@
 "use client";
 
-import { Session } from "@supabase/auth-helpers-nextjs";
 import Link from "next/link";
 import { useEffect, useRef, useState } from "react";
 import { FaBars } from "react-icons/fa";
+import { useRecoilState } from "recoil";
 import profilePicture from "../profile.png";
-import supabase from "../utils/db";
+import { usersAtom } from "../utils/atoms/usersAtom";
 import LogoutButton from "./LogoutButton";
 import NavbarCreateButton from "./NavbarCreateButton";
 
 export default function Navbar() {
   const profileRef = useRef<HTMLImageElement>(null);
+  const [user, setUser] = useRecoilState(usersAtom);
   const [isProfileMenuVisible, setProfileMenuVisible] = useState(false);
-  const [session, setSession] = useState<Session | null>(null);
+
+  console.log("user: ", user);
 
   function toggleMenu() {
     setProfileMenuVisible(!isProfileMenuVisible);
@@ -31,16 +33,7 @@ export default function Navbar() {
       document.removeEventListener("click", handleClickOutside);
     };
   }
-  function handleGetSession() {
-    supabase.auth
-      .getSession()
-      .then((session) => setSession(session.data.session ?? null))
-      .catch((err) => {
-        console.error("ERROR GET SESSION: ", err);
-      });
-  }
 
-  useEffect(handleGetSession, []);
   useEffect(addRemoveEventListeners, []);
 
   return (
@@ -52,11 +45,12 @@ export default function Navbar() {
         </Link>
       </div>
 
-      <NavbarCreateButton />
+      {/* display NavbarCreateButton only if user.userRole === "admin" */}
+      {user.userRole === "admin" && <NavbarCreateButton />}
 
       <div className="pr-4 relative">
         <img
-          src={session?.user?.user_metadata?.avatar_url || profilePicture.src}
+          src={user?.user_metadata?.avatar_url || profilePicture.src}
           alt="Foto de Perfil"
           ref={profileRef}
           onClick={toggleMenu}
@@ -65,7 +59,7 @@ export default function Navbar() {
 
         {isProfileMenuVisible && (
           <ul className="absolute right-4 bg-white border rounded-[10px] pt-2 px-2 flex flex-col items-center z-50">
-            <li className="pb-2">{session?.user?.email}</li>
+            <li className="pb-2">{user?.email}</li>
             <li className="pb-2">
               <LogoutButton />
             </li>

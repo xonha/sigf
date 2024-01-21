@@ -1,4 +1,30 @@
+import { User } from "@supabase/supabase-js";
 import { TUser, TUserViewPlusRole } from "../api/users/route";
+import supabase from "../utils/db";
+
+export type TUserWithRole = User & { userRole: string };
+
+export async function readUserWithRole() {
+  const { data, error } = await supabase.auth.getUser();
+
+  if (error) {
+    console.error("Error reading user session:", error);
+    throw error;
+  }
+
+  const userData: User = data.user;
+  try {
+    const res = await fetch(`/api/users/${data.user?.id}`);
+    const userRole: TUser = await res.json();
+
+    const userWithRole = { ...userData, userRole: userRole.role };
+
+    return userWithRole as TUserWithRole;
+  } catch (error) {
+    const userWithRole: TUserWithRole = { ...userData, userRole: "student" };
+    return userWithRole;
+  }
+}
 
 export async function readUsers() {
   try {
@@ -6,7 +32,7 @@ export async function readUsers() {
     const users: TUserViewPlusRole[] = await res.json();
     return users;
   } catch (error) {
-    console.error("Error reading periods:", error);
+    console.error("Error reading users:", error);
     throw error;
   }
 }
@@ -20,7 +46,7 @@ export async function createUser(user: TUser) {
     const newUser: TUser = await res.json();
     return newUser;
   } catch (error) {
-    console.error("Error reading periods:", error);
+    console.error("Error reading users:", error);
     throw error;
   }
 }
@@ -34,7 +60,7 @@ export async function updateUser(user: TUser) {
     const newUser: TUser = await res.json();
     return newUser;
   } catch (error) {
-    console.error("Error reading periods:", error);
+    console.error("Error reading users:", error);
     throw error;
   }
 }
