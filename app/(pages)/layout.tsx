@@ -31,7 +31,7 @@ export default function PagesLayout({
       <Navbar />
       <div className="flex">
         <SideBar />
-        {children}
+        <div className="ag-theme-quartz flex-grow flex">{children}</div>
       </div>
     </div>
   );

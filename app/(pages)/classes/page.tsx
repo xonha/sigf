@@ -83,15 +83,11 @@ export default function ClassesPage() {
   }, [shouldUpdate]);
 
   return (
-    <div
-      className="ag-theme-quartz m-4"
-      style={{ width: "100%", fontFamily: "monospace" }}
-    >
-      <AgGridReact
-        rowData={sortedClasses}
-        columnDefs={columnDefs}
-        overlayNoRowsTemplate="ㅤ"
-      />
-    </div>
+    <AgGridReact
+      className="w-full p-4"
+      rowData={sortedClasses}
+      columnDefs={columnDefs}
+      overlayNoRowsTemplate="ㅤ"
+    />
   );
 }

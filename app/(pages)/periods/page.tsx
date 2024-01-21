@@ -79,15 +79,11 @@ export default function () {
   }
 
   return (
-    <div
-      className="ag-theme-quartz m-4"
-      style={{ width: "100%", fontFamily: "monospace" }}
-    >
-      <AgGridReact
-        rowData={periods}
-        columnDefs={columnDefs}
-        overlayNoRowsTemplate="ㅤ"
-      />
-    </div>
+    <AgGridReact
+      className="w-full p-4"
+      rowData={periods}
+      columnDefs={columnDefs}
+      overlayNoRowsTemplate="ㅤ"
+    />
   );
 }

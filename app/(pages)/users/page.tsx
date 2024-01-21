@@ -1,49 +1,11 @@
 "use client";
 
 import { TUser, TUserViewPlusRole } from "@/app/api/users/route";
+import { createUser, readUsers, updateUser } from "@/app/controllers/Users";
 
 import { ColDef } from "ag-grid-community";
 import { AgGridReact } from "ag-grid-react";
 import { useEffect, useState } from "react";
-
-async function readUsers() {
-  try {
-    const res = await fetch(`/api/users`);
-    const users: TUserViewPlusRole[] = await res.json();
-    return users;
-  } catch (error) {
-    console.error("Error reading periods:", error);
-    throw error;
-  }
-}
-
-async function createUser(user: TUser) {
-  try {
-    const res = await fetch(`/api/users`, {
-      method: "POST",
-      body: JSON.stringify(user),
-    });
-    const newUser: TUser = await res.json();
-    return newUser;
-  } catch (error) {
-    console.error("Error reading periods:", error);
-    throw error;
-  }
-}
-
-async function updateUser(user: TUser) {
-  try {
-    const res = await fetch(`/api/users`, {
-      method: "PATCH",
-      body: JSON.stringify(user),
-    });
-    const newUser: TUser = await res.json();
-    return newUser;
-  } catch (error) {
-    console.error("Error reading periods:", error);
-    throw error;
-  }
-}
 
 export default function () {
   const [users, setUsers] = useState<TUserViewPlusRole[]>([]);
@@ -179,15 +141,11 @@ export default function () {
   }, []);
 
   return (
-    <div
-      className="ag-theme-quartz m-4"
-      style={{ width: "100%", fontFamily: "monospace" }}
-    >
-      <AgGridReact
-        rowData={users}
-        columnDefs={columnDefs}
-        overlayNoRowsTemplate="ㅤ"
-      />
-    </div>
+    <AgGridReact
+      className="w-full p-4"
+      rowData={users}
+      columnDefs={columnDefs}
+      overlayNoRowsTemplate="ㅤ"
+    />
   );
 }
