@@ -8,6 +8,7 @@ import {
   sortedClassesSelector,
 } from "@/app/utils/atoms/classesAtom";
 import { enrollmentsAtom } from "@/app/utils/atoms/enrollmentsAtom";
+import { usersAtom } from "@/app/utils/atoms/usersAtom";
 import { ColDef } from "ag-grid-community";
 import { AgGridReact } from "ag-grid-react";
 import Link from "next/link";
@@ -17,11 +18,11 @@ import ButtonEnroll from "./components/ButtonEnroll";
 import ButtonOptions from "./components/ButtonOptions";
 
 export default function ClassesPage() {
+  const user = useRecoilValue(usersAtom);
   const [shouldUpdate, setShouldUpdate] = useState(false);
   const setUserEnrollments = useSetRecoilState(enrollmentsAtom);
   const setClasses = useSetRecoilState(classesAtom);
   const sortedClasses = useRecoilValue(sortedClassesSelector);
-
   const columnDefs: ColDef<TClasses>[] = [
     {
       headerName: "Nome",
@@ -43,6 +44,27 @@ export default function ClassesPage() {
       headerName: "Ações",
       flex: 1,
       cellRenderer: cellRendererActions,
+    },
+  ];
+
+  user?.userRole !== "admin";
+
+  const columnDefsNonAdmin: ColDef<TClasses>[] = [
+    {
+      headerName: "Nome",
+      flex: 1,
+      sortIndex: 0,
+      cellRenderer: cellRendererClassName,
+    },
+    {
+      headerName: "Dias de Aula",
+      field: "week_days",
+      flex: 1,
+    },
+    {
+      headerName: "Inscrição",
+      flex: 1,
+      cellRenderer: cellRendererEnroll,
     },
   ];
 
@@ -86,7 +108,7 @@ export default function ClassesPage() {
     <AgGridReact
       className="w-full p-4"
       rowData={sortedClasses}
-      columnDefs={columnDefs}
+      columnDefs={user?.userRole === "admin" ? columnDefs : columnDefsNonAdmin}
       overlayNoRowsTemplate="ㅤ"
     />
   );

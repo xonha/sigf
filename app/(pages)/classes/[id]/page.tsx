@@ -1,10 +1,12 @@
 "use client";
 
+import { usersAtom } from "@/app/utils/atoms/usersAtom";
 import { Database } from "@/database.types";
 import { ColDef } from "ag-grid-community";
 import { AgGridReact } from "ag-grid-react";
 import { useParams } from "next/navigation";
 import { useEffect, useState } from "react";
+import { useRecoilValue } from "recoil";
 
 interface IRow {
   classId: string;
@@ -21,6 +23,7 @@ interface IRow {
 }
 
 export default function ClassesIdPage() {
+  const user = useRecoilValue(usersAtom);
   const classId = useParams().id;
   const [rowData, setRowData] = useState<IRow[]>([]);
   const columnDefs: ColDef<IRow>[] = [
@@ -35,6 +38,13 @@ export default function ClassesIdPage() {
       flex: 3,
       cellRenderer: actionButtonRenderer,
     },
+  ];
+  const columnDefsNonAdmin: ColDef<IRow>[] = [
+    { field: "users_view.name", headerName: "Nome", flex: 3 },
+    { field: "users_view.email", headerName: "Email", flex: 3 },
+    { field: "createdAt", headerName: "Data da inscrição", flex: 3 },
+    { field: "danceRole", headerName: "Papel", flex: 2 },
+    { field: "status", headerName: "Inscrição", flex: 2 },
   ];
 
   function actionButtonRenderer(params) {
@@ -177,7 +187,7 @@ export default function ClassesIdPage() {
     <AgGridReact
       className="w-full p-4"
       rowData={rowData}
-      columnDefs={columnDefs}
+      columnDefs={user?.userRole === "admin" ? columnDefs : columnDefsNonAdmin}
       overlayNoRowsTemplate="ㅤ"
     />
   );

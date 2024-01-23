@@ -8,6 +8,7 @@ import { useEffect } from "react";
 import { useSetRecoilState } from "recoil";
 import MainModal from "../components/MainModal";
 import { readPeriods } from "../controllers/Periods";
+import { readUserWithRole } from "../controllers/Users";
 import { periodsAtom } from "../utils/atoms/periodsAtom";
 import { usersAtom } from "../utils/atoms/usersAtom";
 
@@ -22,10 +23,10 @@ export default function PagesLayout({
   useEffect(() => {
     async function handleLoadGlobalStates() {
       const periods = await readPeriods();
-      // const user = await readUserWithRole();
+      const user = await readUserWithRole();
 
       setPeriods(periods);
-      // setUsers(user);
+      setUsers(user);
     }
     handleLoadGlobalStates();
   }, []);

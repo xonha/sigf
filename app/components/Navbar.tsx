@@ -14,8 +14,6 @@ export default function Navbar() {
   const [user, setUser] = useRecoilState(usersAtom);
   const [isProfileMenuVisible, setProfileMenuVisible] = useState(false);
 
-  console.log("user: ", user);
-
   function toggleMenu() {
     setProfileMenuVisible(!isProfileMenuVisible);
   }
@@ -46,7 +44,7 @@ export default function Navbar() {
       </div>
 
       {/* display NavbarCreateButton only if user.userRole === "admin" */}
-      {user.userRole === "admin" && <NavbarCreateButton />}
+      {user?.userRole === "admin" && <NavbarCreateButton />}
 
       <div className="pr-4 relative">
         <img
