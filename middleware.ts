@@ -4,8 +4,8 @@ import { NextResponse } from "next/server";
 const whiteList = {
   student: {
     pages: {
-      classes: true,
-      calendar: true,
+      classes: { get: true, "[id]": { attendance: { get: false } } },
+      calendar: { get: true },
     },
     api: {
       get: true,
@@ -47,7 +47,10 @@ function getReqParams(
       userRole + paramsList.join(".") + "." + requestMethod,
     ];
 
-  return [paramsList.slice(1), userRole + "." + "pages" + paramsList.join(".")];
+  return [
+    paramsList.slice(1),
+    userRole + "." + "pages" + paramsList.join(".") + "." + requestMethod,
+  ];
 }
 
 function recursiveWhiteListCheck(
@@ -55,12 +58,20 @@ function recursiveWhiteListCheck(
   requestMethod: string,
   flatObject: object
 ) {
-  const splittedKey = key.split(".");
-  if (flatObject[key]) return true;
-  else if (splittedKey.length > 1 && splittedKey[0] !== "") {
+  const splittedKeys = key.split(".");
+
+  if (flatObject[key] === true) {
+    return true;
+  } else if (
+    splittedKeys.length > 1 &&
+    splittedKeys[0] !== "" &&
+    flatObject[key] === undefined
+  ) {
     const newKey = key.split(".").slice(0, -2).join(".") + "." + requestMethod;
     return recursiveWhiteListCheck(newKey, requestMethod, flatObject);
-  } else return false;
+  }
+
+  return false;
 }
 
 function replaceUuids(paramsString: string) {

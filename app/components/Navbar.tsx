@@ -3,7 +3,7 @@
 import Link from "next/link";
 import { useEffect, useRef, useState } from "react";
 import { FaBars } from "react-icons/fa";
-import { useRecoilState } from "recoil";
+import { useRecoilValue } from "recoil";
 import profilePicture from "../profile.png";
 import { usersAtom } from "../utils/atoms/usersAtom";
 import LogoutButton from "./LogoutButton";
@@ -11,7 +11,7 @@ import NavbarCreateButton from "./NavbarCreateButton";
 
 export default function Navbar() {
   const profileRef = useRef<HTMLImageElement>(null);
-  const [user, setUser] = useRecoilState(usersAtom);
+  const user = useRecoilValue(usersAtom);
   const [isProfileMenuVisible, setProfileMenuVisible] = useState(false);
 
   function toggleMenu() {
