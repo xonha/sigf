@@ -33,7 +33,7 @@ export default async function NavbarHome() {
         <nav className="w-full flex justify-center border-b border-b-foreground/10 h-16">
             <div className="w-full max-w-4xl flex justify-between items-center p-3 text-sm text-foreground">
                 <div />
-                <form action="/login" method="post">
+                <form action="/login" method="get">
                     <button
                         formNoValidate
                         className="py-2 px-4 rounded-md no-underline bg-green-500 text-white hover:bg-btn-background-hover"
