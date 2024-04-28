@@ -13,7 +13,7 @@ export default function SideBar() {
 
   if (user?.userRole === "admin") {
     return (
-      <aside className="sticky bg-white w-[50px] md:w-[220px] h-[calc(100vh-64px)] border-gray-300 border-r-[1px] overflow-hidden">
+      <aside className="sticky bg-white w-52 lg:block hidden h-[calc(100vh-64px)] border-gray-300 border-r-[1px] overflow-hidden">
         <SideBarButton
           text="Turmas"
           icon={<FaPeopleGroup className="shrink-0" />}

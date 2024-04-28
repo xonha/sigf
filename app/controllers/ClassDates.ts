@@ -3,7 +3,7 @@ import { TClassDates } from "../api/classDates/route";
 export async function createClassDates(
   classId: string | string[],
   dates: Date[],
-  currentClassDates: TClassDates[] = []
+  currentClassDates: TClassDates[] = [],
 ): Promise<TClassDates[]> {
   const body = dates.map((date) => {
     return {

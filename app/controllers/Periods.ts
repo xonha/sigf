@@ -27,7 +27,7 @@ export async function createPeriod(
   year: Date,
   semester: Database["public"]["Enums"]["semesterEnum"],
   startDate: Date,
-  endDate: Date
+  endDate: Date,
 ) {
   try {
     const body = {
@@ -55,7 +55,7 @@ export async function editPeriod(
   year: Date,
   semester: Database["public"]["Enums"]["semesterEnum"],
   startDate: Date,
-  endDate: Date
+  endDate: Date,
 ) {
   try {
     const body = {

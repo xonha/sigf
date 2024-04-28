@@ -12,6 +12,15 @@ import { readUserWithRole } from "../controllers/Users";
 import { periodsAtom } from "../utils/atoms/periodsAtom";
 import { usersAtom } from "../utils/atoms/usersAtom";
 
+function Content({ children }: { children: React.ReactNode }) {
+  return (
+    <div className="flex h-[calc(100dvh-4rem)]">
+      <SideBar />
+      <div className="ag-theme-quartz flex-grow flex">{children}</div>
+    </div>
+  );
+}
+
 export default function PagesLayout({
   children,
 }: {
@@ -32,13 +41,10 @@ export default function PagesLayout({
   }, []);
 
   return (
-    <div className="bg-white w-full h-screen">
+    <div className="bg-white w-full h-dvh flex flex-col">
       <MainModal />
       <Navbar />
-      <div className="flex">
-        <SideBar />
-        <div className="ag-theme-quartz flex-grow flex">{children}</div>
-      </div>
+      <Content children={children} />
     </div>
   );
 }
