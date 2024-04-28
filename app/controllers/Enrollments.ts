@@ -14,7 +14,7 @@ export async function readEnrollments() {
     const resData = await res.json();
 
     const enrollments = await resData.map(
-      (enrollment: { classId: string }) => enrollment.classId
+      (enrollment: { classId: string }) => enrollment.classId,
     );
     return enrollments as TEnrollment[];
   } catch (error) {
