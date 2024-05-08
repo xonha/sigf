@@ -21,21 +21,21 @@ export default function FormClassDate() {
   const setIsModalOpen = useSetRecoilState(modalIsOpenAtom);
 
   async function handleCreateClassDate(
-    event: React.FormEvent<HTMLFormElement>
+    event: React.FormEvent<HTMLFormElement>,
   ) {
     event.preventDefault();
     const classData = await readClass(classId);
 
-    if (!classData?.week_days) {
+    if (!classData?.weekDays) {
       throw new Error("Class has no week days");
     }
 
-    const classWeekDays = classData.week_days.split(",");
+    const classWeekDays = classData.weekDays.split(",");
     const selectedDateWeekDay = selectedDate.toLocaleDateString("en-US", {
       weekday: "short",
     });
     const isDateInClassWeekDays = classWeekDays.includes(
-      selectedDateWeekDay.toLowerCase()
+      selectedDateWeekDay.toLowerCase(),
     );
 
     if (!isDateInClassWeekDays) {
@@ -47,7 +47,7 @@ export default function FormClassDate() {
     const newClassDates = await createClassDates(
       classId,
       [selectedDate],
-      classDates
+      classDates,
     );
     const attendances = newClassDates.flatMap((classDate) => {
       return approvedEnrollments.map((enrollment) => {

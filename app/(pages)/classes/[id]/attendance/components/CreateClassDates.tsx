@@ -32,7 +32,7 @@ export default function GenerateClassDates() {
   async function handleCreateAllClassDates() {
     const classData = await readClass(classId);
 
-    const weekDays = classData.week_days.split(",");
+    const weekDays = classData.weekDays.split(",");
     const startDate = new Date(classData.period.startDate + "EDT");
     const endDate = new Date(classData.period.endDate + "EDT");
 

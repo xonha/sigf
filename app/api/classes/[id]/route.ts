@@ -22,11 +22,11 @@ export async function DELETE(_: NextRequest, { params }: any) {
 }
 
 export async function PATCH(request: NextRequest, { params }: any) {
-  const { name, week_days } = await request.json();
+  const { name, weekDays } = await request.json();
 
   const { data, error } = await supabase
     .from(table)
-    .update({ name, week_days })
+    .update({ name, weekDays })
     .eq("id", params.id);
 
   if (error) {
