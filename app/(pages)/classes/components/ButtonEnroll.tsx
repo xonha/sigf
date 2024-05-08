@@ -49,7 +49,7 @@ export default function ButtonEnroll({
       });
       await response.json();
       const filteredEnrollments = userEnrollments.filter(
-        (item) => item.classId === classId
+        (item) => item.classId === classId,
       );
 
       setUserEnrollments(filteredEnrollments);

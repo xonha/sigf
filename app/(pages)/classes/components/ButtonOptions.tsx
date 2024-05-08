@@ -46,6 +46,12 @@ export default function ButtonOptions(props: { id: string }) {
         Editar
       </button>
       <button
+        className="text-green-500 hover:text-green-400 font-bold"
+        onClick={() => openModal("classEnrollment")}
+      >
+        teste
+      </button>
+      <button
         className="text-red-500 hover:text-red-400 font-bold"
         onClick={handleDeleteClass}
       >

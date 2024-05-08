@@ -52,7 +52,7 @@ export default function () {
       deletePeriod(periodId);
       setPeriods((prevPeriods) => {
         const newPeriods = prevPeriods.filter(
-          (period) => period.id !== periodId
+          (period) => period.id !== periodId,
         );
         return newPeriods;
       });

@@ -1,7 +1,6 @@
 "use client";
 
 import { TClasses } from "@/app/api/classes/[id]/route";
-import { readClasses } from "@/app/controllers/Classes";
 import { readEnrollments } from "@/app/controllers/Enrollments";
 import {
   classesAtom,
@@ -16,6 +15,7 @@ import { useEffect, useState } from "react";
 import { useRecoilValue, useSetRecoilState } from "recoil";
 import ButtonEnroll from "./components/ButtonEnroll";
 import ButtonOptions from "./components/ButtonOptions";
+import { readClasses } from "@/app/api/classes/controller";
 
 export default function ClassesPage() {
   const user = useRecoilValue(usersAtom);

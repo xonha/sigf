@@ -1,4 +1,5 @@
 import { TAttendance } from "@/app/api/attendance/route";
+import { readClass } from "@/app/api/classes/controller";
 import {
   createAttendances,
   readApprovedEnrollments,
@@ -7,7 +8,6 @@ import {
   createClassDates,
   deleteClassDates,
 } from "@/app/controllers/ClassDates";
-import { readClass } from "@/app/controllers/Classes";
 import { classDatesAtom } from "@/app/utils/atoms/classDatesAtom";
 import {
   TModalOptions,
