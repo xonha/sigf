@@ -2,11 +2,11 @@ import { NextRequest, NextResponse } from "next/server";
 import supabase from "../../utils/db";
 
 export async function POST(request: NextRequest) {
-  const { userId, classId, danceRole } = await request.json();
+  const { userId, classId } = await request.json();
 
   const { data, error } = await supabase
     .from("enrollment")
-    .insert([{ userId, classId, danceRole }])
+    .insert([{ userId, classId }])
     .select();
 
   if (error) {

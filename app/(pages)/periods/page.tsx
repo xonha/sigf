@@ -29,7 +29,7 @@ async function deletePeriod(id: string) {
 export default function () {
   const setIsModalOpen = useSetRecoilState(modalIsOpenAtom);
   const setModalOption = useSetRecoilState(modalOptionsAtom);
-  const setModalId = useSetRecoilState(modalIdAtom);
+  const setPeriodId = useSetRecoilState(modalIdAtom);
   const [periods, setPeriods] = useRecoilState<TPeriod[]>(periodsAtom);
 
   const columnDefs: ColDef<TPeriod>[] = [
@@ -43,7 +43,7 @@ export default function () {
 
   function openModal(modalOption: TModalOptions, periodId: string) {
     setModalOption(modalOption);
-    setModalId(periodId);
+    setPeriodId(periodId);
     setIsModalOpen(true);
   }
 

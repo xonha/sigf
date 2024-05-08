@@ -19,7 +19,7 @@ export default function ModalClasses() {
   const [name, setName] = useState("");
   const setIsModalOpen = useSetRecoilState(modalIsOpenAtom);
   const setClasses = useSetRecoilState(classesAtom);
-  const id = useRecoilValue(modalIdAtom);
+  const classId = useRecoilValue(modalIdAtom);
   const periods = useRecoilValue(periodsAtom);
 
   async function handleFormSubmit(event: React.FormEvent<HTMLFormElement>) {
@@ -27,7 +27,7 @@ export default function ModalClasses() {
     event.preventDefault();
 
     let classData: any;
-    if (!id) {
+    if (!classId) {
       classData = await createClass({
         name,
         periodId,
@@ -37,7 +37,7 @@ export default function ModalClasses() {
       });
     } else {
       classData = await updateClass({
-        id,
+        id: classId,
         name,
         weekDays: selectedWeekdays.join(","),
         size,
@@ -57,10 +57,10 @@ export default function ModalClasses() {
     setSelectedWeekdays(updatedWeekdays);
   }
 
-  if (id) {
+  if (classId) {
     useEffect(() => {
       async function updateClassState() {
-        const classData = await readClass(id);
+        const classData = await readClass(classId);
         const currentSelectedWeekdays = classData.weekDays.split(",");
         setSelectedWeekdays(currentSelectedWeekdays);
         classData.size !== undefined ? setSize(classData.size) : setSize(30);
@@ -137,7 +137,7 @@ export default function ModalClasses() {
           Fechar
         </button>
         <button className="bg-green-500 hover:bg-green-600 text-white font-bold py-2 px-4 rounded">
-          {id ? "Salvar" : "Criar"}
+          {classId ? "Salvar" : "Criar"}
         </button>
       </div>
     </form>
