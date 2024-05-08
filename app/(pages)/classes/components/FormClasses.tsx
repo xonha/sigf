@@ -7,19 +7,15 @@ import { useEffect, useState } from "react";
 import { useRecoilValue, useSetRecoilState } from "recoil";
 import { periodsAtom } from "../../../utils/atoms/periodsAtom";
 import { validWeekDays } from "../../../utils/types/WeekDays";
+import { Database } from "@/database.types";
 
-async function createClass(
-  name: string,
-  periodId: string,
-  weekDays: string[],
-  size: number
-) {
-  const week_days = weekDays.join(",");
-  const body = { name, periodId, week_days, size };
+export type TCreateClass = Database["public"]["Tables"]["classes"]["Insert"];
+export type TEditClass = Database["public"]["Tables"]["classes"]["Update"];
 
+async function createClass(classData: TCreateClass) {
   const resCreateClass = await fetch("/api/classes", {
     method: "POST",
-    body: JSON.stringify(body),
+    body: JSON.stringify(classData),
   });
   if (!resCreateClass.ok) {
     throw new Error("Error creating class");
@@ -35,13 +31,11 @@ async function createClass(
   return data;
 }
 
-async function editClass(id: string, className: string, weekDays: string[]) {
+async function editClass(classData: TEditClass) {
   try {
-    const body = { id, name: className, week_days: weekDays.join(",") };
-
     await fetch(`/api/classes`, {
       method: "PATCH",
-      body: JSON.stringify(body),
+      body: JSON.stringify(classData),
     });
 
     const response = await fetch("/api/classes");
@@ -56,27 +50,35 @@ async function editClass(id: string, className: string, weekDays: string[]) {
 
 export default function FormClasses() {
   const [selectedWeekdays, setSelectedWeekdays] = useState<string[]>([]);
-  const [classSize, setClassSize] = useState(30);
+  const [isActive, setIsActive] = useState(true);
+  const [size, setSize] = useState(30);
   const [name, setName] = useState("");
   const setIsModalOpen = useSetRecoilState(modalIsOpenAtom);
   const setClasses = useSetRecoilState(classesAtom);
-  const classId = useRecoilValue(modalIdAtom);
+  const id = useRecoilValue(modalIdAtom);
   const periods = useRecoilValue(periodsAtom);
 
   async function handleFormSubmit(event: React.FormEvent<HTMLFormElement>) {
     const periodId = event.target[2].value;
     event.preventDefault();
 
-    let classData;
-    if (!classId) {
-      classData = await createClass(
+    let classData: any;
+    if (!id) {
+      classData = await createClass({
         name,
         periodId,
-        selectedWeekdays,
-        classSize
-      );
+        weekDays: selectedWeekdays.join(","),
+        size,
+        isActive,
+      });
     } else {
-      classData = await editClass(classId, name, selectedWeekdays);
+      classData = await editClass({
+        id,
+        name,
+        weekDays: selectedWeekdays.join(","),
+        size,
+        isActive,
+      });
     }
     setName("");
     setClasses(classData);
@@ -84,22 +86,26 @@ export default function FormClasses() {
     setIsModalOpen(false);
   }
 
-  function handleWeekDaysCheckboxChange(weekday) {
+  function handleWeekDaysCheckboxChange(weekday: string) {
     const updatedWeekdays = selectedWeekdays.includes(weekday)
       ? selectedWeekdays.filter((day) => day !== weekday)
       : [...selectedWeekdays, weekday];
     setSelectedWeekdays(updatedWeekdays);
   }
 
-  if (classId) {
+  if (id) {
     useEffect(() => {
-      async function readCurrentSelectedWeekdays() {
-        const classData = await readClass(classId);
-        const currentSelectedWeekdays = classData.week_days.split(",");
+      async function updateClassState() {
+        const classData = await readClass(id);
+        const currentSelectedWeekdays = classData.weekDays.split(",");
         setSelectedWeekdays(currentSelectedWeekdays);
+        classData.size !== undefined ? setSize(classData.size) : setSize(30);
+        classData.isActive !== undefined
+          ? setIsActive(classData.isActive)
+          : setIsActive(false);
         setName(classData.name);
       }
-      readCurrentSelectedWeekdays();
+      updateClassState();
     }, []);
   }
 
@@ -109,9 +115,7 @@ export default function FormClasses() {
         className="flex-1 flex flex-col w-full justify-center gap-2 text-foreground"
         onSubmit={handleFormSubmit}
       >
-        <label className="text-md" htmlFor="name">
-          Nome
-        </label>
+        <label className="text-md">Nome</label>
         <input
           className="border rounded-md px-4 py-2 pl-2"
           type="text"
@@ -119,31 +123,34 @@ export default function FormClasses() {
           value={name}
           onChange={(e) => setName(e.target.value)}
         />
-        <label className="text-md" htmlFor="name">
-          Tamanho da Turma
-        </label>
+        <label className="text-md">Tamanho da Turma</label>
         <input
           className="border rounded-md px-4 py-2 pl-2"
           type="number"
-          value={classSize}
-          onChange={(e) => setClassSize(Number(e.target.value))}
+          value={size}
+          onChange={(e) => setSize(Number(e.target.value))}
         />
-        <label className="text-md" htmlFor="semester">
-          Semestre
-        </label>
+        <label className="text-md">Semestre</label>
         <select
           className="rounded-md px-4 py-2 bg-inherit border mb-6"
           name="periodId"
         >
-          {periods.map((period) => (
+          {periods.map((period: any) => (
             <option key={period.id} value={period.id}>
               {period.year} - {period.semester}
             </option>
           ))}
         </select>
-        <label className="text-md" htmlFor="weekdays">
-          Dias da Semana
-        </label>
+        <div className="flex gap-4">
+          <label>Classe Ativa</label>
+          <input
+            name="status"
+            type="checkbox"
+            checked={isActive}
+            onChange={() => setIsActive(!isActive)}
+          />
+        </div>
+        <label className="text-md">Dias da Semana</label>
         <div className="flex gap-4">
           {validWeekDays.map((weekday) => (
             <div key={weekday} className="flex items-center">
@@ -155,9 +162,7 @@ export default function FormClasses() {
                 checked={selectedWeekdays.includes(weekday)}
                 onChange={() => handleWeekDaysCheckboxChange(weekday)}
               />
-              <label className="ml-2" htmlFor={weekday}>
-                {weekday}
-              </label>
+              <label className="ml-2">{weekday}</label>
             </div>
           ))}
         </div>
@@ -169,7 +174,7 @@ export default function FormClasses() {
             Fechar
           </button>
           <button className="bg-green-500 hover:bg-green-600 text-white font-bold py-2 px-4 rounded">
-            {classId ? "Salvar" : "Criar"}
+            {id ? "Salvar" : "Criar"}
           </button>
         </div>
       </form>

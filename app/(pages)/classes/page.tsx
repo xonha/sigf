@@ -32,7 +32,7 @@ export default function ClassesPage() {
     },
     {
       headerName: "Dias de Aula",
-      field: "week_days",
+      field: "weekDays",
       flex: 1,
     },
     {
@@ -58,7 +58,7 @@ export default function ClassesPage() {
     },
     {
       headerName: "Dias de Aula",
-      field: "week_days",
+      field: "weekDays",
       flex: 1,
     },
     {
@@ -68,7 +68,7 @@ export default function ClassesPage() {
     },
   ];
 
-  function cellRendererClassName(params) {
+  function cellRendererClassName(params: { data: any }) {
     const classData = params.data;
 
     return (
@@ -78,11 +78,11 @@ export default function ClassesPage() {
     );
   }
 
-  function cellRendererActions(params) {
+  function cellRendererActions(params: { data: { id: string } }) {
     return <ButtonOptions id={params.data.id} />;
   }
 
-  function cellRendererEnroll(params) {
+  function cellRendererEnroll(params: { data: { id: string } }) {
     return (
       <ButtonEnroll
         classId={params.data.id}
