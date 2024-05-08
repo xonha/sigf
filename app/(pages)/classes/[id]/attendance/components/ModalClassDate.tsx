@@ -14,7 +14,7 @@ import React, { useState } from "react";
 import DatePicker from "react-datepicker";
 import { useRecoilState, useSetRecoilState } from "recoil";
 
-export default function FormClassDate() {
+export default function ModalClassDate() {
   const classId = useParams().id;
   const [classDates, setClassDates] = useRecoilState(classDatesAtom);
   const [selectedDate, setSelectedDate] = useState(new Date());
