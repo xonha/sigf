@@ -14,73 +14,52 @@ import { AgGridReact } from "ag-grid-react";
 import Link from "next/link";
 import { useEffect, useState } from "react";
 import { useRecoilValue, useSetRecoilState } from "recoil";
+import ButtonEnrollment from "./components/ButtonEnrollment";
 import ButtonOptions from "./components/ButtonOptions";
 
 export default function ClassesPage() {
   const user = useRecoilValue(usersAtom);
   const [shouldUpdate, setShouldUpdate] = useState(false);
-  const setUserEnrollments = useSetRecoilState(enrollmentsAtom);
+  const setEnrollmentIds = useSetRecoilState(enrollmentsAtom);
   const setClasses = useSetRecoilState(classesAtom);
   const sortedClasses = useRecoilValue(sortedClassesSelector);
-  const columnDefs: ColDef<TClasses>[] = [
-    {
-      headerName: "Nome",
-      flex: 1,
-      sortIndex: 0,
-      cellRenderer: cellRendererClassName,
-    },
-    {
-      headerName: "Dias de Aula",
-      field: "weekDays",
-      flex: 1,
-    },
-    {
-      headerName: "Ações",
-      flex: 1,
-      cellRenderer: cellRendererActions,
-    },
-  ];
-
-  user?.userRole !== "admin";
-
   const columnDefsNonAdmin: ColDef<TClasses>[] = [
     {
       headerName: "Nome",
       flex: 1,
       sortIndex: 0,
-      cellRenderer: cellRendererClassName,
+      cellRenderer: (p: any) => (
+        <Link className="font-bold" href={`/classes/${p.data.id}`}>
+          {p.data.name}
+        </Link>
+      ),
     },
     {
       headerName: "Dias de Aula",
       field: "weekDays",
       flex: 1,
     },
+    {
+      headerName: "Inscrição",
+      flex: 1,
+      cellRenderer: (p: any) => <ButtonEnrollment id={p.data.id} />,
+    },
   ];
-
-  function cellRendererClassName(params: { data: any }) {
-    const classData = params.data;
-
-    return (
-      <Link className=" font-bold" href={`/classes/${classData.id}`}>
-        {classData.name}
-      </Link>
-    );
-  }
-
-  function cellRendererActions(params: { data: { id: string } }) {
-    return <ButtonOptions id={params.data.id} />;
-  }
+  const columnDefs: ColDef<TClasses>[] = [
+    ...columnDefsNonAdmin,
+    {
+      headerName: "Ações",
+      flex: 1,
+      cellRenderer: (p: any) => <ButtonOptions id={p.data.id} />,
+    },
+  ];
 
   useEffect(() => {
     async function handleUpdateGlobalStates() {
-      const classes = await readClasses();
-      const enrollments = await readEnrollments();
-
-      setClasses(classes);
-      setUserEnrollments(enrollments);
+      setClasses(await readClasses());
+      setEnrollmentIds(await readEnrollments());
       setShouldUpdate(false);
     }
-
     handleUpdateGlobalStates();
   }, [shouldUpdate]);
 

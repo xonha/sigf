@@ -23,12 +23,6 @@ export default function ButtonOptions(props: { id: string }) {
   return (
     <div className="flex gap-2">
       <button
-        className="text-green-500 hover:text-green-400 font-bold"
-        onClick={() => openModal("classEnrollment")}
-      >
-        Inscrição
-      </button>
-      <button
         className="text-blue-500 hover:text-blue-400 font-bold"
         onClick={() => openModal("classes")}
       >
