@@ -1,6 +1,8 @@
 "use client";
 
 import { TClasses } from "@/app/api/classes/[id]/route";
+import { readClasses } from "@/app/api/classes/controller";
+import { readEnrollments } from "@/app/api/enrollments/controller";
 import {
   classesAtom,
   sortedClassesSelector,
@@ -12,10 +14,7 @@ import { AgGridReact } from "ag-grid-react";
 import Link from "next/link";
 import { useEffect, useState } from "react";
 import { useRecoilValue, useSetRecoilState } from "recoil";
-import ButtonEnroll from "./components/ButtonEnroll";
 import ButtonOptions from "./components/ButtonOptions";
-import { readClasses } from "@/app/api/classes/controller";
-import { readEnrollments } from "@/app/api/enrollments/controller";
 
 export default function ClassesPage() {
   const user = useRecoilValue(usersAtom);
@@ -34,11 +33,6 @@ export default function ClassesPage() {
       headerName: "Dias de Aula",
       field: "weekDays",
       flex: 1,
-    },
-    {
-      headerName: "Inscrição",
-      flex: 1,
-      cellRenderer: cellRendererEnroll,
     },
     {
       headerName: "Ações",
@@ -61,11 +55,6 @@ export default function ClassesPage() {
       field: "weekDays",
       flex: 1,
     },
-    {
-      headerName: "Inscrição",
-      flex: 1,
-      cellRenderer: cellRendererEnroll,
-    },
   ];
 
   function cellRendererClassName(params: { data: any }) {
@@ -80,15 +69,6 @@ export default function ClassesPage() {
 
   function cellRendererActions(params: { data: { id: string } }) {
     return <ButtonOptions id={params.data.id} />;
-  }
-
-  function cellRendererEnroll(params: { data: { id: string } }) {
-    return (
-      <ButtonEnroll
-        classId={params.data.id}
-        setUpdateEnrollments={setShouldUpdate}
-      />
-    );
   }
 
   useEffect(() => {

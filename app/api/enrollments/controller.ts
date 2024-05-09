@@ -1,5 +1,9 @@
 import useUser from "@/app/utils/hooks/useUser";
 import { TEnrollment } from "./userId/[id]/route";
+import { Database } from "@/database.types";
+
+type TCreateDeleteEnrollment =
+  Database["public"]["Tables"]["enrollment"]["Insert"];
 
 export async function readEnrollments() {
   const { data, error } = await useUser();
@@ -22,54 +26,32 @@ export async function readEnrollments() {
     throw error;
   }
 }
-export async function createEnrollment(
-  classId: string,
-  setUserEnrollments: any,
-  setUpdateEnrollments: any,
-  userEnrollments: any,
-) {
+
+export async function createEnrollment(enrollment: TCreateDeleteEnrollment) {
   try {
-    const { data, error } = await useUser();
-    if (error) {
-      console.error("Error getting user:", error);
-      return;
-    }
     const res = await fetch(`/api/enrollments`, {
       method: "POST",
-      body: JSON.stringify({ userId: data.user.id, classId }),
+      body: JSON.stringify({ ...enrollment }),
     });
-    const resData = await res.json();
-    setUserEnrollments([...userEnrollments, resData[0].classId]);
-    setUpdateEnrollments(true);
+    const createdEnrollment = await res.json();
+    return createdEnrollment[0];
   } catch (error) {
     console.error("Error enrolling class:", error);
   }
 }
 
 export async function deleteEnrollment(
-  classId: string,
-  setUserEnrollments: any,
-  setUpdateEnrollments: any,
-  userEnrollments: any,
+  enrollment: TCreateDeleteEnrollment,
+  userEnrollmentIds: any,
 ) {
   try {
-    const { data, error } = await useUser();
-
-    if (error) {
-      console.error("Error getting user:", error);
-      return;
-    }
-    const response = await fetch(`/api/enrollments`, {
+    await fetch(`/api/enrollments`, {
       method: "DELETE",
-      body: JSON.stringify({ userId: data.user.id, classId }),
+      body: JSON.stringify({ ...enrollment }),
     });
-    await response.json();
-    const filteredEnrollments = userEnrollments.filter(
-      (item: { classId: string }) => item.classId === classId,
+    return userEnrollmentIds.filter(
+      (enrollmentId: string) => enrollmentId !== enrollment.classId,
     );
-
-    setUserEnrollments(filteredEnrollments);
-    setUpdateEnrollments(true);
   } catch (error) {
     console.error("Error unenrolling class:", error);
   }

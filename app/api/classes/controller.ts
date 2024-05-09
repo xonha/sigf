@@ -61,3 +61,15 @@ export async function updateClass(classData: TUpdateClass) {
     throw error;
   }
 }
+
+export async function deleteClass(id: string) {
+  try {
+    const res = await fetch(`/api/classes/${id}`, {
+      method: "DELETE",
+    });
+    return res;
+  } catch (error) {
+    console.error("Error deleting class:", error);
+    throw error;
+  }
+}
