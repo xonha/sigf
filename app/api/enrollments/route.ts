@@ -1,13 +1,8 @@
 import { NextRequest, NextResponse } from "next/server";
 import supabase from "../../utils/db";
 
-export async function POST(request: NextRequest) {
-  const { userId, classId } = await request.json();
-
-  const { data, error } = await supabase
-    .from("enrollment")
-    .insert([{ userId, classId }])
-    .select();
+export async function GET() {
+  const { data, error } = await supabase.from("enrollment").select();
 
   if (error) {
     return NextResponse.json(error, { status: 500 });
@@ -15,8 +10,13 @@ export async function POST(request: NextRequest) {
   return NextResponse.json(data);
 }
 
-export async function GET() {
-  const { data, error } = await supabase.from("enrollment").select();
+export async function POST(request: NextRequest) {
+  const body = await request.json();
+
+  const { data, error } = await supabase
+    .from("enrollment")
+    .insert([{ ...body }])
+    .select();
 
   if (error) {
     return NextResponse.json(error, { status: 500 });

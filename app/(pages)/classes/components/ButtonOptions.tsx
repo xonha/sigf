@@ -1,3 +1,4 @@
+import { deleteClass } from "@/app/api/classes/controller";
 import { classesAtom } from "@/app/utils/atoms/classesAtom";
 import {
   TModalOptions,
@@ -6,18 +7,6 @@ import {
   modalOptionsAtom,
 } from "@/app/utils/atoms/modalAtom";
 import { useRecoilState, useSetRecoilState } from "recoil";
-
-async function deleteClass(id: string) {
-  try {
-    const res = await fetch(`/api/classes/${id}`, {
-      method: "DELETE",
-    });
-    return res;
-  } catch (error) {
-    console.error("Error deleting class:", error);
-    throw error;
-  }
-}
 
 export default function ButtonOptions(props: { id: string }) {
   const [classes, setClasses] = useRecoilState(classesAtom);
@@ -31,14 +20,14 @@ export default function ButtonOptions(props: { id: string }) {
     setIsModalOpen(true);
   }
 
-  function handleDeleteClass() {
-    deleteClass(props.id);
-    const newClasses = classes.filter((classItem) => classItem.id !== props.id);
-    setClasses(newClasses);
-  }
-
   return (
     <div className="flex gap-2">
+      <button
+        className="text-green-500 hover:text-green-400 font-bold"
+        onClick={() => openModal("classEnrollment")}
+      >
+        Inscrição
+      </button>
       <button
         className="text-blue-500 hover:text-blue-400 font-bold"
         onClick={() => openModal("classes")}
@@ -47,7 +36,10 @@ export default function ButtonOptions(props: { id: string }) {
       </button>
       <button
         className="text-red-500 hover:text-red-400 font-bold"
-        onClick={handleDeleteClass}
+        onClick={() => {
+          deleteClass(props.id);
+          setClasses(classes.filter((classItem) => classItem.id !== props.id));
+        }}
       >
         Excluir
       </button>

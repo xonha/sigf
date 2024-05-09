@@ -193,6 +193,9 @@ export type Database = {
           classId: string
           createdAt: string
           danceRole: Database["public"]["Enums"]["danceRole"]
+          danceRolePreference:
+            | Database["public"]["Enums"]["danceRolePreference"]
+            | null
           status: Database["public"]["Enums"]["enrollmentStatus"]
           userId: string
         }
@@ -200,6 +203,9 @@ export type Database = {
           classId: string
           createdAt?: string
           danceRole?: Database["public"]["Enums"]["danceRole"]
+          danceRolePreference?:
+            | Database["public"]["Enums"]["danceRolePreference"]
+            | null
           status?: Database["public"]["Enums"]["enrollmentStatus"]
           userId: string
         }
@@ -207,6 +213,9 @@ export type Database = {
           classId?: string
           createdAt?: string
           danceRole?: Database["public"]["Enums"]["danceRole"]
+          danceRolePreference?:
+            | Database["public"]["Enums"]["danceRolePreference"]
+            | null
           status?: Database["public"]["Enums"]["enrollmentStatus"]
           userId?: string
         }
@@ -352,6 +361,7 @@ export type Database = {
     }
     Enums: {
       danceRole: "indifferent" | "led" | "leader"
+      danceRolePreference: "led" | "leader"
       enrollmentStatus: "pending" | "approved" | "rejected"
       presenceEnum: "notRegistered" | "present" | "absent" | "justified"
       semesterEnum: "first" | "second" | "firstVacation" | "secondVacation"
