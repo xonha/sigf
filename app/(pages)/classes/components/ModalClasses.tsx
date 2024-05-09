@@ -1,16 +1,16 @@
 "use client";
 
-import { classesAtom } from "@/app/utils/atoms/classesAtom";
-import { modalIdAtom, modalIsOpenAtom } from "@/app/utils/atoms/modalAtom";
-import { useEffect, useState } from "react";
-import { useRecoilValue, useSetRecoilState } from "recoil";
-import { periodsAtom } from "../../../utils/atoms/periodsAtom";
-import { validWeekDays } from "../../../utils/types/WeekDays";
 import {
   createClass,
   readClass,
   updateClass,
 } from "@/app/api/classes/controller";
+import { classesAtom } from "@/app/utils/atoms/classesAtom";
+import { modalIdAtom, modalIsOpenAtom } from "@/app/utils/atoms/modalAtom";
+import { periodsAtom } from "@/app/utils/atoms/periodsAtom";
+import { validWeekDays } from "@/app/utils/types/WeekDays";
+import { useEffect, useState } from "react";
+import { useRecoilValue, useSetRecoilState } from "recoil";
 
 export default function ModalClasses() {
   const [selectedWeekdays, setSelectedWeekdays] = useState<string[]>([]);
