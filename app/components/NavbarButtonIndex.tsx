@@ -2,7 +2,7 @@
 
 import Link from "next/link";
 import { usePathname } from "next/navigation";
-import { useSetRecoilState } from "recoil";
+import { useRecoilValue, useSetRecoilState } from "recoil";
 import GenerateClassDates from "../(pages)/classes/[id]/attendance/components/CreateClassDates";
 import {
   TModalOptions,
@@ -10,11 +10,13 @@ import {
   modalIsOpenAtom,
   modalOptionsAtom,
 } from "../utils/atoms/modalAtom";
+import { enrollmentCountAtom } from "../utils/atoms/enrollmentsAtom";
 
-export default function NavbarCreateButton() {
+export default function NavbarButtonIndex() {
   const setIsModalOpen = useSetRecoilState(modalIsOpenAtom);
   const setModalOption = useSetRecoilState(modalOptionsAtom);
   const setModalId = useSetRecoilState(modalIdAtom);
+  const enrollmentCount = useRecoilValue(enrollmentCountAtom);
 
   const pathname = usePathname();
   const classesIdRegex = new RegExp(
@@ -55,8 +57,8 @@ export default function NavbarCreateButton() {
   } else if (pathname.match(classesIdRegex)) {
     return (
       <div className="flex gap-4">
-        <div className="bg-blue-500 hover:bg-blue-600 text-white font-bold py-2 px-4 rounded">
-          Condutorxs: 23 / 30
+        <div className="bg-blue-500  text-white font-bold py-2 px-4 rounded">
+          Condutorxs: {enrollmentCount.leader} / {enrollmentCount.max}
         </div>
         <Link
           className="bg-green-500 hover:bg-green-600 text-white font-bold py-2 px-4 rounded"
@@ -64,8 +66,8 @@ export default function NavbarCreateButton() {
         >
           Presenças
         </Link>
-        <div className="bg-orange-500 hover:bg-orange-600 text-white font-bold py-2 px-4 rounded">
-          Conduzidxs: 27 / 30
+        <div className="bg-orange-500  text-white font-bold py-2 px-4 rounded">
+          Conduzidxs: {enrollmentCount.led} / {enrollmentCount.max}
         </div>
       </div>
     );

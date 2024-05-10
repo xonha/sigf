@@ -1,12 +1,18 @@
 "use client";
 
+import { readEnrollmentsByClassId } from "@/app/api/enrollments/controller";
+import { classesAtom } from "@/app/utils/atoms/classesAtom";
+import {
+  IEnrollmentCounts,
+  enrollmentCountAtom,
+} from "@/app/utils/atoms/enrollmentsAtom";
 import { usersAtom } from "@/app/utils/atoms/usersAtom";
 import { Database } from "@/database.types";
 import { ColDef } from "ag-grid-community";
 import { AgGridReact } from "ag-grid-react";
 import { useParams } from "next/navigation";
 import { useEffect, useState } from "react";
-import { useRecoilValue } from "recoil";
+import { useRecoilValue, useSetRecoilState } from "recoil";
 
 interface IRow {
   classId: string;
@@ -24,6 +30,8 @@ interface IRow {
 
 export default function ClassesIdPage() {
   const user = useRecoilValue(usersAtom);
+  const setEnrollmentsCount = useSetRecoilState(enrollmentCountAtom);
+  const classes = useRecoilValue(classesAtom);
   const classId = useParams().id;
   const [rowData, setRowData] = useState<IRow[]>([]);
   const columnDefs: ColDef<IRow>[] = [
@@ -99,6 +107,7 @@ export default function ClassesIdPage() {
                 params.data.classId,
                 params.data.userId,
                 "pending",
+                false,
               );
             }}
           >
@@ -129,6 +138,7 @@ export default function ClassesIdPage() {
               params.data.classId,
               params.data.userId,
               "rejected",
+              false,
             );
           }}
         >
@@ -141,7 +151,8 @@ export default function ClassesIdPage() {
   async function updateEnrollment(
     classId: string,
     userId: string,
-    status: string,
+    status: "approved" | "rejected" | "pending",
+    alterCount = true,
   ) {
     try {
       const res = await fetch(`/api/enrollments/classId/${classId}`, {
@@ -151,36 +162,53 @@ export default function ClassesIdPage() {
 
       const data = await res.json();
 
-      const new_row_data = rowData.map((row) => {
-        if (row.classId === data[0].classId && row.userId === data[0].userId) {
-          row.status = data[0].status;
-        }
-        return row;
-      });
-      setRowData(new_row_data);
+      const updatedRowData = rowData.map((row) =>
+        row.classId === data[0].classId && row.userId === data[0].userId
+          ? { ...row, status: data[0].status }
+          : row,
+      );
+      setRowData(updatedRowData);
+
+      if (!alterCount) return;
+      const countChange = data[0].status === "approved" ? 1 : -1;
+      if (data[0].danceRole === "led") {
+        setEnrollmentsCount((prevCount: IEnrollmentCounts) => {
+          return { ...prevCount, led: prevCount.led + countChange };
+        });
+      } else if (data[0].danceRole === "leader") {
+        setEnrollmentsCount((prevCount: IEnrollmentCounts) => {
+          return { ...prevCount, leader: prevCount.leader + countChange };
+        });
+      }
     } catch (error) {
       console.error("Error updating enrollment:", error);
     }
   }
 
-  async function fetchEnrollments() {
-    try {
-      const res = await fetch(`/api/enrollments/classId/${classId}`);
-      const res_data = await res.json();
-
-      const new_res_data = res_data.map((row) => {
-        row.createdAt = new Date(row.createdAt);
-        return row;
-      });
-
-      setRowData(new_res_data);
-    } catch (error) {
-      console.error("Error fetching enrollments:", error);
-    }
-  }
-
   useEffect(() => {
-    fetchEnrollments();
+    async function handleReadEnrollments() {
+      const enrollments = await readEnrollmentsByClassId(classId as string);
+      setRowData(enrollments);
+
+      const enrollmentsLedCount = enrollments.filter(
+        (enrollment) =>
+          enrollment.danceRole === "led" && enrollment.status === "approved",
+      );
+      const enrollmentsLeaderCount = enrollments.filter(
+        (enrollment) =>
+          enrollment.danceRole === "leader" && enrollment.status === "approved",
+      );
+
+      const currentClass = classes.find((c) => c.id === classId);
+      if (!currentClass) return console.error("Class not found");
+      setEnrollmentsCount({
+        max: currentClass.size,
+        led: enrollmentsLedCount.length,
+        leader: enrollmentsLeaderCount.length,
+      });
+    }
+
+    handleReadEnrollments();
   }, []);
 
   return (

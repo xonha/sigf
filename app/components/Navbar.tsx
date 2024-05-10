@@ -7,7 +7,7 @@ import { useRecoilValue } from "recoil";
 import profilePicture from "../profile.png";
 import { usersAtom } from "../utils/atoms/usersAtom";
 import LogoutButton from "./LogoutButton";
-import NavbarCreateButton from "./NavbarCreateButton";
+import NavbarButtonIndex from "./NavbarButtonIndex";
 
 export default function Navbar() {
   const profileRef = useRef<HTMLImageElement>(null);
@@ -43,8 +43,7 @@ export default function Navbar() {
         </Link>
       </div>
 
-      {/* display NavbarCreateButton only if user.userRole === "admin" */}
-      {user?.userRole === "admin" && <NavbarCreateButton />}
+      {user?.userRole === "admin" && <NavbarButtonIndex />}
 
       <div className="pr-4 relative">
         <img

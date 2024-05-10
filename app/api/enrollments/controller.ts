@@ -6,6 +6,32 @@ type TCreateDeleteEnrollment =
   Database["public"]["Tables"]["enrollment"]["Insert"];
 
 export async function readEnrollments() {
+  try {
+    const res = await fetch(`/api/enrollments`);
+    const enrollments = await res.json();
+    return enrollments as TEnrollment[];
+  } catch (error) {
+    console.error("Error getting enrollments:", error);
+    throw error;
+  }
+}
+export async function readEnrollmentsByClassId(classId: string) {
+  try {
+    const res = await fetch(`/api/enrollments/classId/${classId}`);
+    const res_data = await res.json();
+
+    const new_res_data = res_data.map((row) => {
+      row.createdAt = new Date(row.createdAt);
+      return row;
+    });
+
+    return new_res_data;
+  } catch (error) {
+    console.error("Error fetching enrollments:", error);
+  }
+}
+
+export async function readEnrollmentsByUser() {
   const { data, error } = await useUser();
 
   if (error) {

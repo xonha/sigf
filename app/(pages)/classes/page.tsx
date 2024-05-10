@@ -2,7 +2,7 @@
 
 import { TClasses } from "@/app/api/classes/[id]/route";
 import { readClasses } from "@/app/api/classes/controller";
-import { readEnrollments } from "@/app/api/enrollments/controller";
+import { readEnrollmentsByUser } from "@/app/api/enrollments/controller";
 import {
   classesAtom,
   sortedClassesSelector,
@@ -57,7 +57,7 @@ export default function ClassesPage() {
   useEffect(() => {
     async function handleUpdateGlobalStates() {
       setClasses(await readClasses());
-      setEnrollmentIds(await readEnrollments());
+      setEnrollmentIds(await readEnrollmentsByUser());
       setShouldUpdate(false);
     }
     handleUpdateGlobalStates();
