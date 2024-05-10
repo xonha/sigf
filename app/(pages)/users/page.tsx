@@ -24,7 +24,7 @@ export default function () {
 
   async function handleChangeRole(
     userData: TUserViewPlusRole,
-    newRole: TUser["role"]
+    newRole: TUser["role"],
   ) {
     if (userData.user.created_at === "never") {
       const createdUser = await createUser({
@@ -80,7 +80,7 @@ export default function () {
     function BtnAdmin() {
       return (
         <button
-          className="text-red-500 hover:text-red-400 font-bold"
+          className="text-orange-500 hover:text-orange-400 font-bold"
           onClick={() => handleChangeRole(data, "admin")}
         >
           Admin

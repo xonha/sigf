@@ -57,19 +57,19 @@ export default function ClassesIdPage() {
               updateEnrollment(
                 params.data.classId,
                 params.data.userId,
-                "pending"
+                "pending",
               );
             }}
           >
             Resetar
           </button>
           <button
-            className="text-red-500 hover:text-red-400 font-bold"
+            className="text-orange-500 hover:text-orange-400 font-bold"
             onClick={() => {
               updateEnrollment(
                 params.data.classId,
                 params.data.userId,
-                "rejected"
+                "rejected",
               );
             }}
           >
@@ -86,7 +86,7 @@ export default function ClassesIdPage() {
               updateEnrollment(
                 params.data.classId,
                 params.data.userId,
-                "approved"
+                "approved",
               );
             }}
           >
@@ -98,7 +98,7 @@ export default function ClassesIdPage() {
               updateEnrollment(
                 params.data.classId,
                 params.data.userId,
-                "pending"
+                "pending",
               );
             }}
           >
@@ -116,19 +116,19 @@ export default function ClassesIdPage() {
             updateEnrollment(
               params.data.classId,
               params.data.userId,
-              "approved"
+              "approved",
             );
           }}
         >
           Aprovar
         </button>
         <button
-          className="text-red-500 hover:text-red-400 font-bold"
+          className="text-orange-500 hover:text-orange-400 font-bold"
           onClick={() => {
             updateEnrollment(
               params.data.classId,
               params.data.userId,
-              "rejected"
+              "rejected",
             );
           }}
         >
@@ -141,7 +141,7 @@ export default function ClassesIdPage() {
   async function updateEnrollment(
     classId: string,
     userId: string,
-    status: string
+    status: string,
   ) {
     try {
       const res = await fetch(`/api/enrollments/classId/${classId}`, {

@@ -29,7 +29,7 @@ export default function ButtonOptions(props: { id: string }) {
         Editar
       </button>
       <button
-        className="text-red-500 hover:text-red-400 font-bold"
+        className="text-orange-500 hover:text-orange-400 font-bold"
         onClick={() => {
           deleteClass(props.id);
           setClasses(classes.filter((classItem) => classItem.id !== props.id));

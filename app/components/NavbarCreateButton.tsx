@@ -18,10 +18,10 @@ export default function NavbarCreateButton() {
 
   const pathname = usePathname();
   const classesIdRegex = new RegExp(
-    /\/classes\/[0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{12}$/
+    /\/classes\/[0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{12}$/,
   );
   const attendanceRegex = new RegExp(
-    /\/classes\/[0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{12}\/attendance$/
+    /\/classes\/[0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{12}\/attendance$/,
   );
 
   function openModal(modalOption: TModalOptions) {
@@ -54,13 +54,19 @@ export default function NavbarCreateButton() {
     );
   } else if (pathname.match(classesIdRegex)) {
     return (
-      <div>
+      <div className="flex gap-4">
+        <div className="bg-blue-500 hover:bg-blue-600 text-white font-bold py-2 px-4 rounded">
+          Condutorxs: 23 / 30
+        </div>
         <Link
           className="bg-green-500 hover:bg-green-600 text-white font-bold py-2 px-4 rounded"
           href={`${pathname}/attendance`}
         >
           Presenças
         </Link>
+        <div className="bg-orange-500 hover:bg-orange-600 text-white font-bold py-2 px-4 rounded">
+          Conduzidxs: 27 / 30
+        </div>
       </div>
     );
   } else if (pathname.match(attendanceRegex)) {
