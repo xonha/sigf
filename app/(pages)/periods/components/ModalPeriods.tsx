@@ -4,7 +4,7 @@ import {
   createPeriod,
   editPeriod,
   readPeriod,
-} from "@/app/controllers/Periods";
+} from "@/app/api/periods/controller";
 import { modalIdAtom, modalIsOpenAtom } from "@/app/utils/atoms/modalAtom";
 import { Database } from "@/database.types";
 import { useEffect, useState } from "react";

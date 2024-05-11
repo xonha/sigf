@@ -7,10 +7,10 @@ import "ag-grid-community/styles/ag-theme-quartz.css";
 import { useEffect } from "react";
 import { useSetRecoilState } from "recoil";
 import MainModal from "../components/MainModal";
-import { readPeriods } from "../controllers/Periods";
 import { readUserWithRole } from "../controllers/Users";
 import { periodsAtom } from "../utils/atoms/periodsAtom";
 import { usersAtom } from "../utils/atoms/usersAtom";
+import { readPeriods } from "../api/periods/controller";
 
 function Content({ children }: { children: React.ReactNode }) {
   return (
