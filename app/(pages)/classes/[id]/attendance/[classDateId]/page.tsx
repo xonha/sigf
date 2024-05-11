@@ -3,7 +3,7 @@
 import { Database } from "@/database.types";
 import { ColDef } from "ag-grid-community";
 import { AgGridReact } from "ag-grid-react";
-import { useParams, usePathname } from "next/navigation";
+import { useParams } from "next/navigation";
 import { useEffect, useState } from "react";
 
 export interface IClassDatesRow {
@@ -26,9 +26,7 @@ export interface IClassDatesRow {
 }
 
 export default function AttendancePage() {
-  const pathname = usePathname();
   const params = useParams();
-  const classId = params.id;
   const classDateId = params.classDateId;
 
   const [rowData, setRowData] = useState<IClassDatesRow[]>([]);
@@ -56,7 +54,7 @@ export default function AttendancePage() {
     function AbsentButton() {
       return (
         <button
-          className="text-red-500 hover:text-red-400 font-bold"
+          className="text-orange-500 hover:text-orange-400 font-bold"
           onClick={() => updateAttendance(data.id, "absent")}
         >
           Ausente
@@ -109,7 +107,7 @@ export default function AttendancePage() {
 
   async function updateAttendance(
     attendanceId: string,
-    presence: Database["public"]["Enums"]["presenceEnum"]
+    presence: Database["public"]["Enums"]["presenceEnum"],
   ) {
     try {
       const res = await fetch(`/api/attendance`, {

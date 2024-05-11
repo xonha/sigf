@@ -68,7 +68,7 @@ export default function () {
           Editar
         </button>
         <button
-          className="text-red-500 hover:text-red-400 font-bold"
+          className="text-orange-500 hover:text-orange-400 font-bold"
           onClick={() => handleDeletePeriod(data.id ?? "")}
           data-action="delete"
         >

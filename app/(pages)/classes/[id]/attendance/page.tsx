@@ -18,7 +18,7 @@ export default function AttendancePage() {
   const classId = useParams().id;
   // TODO: Fix this any, using classDatesAtom but types are incorrect
   const [rowData, setRowData] = useRecoilState<IClassDatesRow[]>(
-    classDatesAtom as any
+    classDatesAtom as any,
   );
   const columnDefs: ColDef<IClassDatesRow>[] = [
     { field: "day", headerName: "Dia", flex: 1 },
@@ -40,7 +40,7 @@ export default function AttendancePage() {
           Editar
         </button>
         <button
-          className="text-red-500 hover:text-red-400 font-bold"
+          className="text-orange-500 hover:text-orange-400 font-bold"
           onClick={() => deleteClassDate(params.data.id)}
         >
           Deletar

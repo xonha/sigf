@@ -99,7 +99,7 @@ export default function ModalClassEnrollment() {
       <div className="flex flex-row-reverse gap-4">
         {isEnrolled ? (
           <button
-            className="bg-red-500 hover:bg-red-600 text-white font-bold py-2 px-4 rounded"
+            className="bg-orange-500 hover:bg-orange-600 text-white font-bold py-2 px-4 rounded"
             onClick={handleUnenroll}
           >
             Desinscrever

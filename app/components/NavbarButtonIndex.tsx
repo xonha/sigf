@@ -2,7 +2,7 @@
 
 import Link from "next/link";
 import { usePathname } from "next/navigation";
-import { useSetRecoilState } from "recoil";
+import { useRecoilValue, useSetRecoilState } from "recoil";
 import GenerateClassDates from "../(pages)/classes/[id]/attendance/components/CreateClassDates";
 import {
   TModalOptions,
@@ -10,18 +10,20 @@ import {
   modalIsOpenAtom,
   modalOptionsAtom,
 } from "../utils/atoms/modalAtom";
+import { enrollmentCountAtom } from "../utils/atoms/enrollmentsAtom";
 
-export default function NavbarCreateButton() {
+export default function NavbarButtonIndex() {
   const setIsModalOpen = useSetRecoilState(modalIsOpenAtom);
   const setModalOption = useSetRecoilState(modalOptionsAtom);
   const setModalId = useSetRecoilState(modalIdAtom);
+  const enrollmentCount = useRecoilValue(enrollmentCountAtom);
 
   const pathname = usePathname();
   const classesIdRegex = new RegExp(
-    /\/classes\/[0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{12}$/
+    /\/classes\/[0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{12}$/,
   );
   const attendanceRegex = new RegExp(
-    /\/classes\/[0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{12}\/attendance$/
+    /\/classes\/[0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{12}\/attendance$/,
   );
 
   function openModal(modalOption: TModalOptions) {
@@ -54,13 +56,31 @@ export default function NavbarCreateButton() {
     );
   } else if (pathname.match(classesIdRegex)) {
     return (
-      <div>
+      <div className="flex gap-4">
+        <div
+          className={
+            enrollmentCount.leader === enrollmentCount.max
+              ? "bg-blue-300  text-white font-bold py-2 px-4 rounded"
+              : "bg-blue-500  text-white font-bold py-2 px-4 rounded"
+          }
+        >
+          Condutorxs: {enrollmentCount.leader} / {enrollmentCount.max}
+        </div>
         <Link
           className="bg-green-500 hover:bg-green-600 text-white font-bold py-2 px-4 rounded"
           href={`${pathname}/attendance`}
         >
           Presenças
         </Link>
+        <div
+          className={
+            enrollmentCount.led === enrollmentCount.max
+              ? "bg-orange-300  text-white font-bold py-2 px-4 rounded"
+              : "bg-orange-500  text-white font-bold py-2 px-4 rounded"
+          }
+        >
+          Conduzidxs: {enrollmentCount.led} / {enrollmentCount.max}
+        </div>
       </div>
     );
   } else if (pathname.match(attendanceRegex)) {
