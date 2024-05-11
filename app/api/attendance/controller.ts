@@ -1,5 +1,5 @@
-import { TAttendance } from "../api/attendance/route";
-import { TApprovedEnrollment } from "../api/enrollments/classId/[id]/approved/route";
+import { TApprovedEnrollment } from "../enrollments/classId/[id]/approved/route";
+import { TAttendance } from "./route";
 
 export async function createAttendances(attendances: TAttendance[]) {
   try {

@@ -1,11 +1,11 @@
 "use client";
 
-import { TAttendance } from "@/app/api/attendance/route";
-import { readClass } from "@/app/api/classes/controller";
 import {
   createAttendances,
   readApprovedEnrollments,
-} from "@/app/controllers/Attendance";
+} from "@/app/api/attendance/controller";
+import { TAttendance } from "@/app/api/attendance/route";
+import { readClass } from "@/app/api/classes/controller";
 import { createClassDates } from "@/app/controllers/ClassDates";
 import { classDatesAtom } from "@/app/utils/atoms/classDatesAtom";
 import { modalIsOpenAtom } from "@/app/utils/atoms/modalAtom";
