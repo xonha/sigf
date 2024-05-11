@@ -1,4 +1,5 @@
 import { TCalendar, createCalendar } from "@/app/api/calendar/controller";
+import Link from "next/link";
 import { useState } from "react";
 
 export default function ButtonNewCalendar(props: {
@@ -22,7 +23,7 @@ export default function ButtonNewCalendar(props: {
   return (
     <div className="flex justify-center border-b border-dashed">
       {isOpen ? (
-        <div className="w-full m-4">
+        <div className="w-full m-4 flex flex-col">
           <label className="text-md" htmlFor="semester">
             Nome
           </label>
@@ -34,6 +35,13 @@ export default function ButtonNewCalendar(props: {
           />
           <label className="text-md" htmlFor="semester">
             URL
+            <a
+              className="text-blue-500 pl-1"
+              href="https://support.google.com/calendar/answer/41207?hl=pt-BR"
+              target="_blank"
+            >
+              (?)
+            </a>
           </label>
           <input
             className="rounded-md px-4 py-2 w-full border mb-4"
