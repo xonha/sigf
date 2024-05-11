@@ -5,8 +5,8 @@ import {
   readApprovedEnrollments,
 } from "@/app/api/attendance/controller";
 import { TAttendance } from "@/app/api/attendance/route";
+import { createClassDates } from "@/app/api/classDates/controller";
 import { readClass } from "@/app/api/classes/controller";
-import { createClassDates } from "@/app/controllers/ClassDates";
 import { classDatesAtom } from "@/app/utils/atoms/classDatesAtom";
 import { modalIsOpenAtom } from "@/app/utils/atoms/modalAtom";
 import { useParams } from "next/navigation";

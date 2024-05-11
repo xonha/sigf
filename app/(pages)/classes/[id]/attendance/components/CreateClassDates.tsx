@@ -3,11 +3,11 @@ import {
   readApprovedEnrollments,
 } from "@/app/api/attendance/controller";
 import { TAttendance } from "@/app/api/attendance/route";
-import { readClass } from "@/app/api/classes/controller";
 import {
-  createClassDates,
   deleteClassDates,
-} from "@/app/controllers/ClassDates";
+  createClassDates,
+} from "@/app/api/classDates/controller";
+import { readClass } from "@/app/api/classes/controller";
 import { classDatesAtom } from "@/app/utils/atoms/classDatesAtom";
 import {
   TModalOptions,
