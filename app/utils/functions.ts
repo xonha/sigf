@@ -1,7 +1,7 @@
 export function getWeekDays(
   startDate: Date,
   endDate: Date,
-  weekDays: string[],
+  weekDays: string[]
 ) {
   const currentDate = new Date(startDate);
 
@@ -11,7 +11,7 @@ export function getWeekDays(
       weekDays.includes(
         currentDate
           .toLocaleDateString("en-US", { weekday: "short" })
-          .toLowerCase(),
+          .toLowerCase()
       )
     ) {
       classDates.push(new Date(currentDate));

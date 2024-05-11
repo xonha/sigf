@@ -8,12 +8,12 @@ import {
 import { classesAtom } from "@/app/atoms/classesAtom";
 import { modalIsOpenAtom, modalIdAtom } from "@/app/atoms/modalAtom";
 import { periodsAtom } from "@/app/atoms/periodsAtom";
-import { validWeekDays } from "@/app/utils/types/WeekDays";
 import { useEffect, useState } from "react";
 import { useRecoilValue, useSetRecoilState } from "recoil";
 
 export default function ModalClasses() {
   const [selectedWeekdays, setSelectedWeekdays] = useState<string[]>([]);
+  const validWeekDays = ["mon", "tue", "wed", "thu", "fri", "sat", "sun"];
   const [isActive, setIsActive] = useState(true);
   const [size, setSize] = useState(30);
   const [name, setName] = useState("");

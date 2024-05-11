@@ -7,7 +7,7 @@ import {
   deleteEnrollment,
   createEnrollment,
 } from "@/app/api/enrollments/controller";
-import useUser from "@/app/utils/hooks/useUser";
+import useUser from "@/app/hooks/useUser";
 import { enrollmentsAtom } from "@/app/atoms/enrollmentsAtom";
 import { modalIsOpenAtom, modalIdAtom } from "@/app/atoms/modalAtom";
 
