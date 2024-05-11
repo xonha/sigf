@@ -1,6 +1,6 @@
 import { User } from "@supabase/supabase-js";
-import { TUser, TUserViewPlusRole } from "../api/users/route";
-import supabase from "../utils/db";
+import supabase from "../../utils/db";
+import { TUser, TUserViewPlusRole } from "./route";
 
 export type TUserWithRole = User & { userRole: string };
 
