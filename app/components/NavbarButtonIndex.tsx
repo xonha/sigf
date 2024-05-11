@@ -57,7 +57,13 @@ export default function NavbarButtonIndex() {
   } else if (pathname.match(classesIdRegex)) {
     return (
       <div className="flex gap-4">
-        <div className="bg-blue-500  text-white font-bold py-2 px-4 rounded">
+        <div
+          className={
+            enrollmentCount.leader === enrollmentCount.max
+              ? "bg-blue-300  text-white font-bold py-2 px-4 rounded"
+              : "bg-blue-500  text-white font-bold py-2 px-4 rounded"
+          }
+        >
           Condutorxs: {enrollmentCount.leader} / {enrollmentCount.max}
         </div>
         <Link
@@ -66,7 +72,13 @@ export default function NavbarButtonIndex() {
         >
           Presenças
         </Link>
-        <div className="bg-orange-500  text-white font-bold py-2 px-4 rounded">
+        <div
+          className={
+            enrollmentCount.led === enrollmentCount.max
+              ? "bg-orange-300  text-white font-bold py-2 px-4 rounded"
+              : "bg-orange-500  text-white font-bold py-2 px-4 rounded"
+          }
+        >
           Conduzidxs: {enrollmentCount.led} / {enrollmentCount.max}
         </div>
       </div>
