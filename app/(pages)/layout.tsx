@@ -9,8 +9,8 @@ import { useSetRecoilState } from "recoil";
 import { readPeriods } from "../api/periods/controller";
 import { readUserWithRole } from "../api/users/controller";
 import MainModal from "../components/MainModal";
-import { periodsAtom } from "../utils/atoms/periodsAtom";
-import { usersAtom } from "../utils/atoms/usersAtom";
+import { periodsAtom } from "../atoms/periodsAtom";
+import { usersAtom } from "../atoms/usersAtom";
 
 function Content({ children }: { children: React.ReactNode }) {
   return (

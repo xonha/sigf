@@ -1,6 +1,6 @@
 "use client";
 
-import { classDatesAtom } from "@/app/utils/atoms/classDatesAtom";
+import { classDatesAtom } from "@/app/atoms/classDatesAtom";
 import { ColDef } from "ag-grid-community";
 import { AgGridReact } from "ag-grid-react";
 import { useParams, usePathname } from "next/navigation";
@@ -18,7 +18,7 @@ export default function AttendancePage() {
   const classId = useParams().id;
   // TODO: Fix this any, using classDatesAtom but types are incorrect
   const [rowData, setRowData] = useRecoilState<IClassDatesRow[]>(
-    classDatesAtom as any,
+    classDatesAtom as any
   );
   const columnDefs: ColDef<IClassDatesRow>[] = [
     { field: "day", headerName: "Dia", flex: 1 },

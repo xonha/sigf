@@ -5,12 +5,12 @@ import {
   editPeriod,
   readPeriod,
 } from "@/app/api/periods/controller";
-import { modalIdAtom, modalIsOpenAtom } from "@/app/utils/atoms/modalAtom";
+import { modalIsOpenAtom, modalIdAtom } from "@/app/atoms/modalAtom";
+import { periodsAtom } from "@/app/atoms/periodsAtom";
 import { Database } from "@/database.types";
 import { useEffect, useState } from "react";
 import DatePicker from "react-datepicker";
 import { useRecoilValue, useSetRecoilState } from "recoil";
-import { periodsAtom } from "../../../utils/atoms/periodsAtom";
 
 export default function ModalPeriods() {
   const setPeriods = useSetRecoilState(periodsAtom);
@@ -34,7 +34,7 @@ export default function ModalPeriods() {
         year,
         semester,
         startDate,
-        endDate,
+        endDate
       );
     }
 
@@ -70,7 +70,7 @@ export default function ModalPeriods() {
         value={semester}
         onChange={(e) => {
           setSemester(
-            e.target.value as Database["public"]["Enums"]["semesterEnum"],
+            e.target.value as Database["public"]["Enums"]["semesterEnum"]
           );
         }}
         required

@@ -3,12 +3,6 @@
 import { TClasses } from "@/app/api/classes/[id]/route";
 import { readClasses } from "@/app/api/classes/controller";
 import { readEnrollmentsByUser } from "@/app/api/enrollments/controller";
-import {
-  classesAtom,
-  sortedClassesSelector,
-} from "@/app/utils/atoms/classesAtom";
-import { enrollmentsAtom } from "@/app/utils/atoms/enrollmentsAtom";
-import { usersAtom } from "@/app/utils/atoms/usersAtom";
 import { ColDef } from "ag-grid-community";
 import { AgGridReact } from "ag-grid-react";
 import Link from "next/link";
@@ -16,6 +10,9 @@ import { useEffect, useState } from "react";
 import { useRecoilValue, useSetRecoilState } from "recoil";
 import ButtonEnrollment from "./components/ButtonEnrollment";
 import ButtonOptions from "./components/ButtonOptions";
+import { usersAtom } from "@/app/atoms/usersAtom";
+import { classesAtom, sortedClassesSelector } from "@/app/atoms/classesAtom";
+import { enrollmentsAtom } from "@/app/atoms/enrollmentsAtom";
 
 export default function ClassesPage() {
   const user = useRecoilValue(usersAtom);

@@ -8,12 +8,12 @@ import {
   createClassDates,
 } from "@/app/api/classDates/controller";
 import { readClass } from "@/app/api/classes/controller";
-import { classDatesAtom } from "@/app/utils/atoms/classDatesAtom";
+import { classDatesAtom } from "@/app/atoms/classDatesAtom";
 import {
   TModalOptions,
   modalIsOpenAtom,
   modalOptionsAtom,
-} from "@/app/utils/atoms/modalAtom";
+} from "@/app/atoms/modalAtom";
 import { getWeekDays } from "@/app/utils/functions";
 import { useParams } from "next/navigation";
 import { useRecoilState, useSetRecoilState } from "recoil";

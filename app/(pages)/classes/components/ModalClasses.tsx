@@ -5,9 +5,9 @@ import {
   readClass,
   updateClass,
 } from "@/app/api/classes/controller";
-import { classesAtom } from "@/app/utils/atoms/classesAtom";
-import { modalIdAtom, modalIsOpenAtom } from "@/app/utils/atoms/modalAtom";
-import { periodsAtom } from "@/app/utils/atoms/periodsAtom";
+import { classesAtom } from "@/app/atoms/classesAtom";
+import { modalIsOpenAtom, modalIdAtom } from "@/app/atoms/modalAtom";
+import { periodsAtom } from "@/app/atoms/periodsAtom";
 import { validWeekDays } from "@/app/utils/types/WeekDays";
 import { useEffect, useState } from "react";
 import { useRecoilValue, useSetRecoilState } from "recoil";
