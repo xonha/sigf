@@ -1,7 +1,11 @@
 "use client";
 
 import { FaPen } from "react-icons/fa6";
-import { TCalendar, readCalendars } from "@/app/api/calendar/controller";
+import {
+  TCalendar,
+  createCalendar,
+  readCalendars,
+} from "@/app/api/calendar/controller";
 import { useEffect, useState } from "react";
 import ButtonNewCalendar from "./components/ButtonNewCalendar";
 import CalendarFrame from "./components/CalendarFrame";
@@ -16,6 +20,13 @@ export default function Calendar() {
   useEffect(() => {
     async function handleLoadCalendars() {
       const calendars = await readCalendars();
+
+      if (
+        !calendars.length ||
+        !calendars.filter((cal) => cal.name === "main")
+      ) {
+        createCalendar({ name: "main", url: "" });
+      }
       setCalendars(calendars);
       setCurrentCalendar(calendars[0]);
     }
