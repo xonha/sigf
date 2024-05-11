@@ -20,7 +20,7 @@ export default function SideBar() {
           href="/classes"
         />
         <SideBarButton
-          text="Agenda"
+          text="Calendários"
           icon={<FaCalendar className="shrink-0" />}
           href="/calendar"
         />
@@ -46,7 +46,7 @@ export default function SideBar() {
         href="/classes"
       />
       <SideBarButton
-        text="Agenda"
+        text="Calendários"
         icon={<FaCalendar className="shrink-0" />}
         href="/calendar"
       />
