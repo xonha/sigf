@@ -4,10 +4,10 @@ import Link from "next/link";
 import { useEffect, useRef, useState } from "react";
 import { FaBars } from "react-icons/fa";
 import { useRecoilValue } from "recoil";
-import profilePicture from "../profile.png";
-import { usersAtom } from "../utils/atoms/usersAtom";
+import profilePicture from "../assets/profile.png";
 import LogoutButton from "./LogoutButton";
 import NavbarButtonIndex from "./NavbarButtonIndex";
+import { usersAtom } from "../atoms/usersAtom";
 
 export default function Navbar() {
   const profileRef = useRef<HTMLImageElement>(null);

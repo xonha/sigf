@@ -1,5 +1,5 @@
 import { Database } from "@/database.types";
-import { TPeriod } from "../api/periods/route";
+import { TPeriod } from "./route";
 
 export async function readPeriod(periodId: string | string[]) {
   try {

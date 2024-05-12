@@ -1,5 +1,3 @@
-/* eslint-disable @typescript-eslint/ban-types */
-/* eslint-disable @typescript-eslint/no-explicit-any */
 import type { MutableRefObject } from "react";
 import { useEffect } from "react";
 

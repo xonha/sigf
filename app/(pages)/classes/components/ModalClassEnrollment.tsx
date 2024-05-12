@@ -1,6 +1,5 @@
 "use client";
 
-import { modalIdAtom, modalIsOpenAtom } from "@/app/utils/atoms/modalAtom";
 import React, { useState } from "react";
 import { useRecoilState, useRecoilValue, useSetRecoilState } from "recoil";
 import { Database } from "@/database.types";
@@ -8,8 +7,9 @@ import {
   deleteEnrollment,
   createEnrollment,
 } from "@/app/api/enrollments/controller";
-import useUser from "@/app/utils/hooks/useUser";
-import { enrollmentsAtom } from "@/app/utils/atoms/enrollmentsAtom";
+import useUser from "@/app/hooks/useUser";
+import { enrollmentsAtom } from "@/app/atoms/enrollmentsAtom";
+import { modalIsOpenAtom, modalIdAtom } from "@/app/atoms/modalAtom";
 
 export type TDanceRole = Database["public"]["Enums"]["danceRole"];
 export type TDanceRolePreference =
@@ -38,7 +38,7 @@ export default function ModalClassEnrollment() {
 
     const filteredEnrollments = await deleteEnrollment(
       { classId, userId: data.user.id },
-      enrollmentIds,
+      enrollmentIds
     );
     setEnrollmentIds(filteredEnrollments);
   }

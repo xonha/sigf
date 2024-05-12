@@ -2,21 +2,19 @@
 
 import Navbar from "@/app/components/Navbar";
 import SideBar from "@/app/components/SideBar";
-import "ag-grid-community/styles/ag-grid.css";
-import "ag-grid-community/styles/ag-theme-quartz.css";
 import { useEffect } from "react";
 import { useSetRecoilState } from "recoil";
+import { readPeriods } from "../api/periods/controller";
+import { readUserWithRole } from "../api/users/controller";
 import MainModal from "../components/MainModal";
-import { readPeriods } from "../controllers/Periods";
-import { readUserWithRole } from "../controllers/Users";
-import { periodsAtom } from "../utils/atoms/periodsAtom";
-import { usersAtom } from "../utils/atoms/usersAtom";
+import { periodsAtom } from "../atoms/periodsAtom";
+import { usersAtom } from "../atoms/usersAtom";
 
 function Content({ children }: { children: React.ReactNode }) {
   return (
     <div className="flex h-[calc(100dvh-4rem)]">
       <SideBar />
-      <div className="ag-theme-quartz flex-grow flex">{children}</div>
+      <div className="flex-grow flex">{children}</div>
     </div>
   );
 }

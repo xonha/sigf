@@ -2,12 +2,12 @@
 
 import { TPeriod } from "@/app/api/periods/route";
 import {
-  TModalOptions,
-  modalIdAtom,
   modalIsOpenAtom,
   modalOptionsAtom,
-} from "@/app/utils/atoms/modalAtom";
-import { periodsAtom } from "@/app/utils/atoms/periodsAtom";
+  modalIdAtom,
+  TModalOptions,
+} from "@/app/atoms/modalAtom";
+import { periodsAtom } from "@/app/atoms/periodsAtom";
 import { ColDef } from "ag-grid-community";
 import { AgGridReact } from "ag-grid-react";
 import { useRecoilState, useSetRecoilState } from "recoil";
@@ -52,7 +52,7 @@ export default function () {
       deletePeriod(periodId);
       setPeriods((prevPeriods) => {
         const newPeriods = prevPeriods.filter(
-          (period) => period.id !== periodId,
+          (period) => period.id !== periodId
         );
         return newPeriods;
       });

@@ -6,7 +6,7 @@ import ModalClassDate from "../(pages)/classes/[id]/attendance/components/ModalC
 import ModalClassEnrollment from "../(pages)/classes/components/ModalClassEnrollment";
 import ModalClasses from "../(pages)/classes/components/ModalClasses";
 import ModalPeriods from "../(pages)/periods/components/ModalPeriods";
-import { modalIsOpenAtom, modalOptionsAtom } from "../utils/atoms/modalAtom";
+import { modalIsOpenAtom, modalOptionsAtom } from "../atoms/modalAtom";
 
 Modal.setAppElement("#__modal");
 

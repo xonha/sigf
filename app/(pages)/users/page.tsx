@@ -1,8 +1,7 @@
 "use client";
 
+import { createUser, readUsers, updateUser } from "@/app/api/users/controller";
 import { TUser, TUserViewPlusRole } from "@/app/api/users/route";
-import { createUser, readUsers, updateUser } from "@/app/controllers/Users";
-
 import { ColDef } from "ag-grid-community";
 import { AgGridReact } from "ag-grid-react";
 import { useEffect, useState } from "react";

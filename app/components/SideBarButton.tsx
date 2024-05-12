@@ -3,7 +3,7 @@ import { ReactNode } from "react";
 
 interface Props {
   text: string;
-  icon: ReactNode;
+  icon?: ReactNode;
   href?: string;
   onClick?: () => void;
 }

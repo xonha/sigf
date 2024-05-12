@@ -1,4 +1,4 @@
-import { TClassDates } from "../api/classDates/route";
+import { TClassDates } from "./route";
 
 export async function createClassDates(
   classId: string | string[],

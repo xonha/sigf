@@ -1,12 +1,12 @@
 "use client";
 
 import { readEnrollmentsByClassId } from "@/app/api/enrollments/controller";
-import { classesAtom } from "@/app/utils/atoms/classesAtom";
+import { classesAtom } from "@/app/atoms/classesAtom";
 import {
-  IEnrollmentCounts,
   enrollmentCountAtom,
-} from "@/app/utils/atoms/enrollmentsAtom";
-import { usersAtom } from "@/app/utils/atoms/usersAtom";
+  IEnrollmentCounts,
+} from "@/app/atoms/enrollmentsAtom";
+import { usersAtom } from "@/app/atoms/usersAtom";
 import { Database } from "@/database.types";
 import { ColDef } from "ag-grid-community";
 import { AgGridReact } from "ag-grid-react";
@@ -65,7 +65,7 @@ export default function ClassesIdPage() {
               updateEnrollment(
                 params.data.classId,
                 params.data.userId,
-                "pending",
+                "pending"
               );
             }}
           >
@@ -77,7 +77,7 @@ export default function ClassesIdPage() {
               updateEnrollment(
                 params.data.classId,
                 params.data.userId,
-                "rejected",
+                "rejected"
               );
             }}
           >
@@ -94,7 +94,7 @@ export default function ClassesIdPage() {
               updateEnrollment(
                 params.data.classId,
                 params.data.userId,
-                "approved",
+                "approved"
               );
             }}
           >
@@ -107,7 +107,7 @@ export default function ClassesIdPage() {
                 params.data.classId,
                 params.data.userId,
                 "pending",
-                false,
+                false
               );
             }}
           >
@@ -125,7 +125,7 @@ export default function ClassesIdPage() {
             updateEnrollment(
               params.data.classId,
               params.data.userId,
-              "approved",
+              "approved"
             );
           }}
         >
@@ -138,7 +138,7 @@ export default function ClassesIdPage() {
               params.data.classId,
               params.data.userId,
               "rejected",
-              false,
+              false
             );
           }}
         >
@@ -152,7 +152,7 @@ export default function ClassesIdPage() {
     classId: string,
     userId: string,
     status: "approved" | "rejected" | "pending",
-    alterCount = true,
+    alterCount = true
   ) {
     try {
       const res = await fetch(`/api/enrollments/classId/${classId}`, {
@@ -165,7 +165,7 @@ export default function ClassesIdPage() {
       const updatedRowData = rowData.map((row) =>
         row.classId === data[0].classId && row.userId === data[0].userId
           ? { ...row, status: data[0].status }
-          : row,
+          : row
       );
       setRowData(updatedRowData);
 
@@ -192,11 +192,11 @@ export default function ClassesIdPage() {
 
       const enrollmentsLedCount = enrollments.filter(
         (enrollment) =>
-          enrollment.danceRole === "led" && enrollment.status === "approved",
+          enrollment.danceRole === "led" && enrollment.status === "approved"
       );
       const enrollmentsLeaderCount = enrollments.filter(
         (enrollment) =>
-          enrollment.danceRole === "leader" && enrollment.status === "approved",
+          enrollment.danceRole === "leader" && enrollment.status === "approved"
       );
 
       const currentClass = classes.find((c) => c.id === classId);
