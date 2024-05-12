@@ -8,6 +8,9 @@ export default function ButtonCalendar(props: {
   onClickName: () => void;
   calendars: TCalendar[];
   setCalendars: (calendars: TCalendar[]) => void;
+  currentCalendar: TCalendar;
+  setCurrentCalendar: (cal: TCalendar) => void;
+  isPrincipal?: boolean;
 }) {
   const [isEditing, setIsEditing] = useState(false);
   const [name, setName] = useState("");
@@ -31,6 +34,7 @@ export default function ButtonCalendar(props: {
     );
 
     props.setCalendars([...filteredCalendars, updatedCalendar]);
+    props.setCurrentCalendar(updatedCalendar);
     setIsEditing(false);
   }
 
@@ -49,7 +53,14 @@ export default function ButtonCalendar(props: {
       }
     >
       <div className="flex flex-row w-full justify-between">
-        <span className="cursor-pointer" onClick={props.onClickName}>
+        <span
+          className={
+            props.currentCalendar && props.currentCalendar.id === props.id
+              ? "cursor-pointer font-bold"
+              : "cursor-pointer"
+          }
+          onClick={props.onClickName}
+        >
           {props.name}
         </span>
         <FaPen
@@ -59,16 +70,20 @@ export default function ButtonCalendar(props: {
       </div>
       {isEditing && (
         <div className="w-full">
-          <label className="text-md" htmlFor="semester">
-            Nome
-          </label>
-          <input
-            className="rounded-md px-4 py-2 w-full border mb-4"
-            type="text"
-            placeholder="Nome do calendário"
-            onChange={(e) => setName(e.target.value)}
-            value={name}
-          />
+          {!props.isPrincipal && (
+            <>
+              <label className="text-md" htmlFor="semester">
+                Nome
+              </label>
+              <input
+                className="rounded-md px-4 py-2 w-full border mb-4"
+                type="text"
+                placeholder="Nome do calendário"
+                onChange={(e) => setName(e.target.value)}
+                value={name || props.name}
+              />
+            </>
+          )}
           <label className="text-md" htmlFor="semester">
             URL
             <a

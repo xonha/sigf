@@ -13,6 +13,7 @@ import ButtonCalendar from "./components/ButtonCalendar";
 
 export default function Calendar() {
   const [calendars, setCalendars] = useState<TCalendar[]>([]);
+  const [mainCalendar, setMainCalendar] = useState<TCalendar>();
   const [currentCalendar, setCurrentCalendar] = useState<TCalendar>(
     calendars[0],
   );
@@ -20,15 +21,17 @@ export default function Calendar() {
   useEffect(() => {
     async function handleLoadCalendars() {
       const calendars = await readCalendars();
+      let mainCalendar: TCalendar = calendars.filter(
+        (cal) => cal.name === "Principal",
+      )[0];
 
-      if (
-        !calendars.length ||
-        !calendars.filter((cal) => cal.name === "main")
-      ) {
-        createCalendar({ name: "main", url: "" });
+      if (calendars.length === 0 || !mainCalendar) {
+        mainCalendar = await createCalendar({ name: "Principal", url: "" });
       }
+
       setCalendars(calendars);
-      setCurrentCalendar(calendars[0]);
+      setMainCalendar(mainCalendar);
+      setCurrentCalendar(mainCalendar);
     }
     handleLoadCalendars();
   }, []);
@@ -39,19 +42,18 @@ export default function Calendar() {
       <Sidebar>
         <ButtonNewCalendar calendars={calendars} setCalendars={setCalendars} />
         <ButtonCalendar
-          key="main"
-          id="main"
+          key={mainCalendar?.id || ""}
+          id={mainCalendar?.id || ""}
           name="Principal"
           calendars={calendars}
           setCalendars={setCalendars}
-          onClickName={() =>
-            setCurrentCalendar(
-              calendars.filter((cal) => cal.name === "main")[0],
-            )
-          }
+          onClickName={() => setCurrentCalendar(mainCalendar || calendars[0])}
+          currentCalendar={currentCalendar}
+          setCurrentCalendar={setCurrentCalendar}
+          isPrincipal
         />
         {calendars
-          .filter((cal) => cal.name !== "main")
+          .filter((cal) => cal.name !== "Principal")
           .map((cal) => (
             <ButtonCalendar
               key={cal.id}
@@ -60,6 +62,8 @@ export default function Calendar() {
               onClickName={() => setCurrentCalendar(cal)}
               calendars={calendars}
               setCalendars={setCalendars}
+              currentCalendar={currentCalendar}
+              setCurrentCalendar={setCurrentCalendar}
             />
           ))}
       </Sidebar>
