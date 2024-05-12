@@ -1,6 +1,5 @@
 "use client";
 
-import { FaPen } from "react-icons/fa6";
 import {
   TCalendar,
   createCalendar,
@@ -10,6 +9,7 @@ import { useEffect, useState } from "react";
 import ButtonNewCalendar from "./components/ButtonNewCalendar";
 import CalendarFrame from "./components/CalendarFrame";
 import Sidebar from "./components/Sidebar";
+import ButtonCalendar from "./components/ButtonCalendar";
 
 export default function Calendar() {
   const [calendars, setCalendars] = useState<TCalendar[]>([]);
@@ -39,7 +39,11 @@ export default function Calendar() {
       <Sidebar>
         <ButtonNewCalendar calendars={calendars} setCalendars={setCalendars} />
         <ButtonCalendar
+          key="main"
+          id="main"
           name="Principal"
+          calendars={calendars}
+          setCalendars={setCalendars}
           onClickName={() =>
             setCurrentCalendar(
               calendars.filter((cal) => cal.name === "main")[0],
@@ -51,26 +55,14 @@ export default function Calendar() {
           .map((cal) => (
             <ButtonCalendar
               key={cal.id}
+              id={cal.id}
               name={cal.name}
               onClickName={() => setCurrentCalendar(cal)}
+              calendars={calendars}
+              setCalendars={setCalendars}
             />
           ))}
       </Sidebar>
     </>
-  );
-}
-
-function ButtonCalendar(props: {
-  name: string;
-  onClickName: () => void;
-  onClickEdit?: () => void;
-}) {
-  return (
-    <div className="flex items-center p-4 gap-4 w-full justify-between">
-      <span className="cursor-pointer" onClick={props.onClickName}>
-        {props.name}
-      </span>
-      <FaPen className="cursor-pointer" onClick={props.onClickEdit} />
-    </div>
   );
 }

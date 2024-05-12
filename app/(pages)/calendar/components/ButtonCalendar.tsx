@@ -1,28 +1,64 @@
-import { TCalendar, createCalendar } from "@/app/api/calendar/controller";
+import { TCalendar, updateCalendar } from "@/app/api/calendar/controller";
 import { useState } from "react";
+import { FaPen } from "react-icons/fa";
 
-export default function ButtonNewCalendar(props: {
+export default function ButtonCalendar(props: {
+  id: string;
+  name: string;
+  onClickName: () => void;
   calendars: TCalendar[];
   setCalendars: (calendars: TCalendar[]) => void;
 }) {
-  const [isCreating, setIsCreating] = useState(false);
+  const [isEditing, setIsEditing] = useState(false);
   const [name, setName] = useState("");
   const [url, setUrl] = useState("");
 
   async function handleSave() {
-    const createdCalendar = await createCalendar({ name, url });
-    props.setCalendars([...props.calendars, createdCalendar]);
-    setIsCreating(false);
+    const newName = name === "" ? props.name : name;
+    const newUrl =
+      url === ""
+        ? props.calendars.filter((cal) => cal.id === props.id)[0].url
+        : url;
+
+    const updatedCalendar = await updateCalendar({
+      id: props.id,
+      name: newName,
+      url: newUrl,
+    });
+
+    const filteredCalendars = props.calendars.filter(
+      (cal) => cal.id !== props.id,
+    );
+
+    props.setCalendars([...filteredCalendars, updatedCalendar]);
+    setIsEditing(false);
   }
 
   function handleCancel() {
-    setIsCreating(false);
+    setName("");
+    setUrl("");
+    setIsEditing(false);
   }
 
   return (
-    <div className="flex justify-center border-b border-dashed">
-      {isCreating ? (
-        <div className="w-full m-4 flex flex-col">
+    <div
+      className={
+        isEditing
+          ? "flex flex-col items-center p-4 gap-4 w-full border-b border-dashed"
+          : "flex flex-col items-center p-4 gap-4 w-full"
+      }
+    >
+      <div className="flex flex-row w-full justify-between">
+        <span className="cursor-pointer" onClick={props.onClickName}>
+          {props.name}
+        </span>
+        <FaPen
+          className="cursor-pointer"
+          onClick={() => setIsEditing(!isEditing)}
+        />
+      </div>
+      {isEditing && (
+        <div className="w-full">
           <label className="text-md" htmlFor="semester">
             Nome
           </label>
@@ -31,6 +67,7 @@ export default function ButtonNewCalendar(props: {
             type="text"
             placeholder="Nome do calendário"
             onChange={(e) => setName(e.target.value)}
+            value={name}
           />
           <label className="text-md" htmlFor="semester">
             URL
@@ -47,6 +84,7 @@ export default function ButtonNewCalendar(props: {
             type="url"
             placeholder="URL do calendário"
             onChange={(e) => setUrl(e.target.value)}
+            value={url}
           />
           <div className="flex justify-around gap-4">
             <button
@@ -55,7 +93,7 @@ export default function ButtonNewCalendar(props: {
             >
               Cancelar
             </button>
-            {!name || !url ? (
+            {name === "" && url === "" ? (
               <button
                 className="border border-gray-700 rounded px-4 py-2 text-black"
                 disabled
@@ -72,13 +110,6 @@ export default function ButtonNewCalendar(props: {
             )}
           </div>
         </div>
-      ) : (
-        <button
-          className="m-4 py-2 px-4 w-full font-bold rounded-md bg-green-500 hover:bg-green-600 text-white"
-          onClick={() => setIsCreating(true)}
-        >
-          Novo Calendário
-        </button>
       )}
     </div>
   );
