@@ -75,7 +75,7 @@ export default function ModalClasses() {
 
   return (
     <form
-      className="flex-1 flex flex-col w-full justify-center gap-2 text-foreground"
+      className="flex-1 flex flex-col w-full justify-center gap-2 text-foreground z-1000"
       onSubmit={handleFormSubmit}
     >
       <label className="text-md">Nome</label>
@@ -95,7 +95,7 @@ export default function ModalClasses() {
       />
       <label className="text-md">Semestre</label>
       <select
-        className="rounded-md px-4 py-2 bg-inherit border mb-6"
+        className="rounded-md px-4 py-2 bg-inherit border mb-2"
         name="periodId"
       >
         {periods.map((period: any) => (
@@ -104,7 +104,7 @@ export default function ModalClasses() {
           </option>
         ))}
       </select>
-      <div className="flex gap-4">
+      <div className="flex gap-4 mb-2">
         <label>Classe Ativa</label>
         <input
           name="status"
@@ -114,20 +114,41 @@ export default function ModalClasses() {
         />
       </div>
       <label className="text-md">Dias da Semana</label>
-      <div className="flex gap-4">
-        {validWeekDays.map((weekday) => (
-          <div key={weekday} className="flex items-center">
-            <input
-              type="checkbox"
-              id={weekday}
-              name="weekdays"
-              value={weekday}
-              checked={selectedWeekdays.includes(weekday)}
-              onChange={() => handleWeekDaysCheckboxChange(weekday)}
-            />
-            <label className="ml-2">{weekday}</label>
-          </div>
-        ))}
+      <div className="flex gap-2 justify-center">
+        {validWeekDays.map(
+          (weekday, index) =>
+            index < 4 && (
+              <div key={weekday} className="flex items-center">
+                <input
+                  type="checkbox"
+                  id={weekday}
+                  name="weekdays"
+                  value={weekday}
+                  checked={selectedWeekdays.includes(weekday)}
+                  onChange={() => handleWeekDaysCheckboxChange(weekday)}
+                />
+                <label className="ml-2">{weekday}</label>
+              </div>
+            ),
+        )}
+      </div>
+      <div className="flex gap-2 justify-center">
+        {validWeekDays.map(
+          (weekday, index) =>
+            index >= 4 && (
+              <div key={weekday} className="flex items-center">
+                <input
+                  type="checkbox"
+                  id={weekday}
+                  name="weekdays"
+                  value={weekday}
+                  checked={selectedWeekdays.includes(weekday)}
+                  onChange={() => handleWeekDaysCheckboxChange(weekday)}
+                />
+                <label className="ml-2">{weekday}</label>
+              </div>
+            ),
+        )}
       </div>
       <div className="flex justify-end gap-4 mt-4">
         <button

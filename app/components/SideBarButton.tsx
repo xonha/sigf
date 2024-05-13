@@ -1,20 +1,22 @@
 import Link from "next/link";
 import { ReactNode } from "react";
+import { useSetRecoilState } from "recoil";
+import { sidebarMainAtom } from "../atoms/sidebarsAtom";
 
-interface Props {
+export interface ISidebarButton {
   text: string;
   icon?: ReactNode;
   href?: string;
-  onClick?: () => void;
 }
 
-export default function SideBarButton(props: Props) {
-  const { href = "", icon, text, onClick } = props;
+export default function SideBarButton({ href, icon, text }: ISidebarButton) {
+  const setSidebarIsOpen = useSetRecoilState(sidebarMainAtom);
+
   return (
     <Link
-      onClick={onClick}
-      href={href}
       className="flex items-center p-4 cursor-pointer"
+      onClick={() => setSidebarIsOpen(false)}
+      href={href || ""}
     >
       {icon}
       <div className="px-4">{text}</div>

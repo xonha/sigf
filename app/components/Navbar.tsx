@@ -3,15 +3,17 @@
 import Link from "next/link";
 import { useEffect, useRef, useState } from "react";
 import { FaBars } from "react-icons/fa";
-import { useRecoilValue } from "recoil";
+import { useRecoilState, useRecoilValue } from "recoil";
 import profilePicture from "../assets/profile.png";
 import LogoutButton from "./LogoutButton";
 import NavbarButtonIndex from "./NavbarButtonIndex";
 import { usersAtom } from "../atoms/usersAtom";
+import { sidebarMainAtom } from "../atoms/sidebarsAtom";
 
 export default function Navbar() {
   const profileRef = useRef<HTMLImageElement>(null);
   const user = useRecoilValue(usersAtom);
+  const [sidebarIsOpen, setSidebarIsOpen] = useRecoilState(sidebarMainAtom);
   const [isProfileMenuVisible, setProfileMenuVisible] = useState(false);
 
   function toggleMenu() {
@@ -37,7 +39,7 @@ export default function Navbar() {
   return (
     <nav className="border-b-[1px] border-gray-300 h-16 w-full flex items-center flex-row justify-between">
       <div className="flex flex-row items-center pl-4">
-        <FaBars />
+        <FaBars onClick={() => setSidebarIsOpen(!sidebarIsOpen)} />
         <Link href="/classes" className="pl-4">
           SIGF
         </Link>
