@@ -38,9 +38,12 @@ export default function Navbar() {
 
   return (
     <nav className="border-b-[1px] border-gray-300 h-16 w-full flex items-center flex-row justify-between">
-      <div className="flex flex-row items-center pl-4">
-        <FaBars onClick={() => setSidebarIsOpen(!sidebarIsOpen)} />
-        <Link href="/classes" className="pl-4">
+      <div className="flex flex-row items-center pl-4 gap-4">
+        <FaBars
+          className="cursor-pointer"
+          onClick={() => setSidebarIsOpen(!sidebarIsOpen)}
+        />
+        <Link className="font-bold" href="/classes">
           SIGF
         </Link>
       </div>
