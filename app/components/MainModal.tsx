@@ -2,6 +2,7 @@
 
 import Modal from "react-modal";
 import { useRecoilState, useRecoilValue } from "recoil";
+import ModalCalendar from "../(pages)/calendar/components/ModalCalendar";
 import ModalClassDate from "../(pages)/classes/[id]/attendance/components/ModalClassDate";
 import ModalClassEnrollment from "../(pages)/classes/components/ModalClassEnrollment";
 import ModalClasses from "../(pages)/classes/components/ModalClasses";
@@ -31,6 +32,7 @@ export default function MainModal() {
         {
           classes: <ModalClasses />,
           periods: <ModalPeriods />,
+          calendar: <ModalCalendar />,
           classDate: <ModalClassDate />,
           classEnrollment: <ModalClassEnrollment />,
         }[modalOption]

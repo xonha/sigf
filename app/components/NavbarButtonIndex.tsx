@@ -2,7 +2,7 @@
 
 import Link from "next/link";
 import { usePathname } from "next/navigation";
-import { useRecoilValue, useSetRecoilState } from "recoil";
+import { useRecoilState, useRecoilValue, useSetRecoilState } from "recoil";
 import GenerateClassDates from "../(pages)/classes/[id]/attendance/components/CreateClassDates";
 import { enrollmentCountAtom } from "../atoms/enrollmentsAtom";
 import {
@@ -11,19 +11,22 @@ import {
   modalIdAtom,
   TModalOptions,
 } from "../atoms/modalAtom";
+import ButtonNewCalendar from "../(pages)/calendar/components/ButtonNewCalendar";
+import { calendarsAtom } from "../atoms/calendarAtom";
 
 export default function NavbarButtonIndex() {
   const setIsModalOpen = useSetRecoilState(modalIsOpenAtom);
   const setModalOption = useSetRecoilState(modalOptionsAtom);
   const setModalId = useSetRecoilState(modalIdAtom);
   const enrollmentCount = useRecoilValue(enrollmentCountAtom);
+  const [calendars, setCalendars] = useRecoilState(calendarsAtom);
 
   const pathname = usePathname();
   const classesIdRegex = new RegExp(
-    /\/classes\/[0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{12}$/
+    /\/classes\/[0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{12}$/,
   );
   const attendanceRegex = new RegExp(
-    /\/classes\/[0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{12}\/attendance$/
+    /\/classes\/[0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{12}\/attendance$/,
   );
 
   function openModal(modalOption: TModalOptions) {
@@ -43,6 +46,8 @@ export default function NavbarButtonIndex() {
         </button>
       </>
     );
+  } else if (pathname === "/calendar") {
+    return <ButtonNewCalendar />;
   } else if (pathname === "/classes") {
     return (
       <>

@@ -52,7 +52,11 @@ export default function ButtonCalendar(props: {
           : "flex flex-col items-center p-4 gap-4 w-full"
       }
     >
-      <div className="flex flex-row w-full justify-between">
+      <div className="flex flex-row w-full gap-4">
+        <FaPen
+          className="cursor-pointer"
+          onClick={() => setIsEditing(!isEditing)}
+        />
         <span
           className={
             props.currentCalendar && props.currentCalendar.id === props.id
@@ -63,10 +67,6 @@ export default function ButtonCalendar(props: {
         >
           {props.name}
         </span>
-        <FaPen
-          className="cursor-pointer"
-          onClick={() => setIsEditing(!isEditing)}
-        />
       </div>
       {isEditing && (
         <div className="w-full">
