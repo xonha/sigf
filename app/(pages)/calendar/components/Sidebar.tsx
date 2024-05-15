@@ -6,9 +6,9 @@ import { FaChevronRight } from "react-icons/fa6";
 
 export default function Sidebar(props: { children: React.ReactNode }) {
   const user = useRecoilValue(usersAtom);
-  if (user?.userRole !== "admin") return null;
-
   const [isSidebarOpen, setIsSidebarOpen] = useState(false);
+
+  if (user?.userRole !== "admin") return null;
 
   return (
     <>

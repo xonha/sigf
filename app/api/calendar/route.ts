@@ -38,3 +38,16 @@ export async function PATCH(request: NextRequest) {
   }
   return NextResponse.json(data);
 }
+
+export async function DELETE(request: NextRequest) {
+  const body = await request.json();
+  const { data, error } = await supabase
+    .from("calendar")
+    .delete()
+    .eq("id", body.id)
+    .select("*");
+  if (error) {
+    return NextResponse.json(error, { status: 500 });
+  }
+  return NextResponse.json(data);
+}
