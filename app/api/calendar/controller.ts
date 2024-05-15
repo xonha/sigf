@@ -50,3 +50,17 @@ export async function updateCalendar(
     throw error;
   }
 }
+
+export async function deleteCalendar(id: string): Promise<TCalendar> {
+  try {
+    const res = await fetch(`/api/calendar`, {
+      method: "DELETE",
+      body: JSON.stringify({ id }),
+    });
+    const deletedCalendar: TCalendar = await res.json();
+    return deletedCalendar[0];
+  } catch (error) {
+    console.error("Error deleting calendar:", error);
+    throw error;
+  }
+}

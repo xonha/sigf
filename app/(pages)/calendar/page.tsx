@@ -6,13 +6,14 @@ import {
   readCalendars,
 } from "@/app/api/calendar/controller";
 import { useEffect, useState } from "react";
-import ButtonNewCalendar from "./components/ButtonNewCalendar";
 import CalendarFrame from "./components/CalendarFrame";
 import Sidebar from "./components/Sidebar";
 import ButtonCalendar from "./components/ButtonCalendar";
+import { calendarsAtom } from "@/app/atoms/calendarAtom";
+import { useRecoilState } from "recoil";
 
 export default function Calendar() {
-  const [calendars, setCalendars] = useState<TCalendar[]>([]);
+  const [calendars, setCalendars] = useRecoilState(calendarsAtom);
   const [mainCalendar, setMainCalendar] = useState<TCalendar>();
   const [currentCalendar, setCurrentCalendar] = useState<TCalendar>(
     calendars[0],
@@ -40,7 +41,6 @@ export default function Calendar() {
     <>
       <CalendarFrame src={currentCalendar ? currentCalendar.url : ""} />
       <Sidebar>
-        <ButtonNewCalendar calendars={calendars} setCalendars={setCalendars} />
         <ButtonCalendar
           key={mainCalendar?.id || ""}
           id={mainCalendar?.id || ""}

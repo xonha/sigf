@@ -1,4 +1,8 @@
-import { TCalendar, updateCalendar } from "@/app/api/calendar/controller";
+import {
+  TCalendar,
+  deleteCalendar,
+  updateCalendar,
+} from "@/app/api/calendar/controller";
 import { useState } from "react";
 import { FaPen } from "react-icons/fa";
 
@@ -38,10 +42,12 @@ export default function ButtonCalendar(props: {
     setIsEditing(false);
   }
 
-  function handleCancel() {
-    setName("");
-    setUrl("");
-    setIsEditing(false);
+  function handleDeleteCalendar() {
+    deleteCalendar(props.id);
+    const filteredCalendars = props.calendars.filter(
+      (cal) => cal.id !== props.id,
+    );
+    props.setCalendars(filteredCalendars);
   }
 
   return (
@@ -52,7 +58,11 @@ export default function ButtonCalendar(props: {
           : "flex flex-col items-center p-4 gap-4 w-full"
       }
     >
-      <div className="flex flex-row w-full justify-between">
+      <div className="flex flex-row w-full gap-4">
+        <FaPen
+          className="cursor-pointer"
+          onClick={() => setIsEditing(!isEditing)}
+        />
         <span
           className={
             props.currentCalendar && props.currentCalendar.id === props.id
@@ -63,10 +73,6 @@ export default function ButtonCalendar(props: {
         >
           {props.name}
         </span>
-        <FaPen
-          className="cursor-pointer"
-          onClick={() => setIsEditing(!isEditing)}
-        />
       </div>
       {isEditing && (
         <div className="w-full">
@@ -101,13 +107,15 @@ export default function ButtonCalendar(props: {
             onChange={(e) => setUrl(e.target.value)}
             value={url}
           />
-          <div className="flex justify-around gap-4">
-            <button
-              className="border border-gray-700 rounded px-4 py-2 text-black"
-              onClick={handleCancel}
-            >
-              Cancelar
-            </button>
+          <div className="flex justify-end gap-4">
+            {!props.isPrincipal && (
+              <button
+                className="border border-orange-500 rounded px-4 py-2 text-orange-500"
+                onClick={handleDeleteCalendar}
+              >
+                Deletar
+              </button>
+            )}
             {name === "" && url === "" ? (
               <button
                 className="border border-gray-700 rounded px-4 py-2 text-black"

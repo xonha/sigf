@@ -13,6 +13,7 @@ export default function SideBar() {
   const user = useRecoilValue(usersAtom);
   const sidebarIsOpen = useRecoilValue(sidebarMainAtom);
   const isAdmin = user?.userRole === "admin";
+
   const buttons = [
     { text: "Turmas", icon: <FaPeopleGroup />, href: "/classes" },
     { text: "Calendários", icon: <FaCalendar />, href: "/calendar" },

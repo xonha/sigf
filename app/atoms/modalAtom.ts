@@ -3,6 +3,7 @@ import { atom } from "recoil";
 export type TModalOptions =
   | ""
   | "classes"
+  | "calendar"
   | "periods"
   | "classDate"
   | "classEnrollment";
