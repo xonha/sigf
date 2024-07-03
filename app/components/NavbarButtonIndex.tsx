@@ -2,7 +2,7 @@
 
 import Link from "next/link";
 import { usePathname } from "next/navigation";
-import { useRecoilState, useRecoilValue, useSetRecoilState } from "recoil";
+import { useRecoilValue, useSetRecoilState } from "recoil";
 import GenerateClassDates from "../(pages)/classes/[id]/attendance/components/CreateClassDates";
 import { enrollmentCountAtom } from "../atoms/enrollmentsAtom";
 import {
@@ -12,14 +12,12 @@ import {
   TModalOptions,
 } from "../atoms/modalAtom";
 import ButtonNewCalendar from "../(pages)/calendar/components/ButtonNewCalendar";
-import { calendarsAtom } from "../atoms/calendarAtom";
 
 export default function NavbarButtonIndex() {
   const setIsModalOpen = useSetRecoilState(modalIsOpenAtom);
   const setModalOption = useSetRecoilState(modalOptionsAtom);
   const setModalId = useSetRecoilState(modalIdAtom);
   const enrollmentCount = useRecoilValue(enrollmentCountAtom);
-  const [calendars, setCalendars] = useRecoilState(calendarsAtom);
 
   const pathname = usePathname();
   const classesIdRegex = new RegExp(
@@ -69,7 +67,7 @@ export default function NavbarButtonIndex() {
               : "bg-blue-500  text-white font-bold py-2 px-4 rounded"
           }
         >
-          Condutorxs: {enrollmentCount.leader} / {enrollmentCount.max}
+          Condutorxs: {enrollmentCount.leader} / {enrollmentCount.max / 2}
         </div>
         <Link
           className="bg-green-500 hover:bg-green-600 text-white font-bold py-2 px-4 rounded"
@@ -84,7 +82,7 @@ export default function NavbarButtonIndex() {
               : "bg-orange-500  text-white font-bold py-2 px-4 rounded"
           }
         >
-          Conduzidxs: {enrollmentCount.led} / {enrollmentCount.max}
+          Conduzidxs: {enrollmentCount.led} / {enrollmentCount.max / 2}
         </div>
       </div>
     );
