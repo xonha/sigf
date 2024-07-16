@@ -3,7 +3,7 @@
 import Link from "next/link";
 import { usePathname } from "next/navigation";
 import { useRecoilValue, useSetRecoilState } from "recoil";
-import GenerateClassDates from "../app/(pages)/classes/[id]/attendance/components/CreateClassDates";
+import GenerateClassDates from "../app/(authPages)/classes/[id]/attendance/components/CreateClassDates";
 import { enrollmentCountAtom } from "@/atoms/enrollmentsAtom";
 import {
   modalIsOpenAtom,
@@ -11,7 +11,7 @@ import {
   modalIdAtom,
   TModalOptions,
 } from "@/atoms/modalAtom";
-import ButtonNewCalendar from "../app/(pages)/calendar/components/ButtonNewCalendar";
+import ButtonNewCalendar from "../app/(authPages)/calendar/components/ButtonNewCalendar";
 
 export default function NavbarButtonIndex() {
   const setIsModalOpen = useSetRecoilState(modalIsOpenAtom);
