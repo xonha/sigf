@@ -1,5 +1,5 @@
+import { TCalendar } from "@/app/api/calendar/controller";
 import { atom } from "recoil";
-import { TCalendar } from "../api/calendar/controller";
 
 export const calendarsAtom = atom<TCalendar[] | []>({
   key: "calendarsAtom",
