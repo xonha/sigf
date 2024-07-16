@@ -29,6 +29,7 @@ const presenceOptions = {
   present: "Presente",
   absent: "Ausente",
   justified: "Justificada",
+  notRegistered: "Não Registrada",
 };
 
 export default function AttendancePage() {

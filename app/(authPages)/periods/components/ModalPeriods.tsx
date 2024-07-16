@@ -34,7 +34,7 @@ export default function ModalPeriods() {
         year,
         semester,
         startDate,
-        endDate
+        endDate,
       );
     }
 
@@ -70,7 +70,7 @@ export default function ModalPeriods() {
         value={semester}
         onChange={(e) => {
           setSemester(
-            e.target.value as Database["public"]["Enums"]["semesterEnum"]
+            e.target.value as Database["public"]["Enums"]["semesterEnum"],
           );
         }}
         required
@@ -98,6 +98,7 @@ export default function ModalPeriods() {
       <DatePicker
         className="rounded-md px-4 py-2 bg-inherit border mb-2"
         selected={startDate}
+        dateFormat="dd/MM/yyyy"
         onChange={(date) => {
           setStartDate(date || new Date());
         }}
@@ -108,6 +109,7 @@ export default function ModalPeriods() {
       <DatePicker
         className="rounded-md px-4 py-2 bg-inherit border mb-2"
         selected={endDate}
+        dateFormat="dd/MM/yyyy"
         onChange={(date) => {
           setEndDate(date || new Date());
         }}
