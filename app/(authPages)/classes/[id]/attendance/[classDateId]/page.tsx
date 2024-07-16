@@ -25,6 +25,12 @@ export interface IClassDatesRow {
   };
 }
 
+const presenceOptions = {
+  present: "Presente",
+  absent: "Ausente",
+  justified: "Justificada",
+};
+
 export default function AttendancePage() {
   const params = useParams();
   const classDateId = params.classDateId;
@@ -33,7 +39,12 @@ export default function AttendancePage() {
   const columnDefs: ColDef<IClassDatesRow>[] = [
     { field: "users_view.name", headerName: "Nome", flex: 1 },
     { field: "users_view.email", headerName: "Email", flex: 1 },
-    { field: "presence", headerName: "Presença", flex: 1 },
+    {
+      field: "presence",
+      headerName: "Presença",
+      flex: 1,
+      valueFormatter: ({ value }) => presenceOptions[value],
+    },
     { headerName: "Ações", flex: 1, cellRenderer: actionsCellRenderer },
   ];
 

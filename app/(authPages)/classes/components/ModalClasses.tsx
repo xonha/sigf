@@ -10,6 +10,8 @@ import { modalIsOpenAtom, modalIdAtom } from "@/atoms/modalAtom";
 import { periodsAtom } from "@/atoms/periodsAtom";
 import { useEffect, useState } from "react";
 import { useRecoilValue, useSetRecoilState } from "recoil";
+import { periodsOptions } from "../../periods/page";
+import { weekDaysOptions } from "../page";
 
 export default function ModalClasses() {
   const [selectedWeekdays, setSelectedWeekdays] = useState<string[]>([]);
@@ -100,7 +102,7 @@ export default function ModalClasses() {
       >
         {periods.map((period: any) => (
           <option key={period.id} value={period.id}>
-            {period.year} - {period.semester}
+            {periodsOptions[period.semester]} - {period.year}
           </option>
         ))}
       </select>
@@ -127,9 +129,9 @@ export default function ModalClasses() {
                   checked={selectedWeekdays.includes(weekday)}
                   onChange={() => handleWeekDaysCheckboxChange(weekday)}
                 />
-                <label className="ml-2">{weekday}</label>
+                <label className="ml-2">{weekDaysOptions[weekday]}</label>
               </div>
-            )
+            ),
         )}
       </div>
       <div className="flex gap-2 justify-center">
@@ -145,9 +147,9 @@ export default function ModalClasses() {
                   checked={selectedWeekdays.includes(weekday)}
                   onChange={() => handleWeekDaysCheckboxChange(weekday)}
                 />
-                <label className="ml-2">{weekday}</label>
+                <label className="ml-2">{weekDaysOptions[weekday]}</label>
               </div>
-            )
+            ),
         )}
       </div>
       <div className="flex justify-end gap-4 mt-4">

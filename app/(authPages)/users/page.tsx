@@ -6,13 +6,24 @@ import { ColDef } from "ag-grid-community";
 import { AgGridReact } from "ag-grid-react";
 import { useEffect, useState } from "react";
 
+const studentRoleOptions = {
+  student: "Aluno",
+  teacher: "Professor",
+  admin: "Admin",
+};
+
 export default function () {
   const [users, setUsers] = useState<TUserViewPlusRole[]>([]);
 
   const columnDefs: ColDef<TUserViewPlusRole>[] = [
     { field: "name", headerName: "Nome", flex: 1 },
     { field: "email", headerName: "Ativo", flex: 1 },
-    { field: "user.role", headerName: "Cargo", flex: 1 },
+    {
+      field: "user.role",
+      headerName: "Cargo",
+      flex: 1,
+      valueFormatter: ({ value }) => studentRoleOptions[value],
+    },
     {
       headerName: "Mudar Cargo",
       minWidth: 150,

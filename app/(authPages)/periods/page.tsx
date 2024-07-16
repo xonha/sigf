@@ -8,23 +8,17 @@ import {
   TModalOptions,
 } from "@/atoms/modalAtom";
 import { periodsAtom } from "@/atoms/periodsAtom";
+import { deletePeriod } from "@/services/periods";
 import { ColDef } from "ag-grid-community";
 import { AgGridReact } from "ag-grid-react";
 import { useRecoilState, useSetRecoilState } from "recoil";
 
-async function deletePeriod(id: string) {
-  try {
-    const res = await fetch(`/api/periods`, {
-      method: "DELETE",
-      body: JSON.stringify({ id }),
-    });
-    const data = await res.json();
-    return data;
-  } catch (error) {
-    console.error("Error deleting class:", error);
-    throw error;
-  }
-}
+const periodsOptions = {
+  first: "Primeiro",
+  second: "Segundo",
+  firstVacation: "Primeiro/Férias",
+  secondVacation: "Segundo/Férias",
+};
 
 export default function () {
   const setIsModalOpen = useSetRecoilState(modalIsOpenAtom);
@@ -34,10 +28,27 @@ export default function () {
 
   const columnDefs: ColDef<TPeriod>[] = [
     { field: "active", headerName: "Ativo", flex: 1 },
-    { field: "semester", headerName: "Semestre", flex: 2 },
+    {
+      field: "semester",
+      headerName: "Semestre",
+      flex: 2,
+      valueFormatter: ({ value }) => periodsOptions[value],
+    },
     { field: "year", headerName: "Ano", flex: 2 },
-    { field: "startDate", headerName: "Início", flex: 2 },
-    { field: "endDate", headerName: "Fim", flex: 2 },
+    {
+      field: "startDate",
+      headerName: "Início",
+      flex: 2,
+      valueFormatter: ({ value }) =>
+        new Date(value).toLocaleDateString("pt-BR"),
+    },
+    {
+      field: "endDate",
+      headerName: "Fim",
+      flex: 2,
+      valueFormatter: ({ value }) =>
+        new Date(value).toLocaleDateString("pt-BR"),
+    },
     { headerName: "Ações", minWidth: 150, cellRenderer: actionCellRenderer },
   ];
 
@@ -52,7 +63,7 @@ export default function () {
       deletePeriod(periodId);
       setPeriods((prevPeriods) => {
         const newPeriods = prevPeriods.filter(
-          (period) => period.id !== periodId
+          (period) => period.id !== periodId,
         );
         return newPeriods;
       });
@@ -87,3 +98,5 @@ export default function () {
     />
   );
 }
+
+export { periodsOptions };

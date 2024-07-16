@@ -14,6 +14,16 @@ import { usersAtom } from "@/atoms/usersAtom";
 import { classesAtom, sortedClassesSelector } from "@/atoms/classesAtom";
 import { enrollmentsAtom } from "@/atoms/enrollmentsAtom";
 
+const weekDaysOptions = {
+  sun: "Dom",
+  mon: "Seg",
+  tue: "Ter",
+  wed: "Qua",
+  thu: "Qui",
+  fri: "Sex",
+  sat: "Sáb",
+};
+
 export default function ClassesPage() {
   const user = useRecoilValue(usersAtom);
   const [shouldUpdate, setShouldUpdate] = useState(false);
@@ -35,6 +45,11 @@ export default function ClassesPage() {
       headerName: "Dias de Aula",
       field: "weekDays",
       flex: 1,
+      valueFormatter: ({ value }) =>
+        value
+          .split(",")
+          .map((v: string) => weekDaysOptions[v])
+          .join(", "),
     },
     {
       headerName: "Inscrição",
@@ -69,3 +84,5 @@ export default function ClassesPage() {
     />
   );
 }
+
+export { weekDaysOptions };

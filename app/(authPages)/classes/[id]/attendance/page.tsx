@@ -18,11 +18,17 @@ export default function AttendancePage() {
   const classId = useParams().id;
   // TODO: Fix this any, using classDatesAtom but types are incorrect
   const [rowData, setRowData] = useRecoilState<IClassDatesRow[]>(
-    classDatesAtom as any
+    classDatesAtom as any,
   );
   const columnDefs: ColDef<IClassDatesRow>[] = [
     { field: "day", headerName: "Dia", flex: 1 },
-    { field: "date", headerName: "Data", flex: 1 },
+    {
+      field: "date",
+      headerName: "Data",
+      flex: 1,
+      valueFormatter: ({ value }) =>
+        new Date(value).toLocaleDateString("pt-BR"),
+    },
     { headerName: "Presenças", flex: 1, cellRenderer: attendanceCellRenderer },
     { headerName: "Ações", flex: 1, cellRenderer: actionsCellRenderer },
   ];

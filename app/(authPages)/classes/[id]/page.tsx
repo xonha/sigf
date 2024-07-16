@@ -28,6 +28,18 @@ interface IRow {
   actionButton?: React.ReactNode;
 }
 
+const danceRoleOptions = {
+  led: "Condutor(a)",
+  leader: "Conduzido(a)",
+  indifferent: "Indiferente",
+};
+
+const enrollmentStatusOptions = {
+  approved: "Aprovado",
+  pending: "Pendente",
+  rejected: "Rejeitado",
+};
+
 export default function ClassesIdPage() {
   const user = useRecoilValue(usersAtom);
   const setEnrollmentsCount = useSetRecoilState(enrollmentCountAtom);
@@ -37,9 +49,25 @@ export default function ClassesIdPage() {
   const columnDefs: ColDef<IRow>[] = [
     { field: "users_view.name", headerName: "Nome", flex: 3 },
     { field: "users_view.email", headerName: "Email", flex: 3 },
-    { field: "createdAt", headerName: "Data da inscrição", flex: 3 },
-    { field: "danceRole", headerName: "Papel", flex: 2 },
-    { field: "status", headerName: "Inscrição", flex: 2 },
+    {
+      field: "createdAt",
+      headerName: "Data da inscrição",
+      flex: 3,
+      valueFormatter: ({ value }) =>
+        new Date(value).toLocaleDateString("pt-BR"),
+    },
+    {
+      field: "danceRole",
+      headerName: "Papel",
+      flex: 2,
+      valueFormatter: ({ value }) => danceRoleOptions[value],
+    },
+    {
+      field: "status",
+      headerName: "Inscrição",
+      flex: 2,
+      valueFormatter: ({ value }) => enrollmentStatusOptions[value],
+    },
     {
       field: "actionButton",
       headerName: "Ações",
@@ -65,7 +93,7 @@ export default function ClassesIdPage() {
               updateEnrollment(
                 params.data.classId,
                 params.data.userId,
-                "pending"
+                "pending",
               );
             }}
           >
@@ -77,7 +105,7 @@ export default function ClassesIdPage() {
               updateEnrollment(
                 params.data.classId,
                 params.data.userId,
-                "rejected"
+                "rejected",
               );
             }}
           >
@@ -94,7 +122,7 @@ export default function ClassesIdPage() {
               updateEnrollment(
                 params.data.classId,
                 params.data.userId,
-                "approved"
+                "approved",
               );
             }}
           >
@@ -107,7 +135,7 @@ export default function ClassesIdPage() {
                 params.data.classId,
                 params.data.userId,
                 "pending",
-                false
+                false,
               );
             }}
           >
@@ -125,7 +153,7 @@ export default function ClassesIdPage() {
             updateEnrollment(
               params.data.classId,
               params.data.userId,
-              "approved"
+              "approved",
             );
           }}
         >
@@ -138,7 +166,7 @@ export default function ClassesIdPage() {
               params.data.classId,
               params.data.userId,
               "rejected",
-              false
+              false,
             );
           }}
         >
@@ -152,7 +180,7 @@ export default function ClassesIdPage() {
     classId: string,
     userId: string,
     status: "approved" | "rejected" | "pending",
-    alterCount = true
+    alterCount = true,
   ) {
     try {
       const res = await fetch(`/api/enrollments/classId/${classId}`, {
@@ -165,7 +193,7 @@ export default function ClassesIdPage() {
       const updatedRowData = rowData.map((row) =>
         row.classId === data[0].classId && row.userId === data[0].userId
           ? { ...row, status: data[0].status }
-          : row
+          : row,
       );
       setRowData(updatedRowData);
 
@@ -192,11 +220,11 @@ export default function ClassesIdPage() {
 
       const enrollmentsLedCount = enrollments.filter(
         (enrollment) =>
-          enrollment.danceRole === "led" && enrollment.status === "approved"
+          enrollment.danceRole === "led" && enrollment.status === "approved",
       );
       const enrollmentsLeaderCount = enrollments.filter(
         (enrollment) =>
-          enrollment.danceRole === "leader" && enrollment.status === "approved"
+          enrollment.danceRole === "leader" && enrollment.status === "approved",
       );
 
       const currentClass = classes.find((c) => c.id === classId);
