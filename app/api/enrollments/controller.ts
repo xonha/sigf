@@ -1,4 +1,4 @@
-import useUser from "@/app/hooks/useUser";
+import useUser from "@/hooks/useUser";
 import { TEnrollment } from "./userId/[id]/route";
 import { Database } from "@/database.types";
 

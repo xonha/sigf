@@ -1,4 +1,4 @@
-import { usersAtom } from "@/app/atoms/usersAtom";
+import { usersAtom } from "@/atoms/usersAtom";
 import { useState } from "react";
 import { useRecoilValue } from "recoil";
 import { FaChevronLeft } from "react-icons/fa6";
@@ -21,13 +21,17 @@ export default function Sidebar(props: { children: React.ReactNode }) {
 
       {isSidebarOpen ? (
         <aside
-          className={`sticky w-52 xl:block h-[calc(100vh-64px)] border-gray-300 border-l border-dashed overflow-hidden ${isSidebarOpen ? "block" : "hidden"}`}
+          className={`sticky w-52 xl:block h-[calc(100vh-64px)] border-gray-300 border-l border-dashed overflow-hidden ${
+            isSidebarOpen ? "block" : "hidden"
+          }`}
         >
           {props.children}
         </aside>
       ) : (
         <aside
-          className={`sticky w-52 hidden xl:block h-[calc(100vh-64px)] border-gray-300 border-l overflow-hidden ${isSidebarOpen ? "block" : "hidden"}`}
+          className={`sticky w-52 hidden xl:block h-[calc(100vh-64px)] border-gray-300 border-l overflow-hidden ${
+            isSidebarOpen ? "block" : "hidden"
+          }`}
         >
           {props.children}
         </aside>

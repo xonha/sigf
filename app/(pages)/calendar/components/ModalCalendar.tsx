@@ -1,6 +1,6 @@
 import { createCalendar } from "@/app/api/calendar/controller";
-import { calendarsAtom } from "@/app/atoms/calendarAtom";
-import { modalIsOpenAtom } from "@/app/atoms/modalAtom";
+import { calendarsAtom } from "@/atoms/calendarAtom";
+import { modalIsOpenAtom } from "@/atoms/modalAtom";
 import { useState } from "react";
 import { useRecoilState, useSetRecoilState } from "recoil";
 

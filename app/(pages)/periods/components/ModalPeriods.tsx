@@ -5,8 +5,8 @@ import {
   editPeriod,
   readPeriod,
 } from "@/app/api/periods/controller";
-import { modalIsOpenAtom, modalIdAtom } from "@/app/atoms/modalAtom";
-import { periodsAtom } from "@/app/atoms/periodsAtom";
+import { modalIsOpenAtom, modalIdAtom } from "@/atoms/modalAtom";
+import { periodsAtom } from "@/atoms/periodsAtom";
 import { Database } from "@/database.types";
 import { useEffect, useState } from "react";
 import DatePicker from "react-datepicker";
@@ -34,7 +34,7 @@ export default function ModalPeriods() {
         year,
         semester,
         startDate,
-        endDate,
+        endDate
       );
     }
 
@@ -70,15 +70,15 @@ export default function ModalPeriods() {
         value={semester}
         onChange={(e) => {
           setSemester(
-            e.target.value as Database["public"]["Enums"]["semesterEnum"],
+            e.target.value as Database["public"]["Enums"]["semesterEnum"]
           );
         }}
         required
       >
         <option value="first">Primeiro</option>
+        <option value="firstVacation">Primeiro/Férias</option>
         <option value="second">Segundo</option>
-        <option value="firstVacation">Primeiro Férias</option>
-        <option value="secondVacation">Segundo Férias</option>
+        <option value="secondVacation">Segundo/Férias</option>
       </select>
       <label className="text-md" htmlFor="year">
         Ano

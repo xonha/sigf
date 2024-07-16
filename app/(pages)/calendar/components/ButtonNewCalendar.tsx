@@ -3,7 +3,7 @@ import {
   modalOptionsAtom,
   modalIdAtom,
   TModalOptions,
-} from "@/app/atoms/modalAtom";
+} from "@/atoms/modalAtom";
 import { useSetRecoilState } from "recoil";
 
 export default function ButtonNewCalendar() {

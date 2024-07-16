@@ -6,8 +6,8 @@ import {
   modalOptionsAtom,
   modalIdAtom,
   TModalOptions,
-} from "@/app/atoms/modalAtom";
-import { periodsAtom } from "@/app/atoms/periodsAtom";
+} from "@/atoms/modalAtom";
+import { periodsAtom } from "@/atoms/periodsAtom";
 import { ColDef } from "ag-grid-community";
 import { AgGridReact } from "ag-grid-react";
 import { useRecoilState, useSetRecoilState } from "recoil";

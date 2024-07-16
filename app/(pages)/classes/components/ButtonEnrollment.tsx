@@ -1,10 +1,10 @@
-import { enrollmentsAtom } from "@/app/atoms/enrollmentsAtom";
+import { enrollmentsAtom } from "@/atoms/enrollmentsAtom";
 import {
   TModalOptions,
   modalIdAtom,
   modalIsOpenAtom,
   modalOptionsAtom,
-} from "@/app/atoms/modalAtom";
+} from "@/atoms/modalAtom";
 import { useRecoilValue, useSetRecoilState } from "recoil";
 
 export default function ButtonEnrollment(props: { id: string }) {

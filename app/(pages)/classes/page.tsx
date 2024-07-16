@@ -10,9 +10,9 @@ import { useEffect, useState } from "react";
 import { useRecoilValue, useSetRecoilState } from "recoil";
 import ButtonEnrollment from "./components/ButtonEnrollment";
 import ButtonOptions from "./components/ButtonOptions";
-import { usersAtom } from "@/app/atoms/usersAtom";
-import { classesAtom, sortedClassesSelector } from "@/app/atoms/classesAtom";
-import { enrollmentsAtom } from "@/app/atoms/enrollmentsAtom";
+import { usersAtom } from "@/atoms/usersAtom";
+import { classesAtom, sortedClassesSelector } from "@/atoms/classesAtom";
+import { enrollmentsAtom } from "@/atoms/enrollmentsAtom";
 
 export default function ClassesPage() {
   const user = useRecoilValue(usersAtom);

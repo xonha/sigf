@@ -1,5 +1,5 @@
 import { NextRequest, NextResponse } from "next/server";
-import supabase from "../../utils/db";
+import supabase from "@/utils/db";
 
 export async function GET() {
   const { data, error } = await supabase.from("enrollment").select();

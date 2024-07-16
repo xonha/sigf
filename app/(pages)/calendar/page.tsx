@@ -9,21 +9,21 @@ import { useEffect, useState } from "react";
 import CalendarFrame from "./components/CalendarFrame";
 import Sidebar from "./components/Sidebar";
 import ButtonCalendar from "./components/ButtonCalendar";
-import { calendarsAtom } from "@/app/atoms/calendarAtom";
+import { calendarsAtom } from "@/atoms/calendarAtom";
 import { useRecoilState } from "recoil";
 
 export default function Calendar() {
   const [calendars, setCalendars] = useRecoilState(calendarsAtom);
   const [mainCalendar, setMainCalendar] = useState<TCalendar>();
   const [currentCalendar, setCurrentCalendar] = useState<TCalendar>(
-    calendars[0],
+    calendars[0]
   );
 
   useEffect(() => {
     async function handleLoadCalendars() {
       const calendars = await readCalendars();
       let mainCalendar: TCalendar = calendars.filter(
-        (cal) => cal.name === "Principal",
+        (cal) => cal.name === "Principal"
       )[0];
 
       if (calendars.length === 0 || !mainCalendar) {

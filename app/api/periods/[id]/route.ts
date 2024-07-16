@@ -1,4 +1,4 @@
-import supabase from "@/app/utils/db";
+import supabase from "@/utils/db";
 import { NextResponse } from "next/server";
 import { TPeriod } from "../route";
 

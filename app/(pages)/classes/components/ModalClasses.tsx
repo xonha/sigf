@@ -5,9 +5,9 @@ import {
   readClass,
   updateClass,
 } from "@/app/api/classes/controller";
-import { classesAtom } from "@/app/atoms/classesAtom";
-import { modalIsOpenAtom, modalIdAtom } from "@/app/atoms/modalAtom";
-import { periodsAtom } from "@/app/atoms/periodsAtom";
+import { classesAtom } from "@/atoms/classesAtom";
+import { modalIsOpenAtom, modalIdAtom } from "@/atoms/modalAtom";
+import { periodsAtom } from "@/atoms/periodsAtom";
 import { useEffect, useState } from "react";
 import { useRecoilValue, useSetRecoilState } from "recoil";
 
@@ -129,7 +129,7 @@ export default function ModalClasses() {
                 />
                 <label className="ml-2">{weekday}</label>
               </div>
-            ),
+            )
         )}
       </div>
       <div className="flex gap-2 justify-center">
@@ -147,7 +147,7 @@ export default function ModalClasses() {
                 />
                 <label className="ml-2">{weekday}</label>
               </div>
-            ),
+            )
         )}
       </div>
       <div className="flex justify-end gap-4 mt-4">

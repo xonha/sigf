@@ -4,11 +4,11 @@ import Link from "next/link";
 import { useEffect, useRef, useState } from "react";
 import { FaBars } from "react-icons/fa";
 import { useRecoilState, useRecoilValue } from "recoil";
-import profilePicture from "../assets/profile.png";
+import profilePicture from "@/assets/profile.png";
 import LogoutButton from "./LogoutButton";
 import NavbarButtonIndex from "./NavbarButtonIndex";
-import { usersAtom } from "../atoms/usersAtom";
-import { sidebarMainAtom } from "../atoms/sidebarsAtom";
+import { usersAtom } from "@/atoms/usersAtom";
+import { sidebarMainAtom } from "@/atoms/sidebarsAtom";
 
 export default function Navbar() {
   const profileRef = useRef<HTMLImageElement>(null);

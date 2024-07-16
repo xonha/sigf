@@ -1,11 +1,11 @@
 import { deleteClass } from "@/app/api/classes/controller";
-import { classesAtom } from "@/app/atoms/classesAtom";
+import { classesAtom } from "@/atoms/classesAtom";
 import {
   modalIsOpenAtom,
   modalOptionsAtom,
   modalIdAtom,
   TModalOptions,
-} from "@/app/atoms/modalAtom";
+} from "@/atoms/modalAtom";
 import { useRecoilState, useSetRecoilState } from "recoil";
 
 export default function ButtonOptions(props: { id: string }) {

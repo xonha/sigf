@@ -1,6 +1,6 @@
 "use client";
 
-import { classDatesAtom } from "@/app/atoms/classDatesAtom";
+import { classDatesAtom } from "@/atoms/classDatesAtom";
 import { ColDef } from "ag-grid-community";
 import { AgGridReact } from "ag-grid-react";
 import { useParams, usePathname } from "next/navigation";

@@ -7,9 +7,9 @@ import {
   deleteEnrollment,
   createEnrollment,
 } from "@/app/api/enrollments/controller";
-import useUser from "@/app/hooks/useUser";
-import { enrollmentsAtom } from "@/app/atoms/enrollmentsAtom";
-import { modalIsOpenAtom, modalIdAtom } from "@/app/atoms/modalAtom";
+import useUser from "@/hooks/useUser";
+import { enrollmentsAtom } from "@/atoms/enrollmentsAtom";
+import { modalIsOpenAtom, modalIdAtom } from "@/atoms/modalAtom";
 
 export type TDanceRole = Database["public"]["Enums"]["danceRole"];
 export type TDanceRolePreference =

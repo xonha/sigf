@@ -1,12 +1,12 @@
 "use client";
 
 import { readEnrollmentsByClassId } from "@/app/api/enrollments/controller";
-import { classesAtom } from "@/app/atoms/classesAtom";
+import { classesAtom } from "@/atoms/classesAtom";
 import {
   enrollmentCountAtom,
   IEnrollmentCounts,
-} from "@/app/atoms/enrollmentsAtom";
-import { usersAtom } from "@/app/atoms/usersAtom";
+} from "@/atoms/enrollmentsAtom";
+import { usersAtom } from "@/atoms/usersAtom";
 import { Database } from "@/database.types";
 import { ColDef } from "ag-grid-community";
 import { AgGridReact } from "ag-grid-react";

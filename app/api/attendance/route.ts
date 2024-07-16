@@ -1,4 +1,4 @@
-import supabase from "@/app/utils/db";
+import supabase from "@/utils/db";
 import { Database } from "@/database.types";
 import { NextRequest, NextResponse } from "next/server";
 

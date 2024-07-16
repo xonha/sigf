@@ -7,8 +7,8 @@ import {
 import { TAttendance } from "@/app/api/attendance/route";
 import { createClassDates } from "@/app/api/classDates/controller";
 import { readClass } from "@/app/api/classes/controller";
-import { classDatesAtom } from "@/app/atoms/classDatesAtom";
-import { modalIsOpenAtom } from "@/app/atoms/modalAtom";
+import { classDatesAtom } from "@/atoms/classDatesAtom";
+import { modalIsOpenAtom } from "@/atoms/modalAtom";
 import { useParams } from "next/navigation";
 import React, { useState } from "react";
 import DatePicker from "react-datepicker";

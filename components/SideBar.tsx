@@ -5,8 +5,8 @@ import {
   FaUserGear,
 } from "react-icons/fa6";
 import { useRecoilValue } from "recoil";
-import { sidebarMainAtom } from "../atoms/sidebarsAtom";
-import { usersAtom } from "../atoms/usersAtom";
+import { sidebarMainAtom } from "@/atoms/sidebarsAtom";
+import { usersAtom } from "@/atoms/usersAtom";
 import SideBarButton from "./SideBarButton";
 
 export default function SideBar() {
@@ -30,7 +30,9 @@ export default function SideBar() {
   ];
   return (
     <aside
-      className={`sticky bg-white ${sidebarIsOpen ? "block" : "hidden"} md:block w-52 h-[calc(100vh-64px)] border-gray-300 border-r overflow-hidden shrink-0`}
+      className={`sticky bg-white ${
+        sidebarIsOpen ? "block" : "hidden"
+      } md:block w-52 h-[calc(100vh-64px)] border-gray-300 border-r overflow-hidden shrink-0`}
     >
       {buttons.map((button, index) => {
         if (!button) return null;

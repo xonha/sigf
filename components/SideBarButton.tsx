@@ -1,7 +1,7 @@
 import Link from "next/link";
 import { ReactNode } from "react";
 import { useSetRecoilState } from "recoil";
-import { sidebarMainAtom } from "../atoms/sidebarsAtom";
+import { sidebarMainAtom } from "@/atoms/sidebarsAtom";
 
 export interface ISidebarButton {
   text: string;
