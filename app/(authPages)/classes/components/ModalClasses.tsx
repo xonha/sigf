@@ -10,8 +10,23 @@ import { modalIsOpenAtom, modalIdAtom } from "@/atoms/modalAtom";
 import { periodsAtom } from "@/atoms/periodsAtom";
 import { useEffect, useState } from "react";
 import { useRecoilValue, useSetRecoilState } from "recoil";
-import { periodsOptions } from "../../periods/page";
-import { weekDaysOptions } from "../page";
+
+export const weekDaysOptions = {
+  sun: "Dom",
+  mon: "Seg",
+  tue: "Ter",
+  wed: "Qua",
+  thu: "Qui",
+  fri: "Sex",
+  sat: "Sáb",
+};
+
+export const periodsOptions = {
+  first: "Primeiro",
+  second: "Segundo",
+  firstVacation: "Primeiro/Férias",
+  secondVacation: "Segundo/Férias",
+};
 
 export default function ModalClasses() {
   const [selectedWeekdays, setSelectedWeekdays] = useState<string[]>([]);

@@ -13,16 +13,7 @@ import ButtonOptions from "./components/ButtonOptions";
 import { usersAtom } from "@/atoms/usersAtom";
 import { classesAtom, sortedClassesSelector } from "@/atoms/classesAtom";
 import { enrollmentsAtom } from "@/atoms/enrollmentsAtom";
-
-const weekDaysOptions = {
-  sun: "Dom",
-  mon: "Seg",
-  tue: "Ter",
-  wed: "Qua",
-  thu: "Qui",
-  fri: "Sex",
-  sat: "Sáb",
-};
+import { weekDaysOptions } from "./components/ModalClasses";
 
 export default function ClassesPage() {
   const user = useRecoilValue(usersAtom);
@@ -84,5 +75,3 @@ export default function ClassesPage() {
     />
   );
 }
-
-export { weekDaysOptions };

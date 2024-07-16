@@ -12,13 +12,7 @@ import { deletePeriod } from "@/services/periods";
 import { ColDef } from "ag-grid-community";
 import { AgGridReact } from "ag-grid-react";
 import { useRecoilState, useSetRecoilState } from "recoil";
-
-const periodsOptions = {
-  first: "Primeiro",
-  second: "Segundo",
-  firstVacation: "Primeiro/Férias",
-  secondVacation: "Segundo/Férias",
-};
+import { periodsOptions } from "../classes/components/ModalClasses";
 
 export default function () {
   const setIsModalOpen = useSetRecoilState(modalIsOpenAtom);
@@ -98,5 +92,3 @@ export default function () {
     />
   );
 }
-
-export { periodsOptions };
