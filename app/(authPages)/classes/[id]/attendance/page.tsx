@@ -30,40 +30,25 @@ export default function AttendancePage() {
         new Date(value).toLocaleDateString("pt-BR"),
     },
     { headerName: "Presenças", flex: 1, cellRenderer: attendanceCellRenderer },
-    { headerName: "Ações", flex: 1, cellRenderer: actionsCellRenderer },
   ];
-
-  function actionsCellRenderer(params: any) {
-    const data: IClassDatesRow = params.data;
-    return (
-      <div className="flex gap-4">
-        <button
-          className="text-blue-500 hover:text-blue-400 font-bold"
-          onClick={() => {
-            console.log("Editando", data.id);
-          }}
-        >
-          Editar
-        </button>
-        <button
-          className="text-orange-500 hover:text-orange-400 font-bold"
-          onClick={() => deleteClassDate(params.data.id)}
-        >
-          Deletar
-        </button>
-      </div>
-    );
-  }
 
   function attendanceCellRenderer(params: any) {
     const classDateData: IClassDatesRow = params.data;
     return (
-      <a
-        className="text-green-500 hover:text-green-400 font-bold"
-        href={`${pathname}/${classDateData.id}`}
-      >
-        Registrar
-      </a>
+      <div className="flex gap-4">
+        <a
+          className="text-green-500 hover:text-green-400 font-bold"
+          href={`${pathname}/${classDateData.id}`}
+        >
+          Registrar
+        </a>
+        <button
+          className="text-orange-500 hover:text-orange-400 font-bold"
+          onClick={() => deleteClassDate(classDateData.id)}
+        >
+          Deletar
+        </button>
+      </div>
     );
   }
 

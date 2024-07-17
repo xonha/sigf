@@ -208,9 +208,7 @@ export default function ClassesIdPage() {
 
   useEffect(() => {
     async function handleReadEnrollments() {
-      console.log("classId", classId);
       const enrollments = await readEnrollmentsByClassId(classId as string);
-      console.log("enrollments", enrollments);
       setRowData(enrollments);
 
       const enrollmentsLedCount = enrollments.filter(
@@ -229,7 +227,6 @@ export default function ClassesIdPage() {
         (currentClass) => currentClass.id === classId,
       );
       if (!currentClass) return console.error("Class not found");
-      console.log("currentClass", currentClass);
       setEnrollmentsCount({
         max: currentClass.size,
         led: enrollmentsLedCount.length,
