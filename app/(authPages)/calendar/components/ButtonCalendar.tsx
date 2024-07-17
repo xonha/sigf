@@ -2,7 +2,7 @@ import {
   TCalendar,
   deleteCalendar,
   updateCalendar,
-} from "@/app/api/calendar/controller";
+} from "@/app/api/calendar/service";
 import { useState } from "react";
 import { FaPen } from "react-icons/fa";
 
@@ -34,7 +34,7 @@ export default function ButtonCalendar(props: {
     });
 
     const filteredCalendars = props.calendars.filter(
-      (cal) => cal.id !== props.id,
+      (cal) => cal.id !== props.id
     );
 
     props.setCalendars([...filteredCalendars, updatedCalendar]);
@@ -45,7 +45,7 @@ export default function ButtonCalendar(props: {
   function handleDeleteCalendar() {
     deleteCalendar(props.id);
     const filteredCalendars = props.calendars.filter(
-      (cal) => cal.id !== props.id,
+      (cal) => cal.id !== props.id
     );
     props.setCalendars(filteredCalendars);
   }

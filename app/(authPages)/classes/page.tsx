@@ -1,8 +1,8 @@
 "use client";
 
 import { TClasses } from "@/app/api/classes/[id]/route";
-import { readClasses } from "@/app/api/classes/controller";
-import { readEnrollmentsByUser } from "@/app/api/enrollments/controller";
+import { readClasses } from "@/app/api/classes/service";
+import { readEnrollmentsByUser } from "@/app/api/enrollments/service";
 import { ColDef } from "ag-grid-community";
 import { AgGridReact } from "ag-grid-react";
 import Link from "next/link";

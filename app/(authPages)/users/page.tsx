@@ -1,6 +1,6 @@
 "use client";
 
-import { createUser, readUsers, updateUser } from "@/app/api/users/controller";
+import { createUser, readUsers, updateUser } from "@/app/api/users/service";
 import { TUser, TUserViewPlusRole } from "@/app/api/users/route";
 import { ColDef } from "ag-grid-community";
 import { AgGridReact } from "ag-grid-react";
@@ -34,7 +34,7 @@ export default function () {
 
   async function handleChangeRole(
     userData: TUserViewPlusRole,
-    newRole: TUser["role"],
+    newRole: TUser["role"]
   ) {
     if (userData.user.created_at === "never") {
       const createdUser = await createUser({

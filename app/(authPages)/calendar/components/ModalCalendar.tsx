@@ -1,4 +1,4 @@
-import { createCalendar } from "@/app/api/calendar/controller";
+import { createCalendar } from "@/app/api/calendar/service";
 import { calendarsAtom } from "@/atoms/calendarAtom";
 import { modalIsOpenAtom } from "@/atoms/modalAtom";
 import { useState } from "react";

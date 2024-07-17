@@ -6,7 +6,7 @@ import { Database } from "@/database.types";
 import {
   deleteEnrollment,
   createEnrollment,
-} from "@/app/api/enrollments/controller";
+} from "@/app/api/enrollments/service";
 import useUser from "@/hooks/useUser";
 import { enrollmentsAtom } from "@/atoms/enrollmentsAtom";
 import { modalIsOpenAtom, modalIdAtom } from "@/atoms/modalAtom";

@@ -1,10 +1,6 @@
 "use client";
 
-import {
-  createClass,
-  readClass,
-  updateClass,
-} from "@/app/api/classes/controller";
+import { createClass, readClass, updateClass } from "@/app/api/classes/service";
 import { classesAtom } from "@/atoms/classesAtom";
 import { modalIsOpenAtom, modalIdAtom } from "@/atoms/modalAtom";
 import { periodsAtom } from "@/atoms/periodsAtom";
@@ -151,7 +147,7 @@ export default function ModalClasses() {
                 />
                 <label className="ml-2">{weekDaysOptions[weekday]}</label>
               </div>
-            ),
+            )
         )}
       </div>
       <div className="flex gap-2 justify-center">
@@ -169,7 +165,7 @@ export default function ModalClasses() {
                 />
                 <label className="ml-2">{weekDaysOptions[weekday]}</label>
               </div>
-            ),
+            )
         )}
       </div>
       <div className="flex justify-end gap-4 mt-4">

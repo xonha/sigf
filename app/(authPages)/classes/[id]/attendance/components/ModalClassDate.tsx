@@ -3,10 +3,10 @@
 import {
   createAttendances,
   readApprovedEnrollments,
-} from "@/app/api/attendance/controller";
+} from "@/app/api/attendance/service";
 import { TAttendance } from "@/app/api/attendance/route";
-import { createClassDates } from "@/app/api/classDates/controller";
-import { readClass } from "@/app/api/classes/controller";
+import { createClassDates } from "@/app/api/classDates/service";
+import { readClass } from "@/app/api/classes/service";
 import { classDatesAtom } from "@/atoms/classDatesAtom";
 import { modalIsOpenAtom } from "@/atoms/modalAtom";
 import { useParams } from "next/navigation";
@@ -22,7 +22,7 @@ export default function ModalClassDate() {
   const setIsModalOpen = useSetRecoilState(modalIsOpenAtom);
 
   async function handleCreateClassDate(
-    event: React.FormEvent<HTMLFormElement>,
+    event: React.FormEvent<HTMLFormElement>
   ) {
     event.preventDefault();
     const classData = await readClass(classId);
@@ -36,7 +36,7 @@ export default function ModalClassDate() {
       weekday: "short",
     });
     const isDateInClassWeekDays = classWeekDays.includes(
-      selectedDateWeekDay.toLowerCase(),
+      selectedDateWeekDay.toLowerCase()
     );
 
     if (!isDateInClassWeekDays) {
@@ -48,7 +48,7 @@ export default function ModalClassDate() {
     const newClassDates = await createClassDates(
       classId,
       [selectedDate],
-      classDates,
+      classDates
     );
     const attendances = newClassDates.flatMap((classDate) => {
       return approvedEnrollments.map((enrollment) => {

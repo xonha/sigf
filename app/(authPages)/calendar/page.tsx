@@ -4,7 +4,7 @@ import {
   TCalendar,
   createCalendar,
   readCalendars,
-} from "@/app/api/calendar/controller";
+} from "@/app/api/calendar/service";
 import { useEffect, useState } from "react";
 import CalendarFrame from "./components/CalendarFrame";
 import Sidebar from "./components/Sidebar";
