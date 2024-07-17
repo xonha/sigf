@@ -3,6 +3,7 @@ import "react-datepicker/dist/react-datepicker.css";
 import "./globals.css";
 import "ag-grid-community/styles/ag-grid.css";
 import "ag-grid-community/styles/ag-theme-quartz.css";
+import { Toaster } from "sonner";
 
 export const metadata = {
   title: "SIGF",
@@ -16,6 +17,7 @@ export default function RootLayout({
 }) {
   return (
     <html lang="en">
+      <Toaster theme="light" richColors />
       <RecoilWrapper>
         <body
           className="min-h-screen ag-theme-quartz bg-background flex flex-col items-center"

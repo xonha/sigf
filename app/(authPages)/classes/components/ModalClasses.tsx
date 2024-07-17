@@ -108,7 +108,12 @@ export default function ModalClasses() {
         className="border rounded-md px-4 py-2 pl-2"
         type="number"
         value={size}
-        onChange={(e) => setSize(Number(e.target.value))}
+        step="2"
+        onChange={(e) => {
+          const value = Number(e.target.value);
+          if (value % 2 !== 0) setSize(value - 1);
+          else setSize(value);
+        }}
       />
       <label className="text-md">Semestre</label>
       <select
