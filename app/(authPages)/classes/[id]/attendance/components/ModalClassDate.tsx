@@ -13,6 +13,7 @@ import { useParams } from "next/navigation";
 import React, { useState } from "react";
 import DatePicker from "react-datepicker";
 import { useRecoilState, useSetRecoilState } from "recoil";
+import { toast } from "sonner";
 
 export default function ModalClassDate() {
   const classId = useParams().id;
@@ -21,7 +22,7 @@ export default function ModalClassDate() {
   const setIsModalOpen = useSetRecoilState(modalIsOpenAtom);
 
   async function handleCreateClassDate(
-    event: React.FormEvent<HTMLFormElement>
+    event: React.FormEvent<HTMLFormElement>,
   ) {
     event.preventDefault();
     const classData = await readClass(classId);
@@ -35,7 +36,7 @@ export default function ModalClassDate() {
       weekday: "short",
     });
     const isDateInClassWeekDays = classWeekDays.includes(
-      selectedDateWeekDay.toLowerCase()
+      selectedDateWeekDay.toLowerCase(),
     );
 
     if (!isDateInClassWeekDays) {
@@ -47,7 +48,7 @@ export default function ModalClassDate() {
     const newClassDates = await createClassDates(
       classId,
       [selectedDate],
-      classDates
+      classDates,
     );
     const attendances = newClassDates.flatMap((classDate) => {
       return approvedEnrollments.map((enrollment) => {
@@ -75,6 +76,7 @@ export default function ModalClassDate() {
         selected={selectedDate}
         onChange={(date) => {
           setSelectedDate(date || new Date());
+          toast.success("Data da aula selecionada");
         }}
       />
       <div className="flex flex-row-reverse gap-4">
