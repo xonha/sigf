@@ -1,5 +1,6 @@
 "use client";
 
+import { readClasses } from "@/app/api/classes/controller";
 import { readEnrollmentsByClassId } from "@/app/api/enrollments/controller";
 import { classesAtom } from "@/atoms/classesAtom";
 import {
@@ -223,7 +224,10 @@ export default function ClassesIdPage() {
           enrollment.status === "approved",
       );
 
-      const currentClass = classes.find((c) => c.id === classId);
+      const classes = await readClasses();
+      const currentClass = classes.find(
+        (currentClass) => currentClass.id === classId,
+      );
       if (!currentClass) return console.error("Class not found");
       console.log("currentClass", currentClass);
       setEnrollmentsCount({
