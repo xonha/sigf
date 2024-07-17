@@ -1,4 +1,4 @@
-import RecoilWrapper from "@/components/RecoilWrapper";
+import RecoilWrapper from "@/app/components/RecoilWrapper";
 import "react-datepicker/dist/react-datepicker.css";
 import "./globals.css";
 import "ag-grid-community/styles/ag-grid.css";

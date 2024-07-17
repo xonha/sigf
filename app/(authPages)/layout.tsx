@@ -1,12 +1,12 @@
 "use client";
 
-import Navbar from "@/components/Navbar";
-import SideBar from "@/components/SideBar";
+import Navbar from "@/app/components/Navbar";
+import SideBar from "@/app/components/SideBar";
 import { useEffect } from "react";
 import { useSetRecoilState } from "recoil";
 import { readPeriods } from "../api/periods/service";
 import { readUserWithRole } from "../api/users/service";
-import MainModal from "@/components/MainModal";
+import MainModal from "@/app/components/MainModal";
 import { periodsAtom } from "@/atoms/periodsAtom";
 import { usersAtom } from "@/atoms/usersAtom";
 

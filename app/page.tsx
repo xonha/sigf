@@ -1,6 +1,6 @@
-import Content from "@/components/Content";
-import MainModal from "@/components/MainModal";
-import NavbarHome from "@/components/NavbarHome";
+import Content from "@/app/components/Content";
+import MainModal from "@/app/components/MainModal";
+import NavbarHome from "@/app/components/NavbarHome";
 
 export const dynamic = "force-dynamic";
 
