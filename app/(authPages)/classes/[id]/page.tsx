@@ -45,7 +45,6 @@ const enrollmentStatusOptions = {
 export default function ClassesIdPage() {
   const user = useRecoilValue(usersAtom);
   const setEnrollmentsCount = useSetRecoilState(enrollmentCountAtom);
-  const classes = useRecoilValue(classesAtom);
   const classId = useParams().id;
   const [rowData, setRowData] = useState<IRow[]>([]);
   const columnDefs: ColDef<IRow>[] = [
@@ -86,9 +85,31 @@ export default function ClassesIdPage() {
   const columnDefsNonAdmin: ColDef<IRow>[] = [
     { field: "users_view.name", headerName: "Nome", flex: 3 },
     { field: "users_view.email", headerName: "Email", flex: 3 },
-    { field: "createdAt", headerName: "Data da inscrição", flex: 3 },
-    { field: "danceRole", headerName: "Papel", flex: 2 },
-    { field: "status", headerName: "Inscrição", flex: 2 },
+    {
+      field: "createdAt",
+      headerName: "Data da inscrição",
+      flex: 3,
+      valueFormatter: ({ value }) =>
+        new Date(value).toLocaleDateString("pt-BR"),
+    },
+    {
+      field: "danceRole",
+      headerName: "Papel",
+      flex: 2,
+      valueFormatter: ({ value }) => danceRoleOptions[value],
+    },
+    {
+      field: "danceRolePreference",
+      headerName: "Preferência",
+      flex: 2,
+      valueFormatter: ({ value }) => danceRoleOptions[value],
+    },
+    {
+      field: "status",
+      headerName: "Inscrição",
+      flex: 2,
+      valueFormatter: ({ value }) => enrollmentStatusOptions[value],
+    },
   ];
 
   function actionButtonRenderer(params: { data: IRow }) {
