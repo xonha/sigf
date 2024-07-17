@@ -4,7 +4,7 @@ import Navbar from "@/components/Navbar";
 import SideBar from "@/components/SideBar";
 import { useEffect } from "react";
 import { useSetRecoilState } from "recoil";
-import { readPeriods } from "../api/periods/controller";
+import { readPeriods } from "../api/periods/service";
 import { readUserWithRole } from "../api/users/controller";
 import MainModal from "@/components/MainModal";
 import { periodsAtom } from "@/atoms/periodsAtom";

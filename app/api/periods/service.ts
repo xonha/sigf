@@ -1,5 +1,6 @@
 import { Database } from "@/database.types";
 import { TPeriod } from "./route";
+import axios from "axios";
 
 export async function readPeriod(periodId: string | string[]) {
   try {
@@ -27,7 +28,7 @@ export async function createPeriod(
   year: Date,
   semester: Database["public"]["Enums"]["semesterEnum"],
   startDate: Date,
-  endDate: Date,
+  endDate: Date
 ) {
   try {
     const body = {
@@ -55,7 +56,7 @@ export async function editPeriod(
   year: Date,
   semester: Database["public"]["Enums"]["semesterEnum"],
   startDate: Date,
-  endDate: Date,
+  endDate: Date
 ) {
   try {
     const body = {
@@ -77,5 +78,15 @@ export async function editPeriod(
     return data;
   } catch (error) {
     console.error("Error creating period:", error);
+  }
+}
+
+export async function deletePeriod(id: string) {
+  try {
+    const res = await axios.delete(`/api/periods`, { data: { id } });
+    return res.data;
+  } catch (error) {
+    console.error("Error deleting class:", error);
+    throw error;
   }
 }

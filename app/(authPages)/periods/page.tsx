@@ -8,11 +8,11 @@ import {
   TModalOptions,
 } from "@/atoms/modalAtom";
 import { periodsAtom } from "@/atoms/periodsAtom";
-import { deletePeriod } from "@/services/periods";
 import { ColDef } from "ag-grid-community";
 import { AgGridReact } from "ag-grid-react";
 import { useRecoilState, useSetRecoilState } from "recoil";
 import { periodsOptions } from "../classes/components/ModalClasses";
+import { deletePeriod } from "@/app/api/periods/service";
 
 export default function () {
   const setIsModalOpen = useSetRecoilState(modalIsOpenAtom);
@@ -57,7 +57,7 @@ export default function () {
       deletePeriod(periodId);
       setPeriods((prevPeriods) => {
         const newPeriods = prevPeriods.filter(
-          (period) => period.id !== periodId,
+          (period) => period.id !== periodId
         );
         return newPeriods;
       });

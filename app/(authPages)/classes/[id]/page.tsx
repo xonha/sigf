@@ -203,7 +203,6 @@ export default function ClassesIdPage() {
       });
 
       const data = await res.json();
-
       const updatedRowData = rowData.map((row) =>
         row.classId === data[0].classId && row.userId === data[0].userId
           ? { ...row, status: data[0].status }

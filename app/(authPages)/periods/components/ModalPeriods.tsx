@@ -4,7 +4,7 @@ import {
   createPeriod,
   editPeriod,
   readPeriod,
-} from "@/app/api/periods/controller";
+} from "@/app/api/periods/service";
 import { modalIsOpenAtom, modalIdAtom } from "@/atoms/modalAtom";
 import { periodsAtom } from "@/atoms/periodsAtom";
 import { Database } from "@/database.types";
@@ -34,7 +34,7 @@ export default function ModalPeriods() {
         year,
         semester,
         startDate,
-        endDate,
+        endDate
       );
     }
 
@@ -70,7 +70,7 @@ export default function ModalPeriods() {
         value={semester}
         onChange={(e) => {
           setSemester(
-            e.target.value as Database["public"]["Enums"]["semesterEnum"],
+            e.target.value as Database["public"]["Enums"]["semesterEnum"]
           );
         }}
         required
