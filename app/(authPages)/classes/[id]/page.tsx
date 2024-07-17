@@ -20,6 +20,7 @@ interface IRow {
   status: Database["public"]["Enums"]["enrollmentStatus"];
   attendance: string;
   danceRole: Database["public"]["Enums"]["danceRole"];
+  danceRolePreference: Database["public"]["Enums"]["danceRolePreference"];
   createdAt: Date;
   users_view: {
     name: string;
@@ -63,6 +64,12 @@ export default function ClassesIdPage() {
       valueFormatter: ({ value }) => danceRoleOptions[value],
     },
     {
+      field: "danceRolePreference",
+      headerName: "Preferência",
+      flex: 2,
+      valueFormatter: ({ value }) => danceRoleOptions[value],
+    },
+    {
       field: "status",
       headerName: "Inscrição",
       flex: 2,
@@ -83,97 +90,82 @@ export default function ClassesIdPage() {
     { field: "status", headerName: "Inscrição", flex: 2 },
   ];
 
-  function actionButtonRenderer(params) {
-    if (params.data.status === "approved") {
-      return (
-        <div className="flex gap-2">
-          <button
-            className="text-blue-500 hover:text-blue-400 font-bold"
-            onClick={() => {
-              updateEnrollment(
-                params.data.classId,
-                params.data.userId,
-                "pending",
-              );
-            }}
-          >
-            Resetar
-          </button>
-          <button
-            className="text-orange-500 hover:text-orange-400 font-bold"
-            onClick={() => {
-              updateEnrollment(
-                params.data.classId,
-                params.data.userId,
-                "rejected",
-              );
-            }}
-          >
-            Rejeitar
-          </button>
-        </div>
-      );
-    } else if (params.data.status === "rejected") {
-      return (
-        <div className="flex gap-2">
-          <button
-            className="text-green-500 hover:text-green-400 font-bold"
-            onClick={() => {
-              updateEnrollment(
-                params.data.classId,
-                params.data.userId,
-                "approved",
-              );
-            }}
-          >
-            Aprovar
-          </button>
-          <button
-            className="text-blue-500 hover:text-blue-400 font-bold"
-            onClick={() => {
-              updateEnrollment(
-                params.data.classId,
-                params.data.userId,
-                "pending",
-                false,
-              );
-            }}
-          >
-            Resetar
-          </button>
-        </div>
-      );
-    }
+  function actionButtonRenderer(params: { data: IRow }) {
+    const { classId, userId, status } = params.data;
 
-    return (
-      <div className="flex gap-2">
-        <button
-          className="text-green-500 hover:text-green-400 font-bold"
-          onClick={() => {
-            updateEnrollment(
-              params.data.classId,
-              params.data.userId,
-              "approved",
-            );
-          }}
-        >
-          Aprovar
-        </button>
-        <button
-          className="text-orange-500 hover:text-orange-400 font-bold"
-          onClick={() => {
-            updateEnrollment(
-              params.data.classId,
-              params.data.userId,
-              "rejected",
-              false,
-            );
-          }}
-        >
-          Rejeitar
-        </button>
-      </div>
+    const renderButton = (
+      buttonStatus: "pending" | "approved" | "rejected",
+      text: string,
+      color: string,
+      hoverColor: string,
+      alterCount = true,
+    ) => (
+      <button
+        key={buttonStatus}
+        className={`${color} ${hoverColor} font-bold`}
+        onClick={() =>
+          updateEnrollment(classId, userId, buttonStatus, alterCount)
+        }
+      >
+        {text}
+      </button>
     );
+
+    const getButtonsForStatus = (
+      currentStatus: "pending" | "approved" | "rejected",
+    ) => {
+      switch (currentStatus) {
+        case "approved":
+          return [
+            renderButton(
+              "pending",
+              "Resetar",
+              "text-blue-500",
+              "hover:text-blue-400",
+            ),
+            renderButton(
+              "rejected",
+              "Rejeitar",
+              "text-orange-500",
+              "hover:text-orange-400",
+            ),
+          ];
+        case "rejected":
+          return [
+            renderButton(
+              "approved",
+              "Aprovar",
+              "text-green-500",
+              "hover:text-green-400",
+            ),
+            renderButton(
+              "pending",
+              "Resetar",
+              "text-blue-500",
+              "hover:text-blue-400",
+              false,
+            ),
+          ];
+        default:
+          return [
+            renderButton(
+              "approved",
+              "Aprovar",
+              "text-green-500",
+              "hover:text-green-400",
+            ),
+            renderButton(
+              "rejected",
+              "Rejeitar",
+              "text-orange-500",
+              "hover:text-orange-400",
+              false,
+            ),
+          ];
+      }
+    };
+
+    return <div className="flex gap-2">{getButtonsForStatus(status)}</div>;
   }
 
   async function updateEnrollment(
@@ -199,11 +191,11 @@ export default function ClassesIdPage() {
 
       if (!alterCount) return;
       const countChange = data[0].status === "approved" ? 1 : -1;
-      if (data[0].danceRole === "led") {
+      if (data[0].danceRolePreference === "led") {
         setEnrollmentsCount((prevCount: IEnrollmentCounts) => {
           return { ...prevCount, led: prevCount.led + countChange };
         });
-      } else if (data[0].danceRole === "leader") {
+      } else if (data[0].danceRolePreference === "leader") {
         setEnrollmentsCount((prevCount: IEnrollmentCounts) => {
           return { ...prevCount, leader: prevCount.leader + countChange };
         });
@@ -215,20 +207,25 @@ export default function ClassesIdPage() {
 
   useEffect(() => {
     async function handleReadEnrollments() {
+      console.log("classId", classId);
       const enrollments = await readEnrollmentsByClassId(classId as string);
+      console.log("enrollments", enrollments);
       setRowData(enrollments);
 
       const enrollmentsLedCount = enrollments.filter(
         (enrollment) =>
-          enrollment.danceRole === "led" && enrollment.status === "approved",
+          enrollment.danceRolePreference === "led" &&
+          enrollment.status === "approved",
       );
       const enrollmentsLeaderCount = enrollments.filter(
         (enrollment) =>
-          enrollment.danceRole === "leader" && enrollment.status === "approved",
+          enrollment.danceRolePreference === "leader" &&
+          enrollment.status === "approved",
       );
 
       const currentClass = classes.find((c) => c.id === classId);
       if (!currentClass) return console.error("Class not found");
+      console.log("currentClass", currentClass);
       setEnrollmentsCount({
         max: currentClass.size,
         led: enrollmentsLedCount.length,
