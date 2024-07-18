@@ -1,4 +1,15 @@
+import axios from "axios";
 import { TClassDates } from "./route";
+
+export async function readClassDates(classId: string | string[]) {
+  try {
+    const res = await axios.get(`/api/classDates/${classId}`);
+    return res.data as TClassDates[];
+  } catch (error) {
+    console.error("Error fetching class dates:", error);
+    throw error;
+  }
+}
 
 export async function createClassDates(
   classId: string | string[],

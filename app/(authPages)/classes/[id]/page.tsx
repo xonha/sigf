@@ -1,5 +1,8 @@
 "use client";
 
+import { TAttendance } from "@/app/api/attendance/route";
+import { createAttendances } from "@/app/api/attendance/service";
+import { readClassDates } from "@/app/api/classDates/service";
 import { readClasses } from "@/app/api/classes/service";
 import { readEnrollmentsByClassId } from "@/app/api/enrollments/service";
 import { classesAtom } from "@/atoms/classesAtom";
@@ -120,7 +123,7 @@ export default function ClassesIdPage() {
       text: string,
       color: string,
       hoverColor: string,
-      alterCount = true
+      alterCount = true,
     ) => (
       <button
         key={buttonStatus}
@@ -134,7 +137,7 @@ export default function ClassesIdPage() {
     );
 
     const getButtonsForStatus = (
-      currentStatus: "pending" | "approved" | "rejected"
+      currentStatus: "pending" | "approved" | "rejected",
     ) => {
       switch (currentStatus) {
         case "approved":
@@ -143,13 +146,13 @@ export default function ClassesIdPage() {
               "pending",
               "Resetar",
               "text-blue-500",
-              "hover:text-blue-400"
+              "hover:text-blue-400",
             ),
             renderButton(
               "rejected",
               "Rejeitar",
               "text-orange-500",
-              "hover:text-orange-400"
+              "hover:text-orange-400",
             ),
           ];
         case "rejected":
@@ -158,14 +161,14 @@ export default function ClassesIdPage() {
               "approved",
               "Aprovar",
               "text-green-500",
-              "hover:text-green-400"
+              "hover:text-green-400",
             ),
             renderButton(
               "pending",
               "Resetar",
               "text-blue-500",
               "hover:text-blue-400",
-              false
+              false,
             ),
           ];
         default:
@@ -174,14 +177,14 @@ export default function ClassesIdPage() {
               "approved",
               "Aprovar",
               "text-green-500",
-              "hover:text-green-400"
+              "hover:text-green-400",
             ),
             renderButton(
               "rejected",
               "Rejeitar",
               "text-orange-500",
               "hover:text-orange-400",
-              false
+              false,
             ),
           ];
       }
@@ -190,12 +193,29 @@ export default function ClassesIdPage() {
     return <div className="flex gap-2">{getButtonsForStatus(status)}</div>;
   }
 
+  async function handleNewEnrollmentAttendance(
+    userId: string,
+    classId: string,
+  ) {
+    const classDates = await readClassDates(classId);
+    const futureClassDates = classDates.filter(
+      (classDate) => new Date(classDate.date) > new Date(),
+    );
+    const newAttendance = futureClassDates.flatMap((classDate) => ({
+      classDateId: classDate.id,
+      userId: userId,
+    }));
+    createAttendances(newAttendance as TAttendance[]);
+  }
+
   async function updateEnrollment(
     classId: string,
     userId: string,
     status: "approved" | "rejected" | "pending",
-    alterCount = true
+    alterCount = true,
   ) {
+    if (status === "approved") handleNewEnrollmentAttendance(userId, classId);
+
     try {
       const res = await fetch(`/api/enrollments/classId/${classId}`, {
         method: "PATCH",
@@ -206,7 +226,7 @@ export default function ClassesIdPage() {
       const updatedRowData = rowData.map((row) =>
         row.classId === data[0].classId && row.userId === data[0].userId
           ? { ...row, status: data[0].status }
-          : row
+          : row,
       );
       setRowData(updatedRowData);
 
@@ -234,17 +254,17 @@ export default function ClassesIdPage() {
       const enrollmentsLedCount = enrollments.filter(
         (enrollment) =>
           enrollment.danceRolePreference === "led" &&
-          enrollment.status === "approved"
+          enrollment.status === "approved",
       );
       const enrollmentsLeaderCount = enrollments.filter(
         (enrollment) =>
           enrollment.danceRolePreference === "leader" &&
-          enrollment.status === "approved"
+          enrollment.status === "approved",
       );
 
       const classes = await readClasses();
       const currentClass = classes.find(
-        (currentClass) => currentClass.id === classId
+        (currentClass) => currentClass.id === classId,
       );
       if (!currentClass) return console.error("Class not found");
       setEnrollmentsCount({

@@ -44,7 +44,7 @@ export async function readEnrollmentsByUser() {
     const resData = await res.json();
 
     const enrollments = await resData.map(
-      (enrollment: { classId: string }) => enrollment.classId
+      (enrollment: { classId: string }) => enrollment.classId,
     );
     return enrollments as TEnrollment[];
   } catch (error) {
@@ -68,7 +68,7 @@ export async function createEnrollment(enrollment: TCreateDeleteEnrollment) {
 
 export async function deleteEnrollment(
   enrollment: TCreateDeleteEnrollment,
-  userEnrollmentIds: any
+  userEnrollmentIds: any,
 ) {
   try {
     await fetch(`/api/enrollments`, {
@@ -76,7 +76,7 @@ export async function deleteEnrollment(
       body: JSON.stringify({ ...enrollment }),
     });
     return userEnrollmentIds.filter(
-      (enrollmentId: string) => enrollmentId !== enrollment.classId
+      (enrollmentId: string) => enrollmentId !== enrollment.classId,
     );
   } catch (error) {
     console.error("Error unenrolling class:", error);
