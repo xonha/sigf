@@ -34,14 +34,14 @@ export default function () {
       headerName: "Início",
       flex: 2,
       valueFormatter: ({ value }) =>
-        new Date(value).toLocaleDateString("pt-BR"),
+        new Date(value + "EDT").toLocaleDateString("pt-BR"),
     },
     {
       field: "endDate",
       headerName: "Fim",
       flex: 2,
       valueFormatter: ({ value }) =>
-        new Date(value).toLocaleDateString("pt-BR"),
+        new Date(value + "EDT").toLocaleDateString("pt-BR"),
     },
     { headerName: "Ações", minWidth: 150, cellRenderer: actionCellRenderer },
   ];
