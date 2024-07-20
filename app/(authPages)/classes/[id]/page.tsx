@@ -31,8 +31,8 @@ interface IRow {
 }
 
 const danceRoleOptions = {
-  led: "Condutor(a)",
-  leader: "Conduzido(a)",
+  led: "Conduzido(a)",
+  leader: "Condutor(a)",
   indifferent: "Indiferente",
 };
 
@@ -45,7 +45,6 @@ const enrollmentStatusOptions = {
 export default function ClassesIdPage() {
   const user = useRecoilValue(usersAtom);
   const setEnrollmentsCount = useSetRecoilState(enrollmentCountAtom);
-  const classes = useRecoilValue(classesAtom);
   const classId = useParams().id;
   const [rowData, setRowData] = useState<IRow[]>([]);
   const columnDefs: ColDef<IRow>[] = [

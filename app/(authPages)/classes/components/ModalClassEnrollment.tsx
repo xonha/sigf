@@ -10,6 +10,8 @@ import {
 import useUser from "@/hooks/useUser";
 import { enrollmentsAtom } from "@/atoms/enrollmentsAtom";
 import { modalIsOpenAtom, modalIdAtom } from "@/atoms/modalAtom";
+import { toast } from "sonner";
+import tw from "tailwind-styled-components";
 
 export type TDanceRole = Database["public"]["Enums"]["danceRole"];
 export type TDanceRolePreference =
@@ -33,95 +35,109 @@ export default function ModalClassEnrollment() {
   };
 
   async function handleUnenroll() {
+    toast.info("Desinscrição em andamento...");
     const { data, error } = await useUser();
-    if (error) return console.error("Error getting user:", error);
+    if (error) return toast.error("Erro ao obter usuário");
 
-    const filteredEnrollments = await deleteEnrollment(
-      { classId, userId: data.user.id },
-      enrollmentIds
-    );
-    setEnrollmentIds(filteredEnrollments);
+    try {
+      const filteredEnrollments = await deleteEnrollment(
+        { classId, userId: data.user.id },
+        enrollmentIds,
+      );
+      setEnrollmentIds(filteredEnrollments);
+    } catch (error) {
+      toast.error("Erro ao desinscrever");
+      return;
+    }
+    setIsModalOpen(false);
+    toast.success("Desinscrição realizada com sucesso!");
   }
 
   async function handleEnroll() {
+    toast.info("Inscrição em andamento...");
     const { data, error } = await useUser();
-    if (error) return console.error("Error getting user:", error);
+    if (error) return toast.error("Erro ao obter usuário");
 
-    const createdEnrollment = await createEnrollment({
-      classId,
-      userId: data.user.id,
-      danceRolePreference,
-      danceRole,
-    });
-    setEnrollmentIds([...enrollmentIds, createdEnrollment.classId]);
+    try {
+      const createdEnrollment = await createEnrollment({
+        classId,
+        userId: data.user.id,
+        danceRolePreference,
+        danceRole,
+      });
+      setEnrollmentIds([...enrollmentIds, createdEnrollment.classId]);
+    } catch (error) {
+      toast.error("Erro ao se inscrever");
+      return;
+    }
+    setIsModalOpen(false);
+    toast.success("Inscrição realizada com sucesso!");
   }
 
   return (
-    <form
-      className="flex-1 flex flex-col w-full justify-center gap-2 text-foreground"
+    <Form
       onSubmit={(e) => {
         e.preventDefault();
       }}
     >
-      <label className="text-md">Papel</label>
-      <select
-        className="rounded-md px-4 py-2 bg-inherit border mb-6"
-        onChange={(e) => {
-          const value = e.target.value as TDanceRole;
-          setDanceRole(value);
-          if (value !== "indifferent") setDanceRolePreference(value);
-        }}
-      >
-        {Object.entries(rolesOptions).map(([key, value]) => (
-          <option key={key} value={key}>
-            {value}
-          </option>
-        ))}
-      </select>
-      {danceRole === "indifferent" ? (
+      {!isEnrolled && (
         <>
-          <label className="text-md">Preferência</label>
-          <select
-            className="rounded-md px-4 py-2 bg-inherit border mb-6"
-            onChange={(e) =>
-              setDanceRolePreference(e.target.value as TDanceRolePreference)
-            }
+          <Label>Papel</Label>
+          <Select
+            onChange={(e) => {
+              const value = e.target.value as TDanceRole;
+              setDanceRole(value);
+              if (value !== "indifferent") setDanceRolePreference(value);
+            }}
           >
-            {Object.entries(optionalRoleOptions).map(([key, value]) => (
+            {Object.entries(rolesOptions).map(([key, value]) => (
               <option key={key} value={key}>
                 {value}
               </option>
             ))}
-          </select>
+          </Select>
+          {danceRole === "indifferent" ? (
+            <>
+              <Label>Preferência</Label>
+              <Select
+                onChange={(e) =>
+                  setDanceRolePreference(e.target.value as TDanceRolePreference)
+                }
+              >
+                {Object.entries(optionalRoleOptions).map(([key, value]) => (
+                  <option key={key} value={key}>
+                    {value}
+                  </option>
+                ))}
+              </Select>
+            </>
+          ) : null}
         </>
-      ) : null}
+      )}
 
-      <div className="flex flex-row-reverse gap-4">
+      <ButtonContainer>
         {isEnrolled ? (
-          <button
-            className="bg-orange-500 hover:bg-orange-600 text-white font-bold py-2 px-4 rounded"
-            onClick={handleUnenroll}
-          >
-            Desinscrever
-          </button>
+          <UnenrollButton onClick={handleUnenroll}>Desinscrever</UnenrollButton>
         ) : (
-          <button
-            className="bg-green-500 hover:bg-green-600 text-white font-bold py-2 px-4 rounded"
-            onClick={handleEnroll}
-          >
-            Inscrever
-          </button>
+          <EnrollButton onClick={handleEnroll}>Inscrever</EnrollButton>
         )}
-        <button
-          className="border border-gray-700 rounded px-4 py-2 text-black"
+        <CloseButton
           onClick={(e) => {
             e.preventDefault();
             setIsModalOpen(false);
           }}
         >
           Fechar
-        </button>
-      </div>
-    </form>
+        </CloseButton>
+      </ButtonContainer>
+    </Form>
   );
 }
+
+const Form = tw.form`flex-1 flex flex-col w-full justify-center gap-2 text-foreground`;
+const Label = tw.label`text-md`;
+const Select = tw.select`rounded-md px-4 py-2 bg-inherit border mb-6`;
+const ButtonContainer = tw.div`flex flex-row-reverse gap-4`;
+const UnenrollButton = tw.button`bg-orange-500 hover:bg-orange-600 text-white font-bold py-2 px-4 rounded`;
+const EnrollButton = tw.button`bg-green-500 hover:bg-green-600 text-white font-bold py-2 px-4 rounded`;
+const CloseButton = tw.button`border border-gray-700 rounded px-4 py-2 text-black`;

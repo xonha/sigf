@@ -57,7 +57,6 @@ export async function updateClass(classData: TUpdateClass) {
 
     return newClasses;
   } catch (error) {
-    console.error("Error creating class:", error);
     throw error;
   }
 }
@@ -69,7 +68,6 @@ export async function deleteClass(id: string) {
     });
     return res;
   } catch (error) {
-    console.error("Error deleting class:", error);
     throw error;
   }
 }

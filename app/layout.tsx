@@ -17,7 +17,7 @@ export default function RootLayout({
 }) {
   return (
     <html lang="en">
-      <Toaster theme="light" richColors />
+      <Toaster theme="light" richColors visibleToasts={2} />
       <RecoilWrapper>
         <body
           className="min-h-screen ag-theme-quartz bg-background flex flex-col items-center"

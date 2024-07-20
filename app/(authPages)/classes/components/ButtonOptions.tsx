@@ -7,8 +7,10 @@ import {
   TModalOptions,
 } from "@/atoms/modalAtom";
 import { useRecoilState, useSetRecoilState } from "recoil";
+import { toast } from "sonner";
 
 export default function ButtonOptions(props: { id: string }) {
+  const classId = props.id;
   const [classes, setClasses] = useRecoilState(classesAtom);
   const setIsModalOpen = useSetRecoilState(modalIsOpenAtom);
   const setModalOption = useSetRecoilState(modalOptionsAtom);
@@ -18,6 +20,18 @@ export default function ButtonOptions(props: { id: string }) {
     setModalOption(modalOption);
     setModalId(props.id);
     setIsModalOpen(true);
+  }
+
+  async function handleDeleteClass() {
+    toast.info("Excluindo classe...");
+    try {
+      await deleteClass(classId);
+    } catch (error) {
+      toast.error("Erro ao excluir classe");
+      return;
+    }
+    setClasses(classes.filter((classItem) => classItem.id !== classId));
+    toast.success("Classe excluída com sucesso!");
   }
 
   return (
@@ -30,10 +44,7 @@ export default function ButtonOptions(props: { id: string }) {
       </button>
       <button
         className="text-orange-500 hover:text-orange-400 font-bold"
-        onClick={() => {
-          deleteClass(props.id);
-          setClasses(classes.filter((classItem) => classItem.id !== props.id));
-        }}
+        onClick={handleDeleteClass}
       >
         Excluir
       </button>

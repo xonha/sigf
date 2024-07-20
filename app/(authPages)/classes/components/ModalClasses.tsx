@@ -10,6 +10,8 @@ import { modalIsOpenAtom, modalIdAtom } from "@/atoms/modalAtom";
 import { periodsAtom } from "@/atoms/periodsAtom";
 import { useEffect, useState } from "react";
 import { useRecoilValue, useSetRecoilState } from "recoil";
+import { toast } from "sonner";
+import tw from "tailwind-styled-components";
 
 export const weekDaysOptions = {
   sun: "Dom",
@@ -40,31 +42,44 @@ export default function ModalClasses() {
   const periods = useRecoilValue(periodsAtom);
 
   async function handleFormSubmit(event: React.FormEvent<HTMLFormElement>) {
-    const periodId = event.target[2].value;
     event.preventDefault();
+    toast.info("Salvando classe...");
+    const periodId = event.target[2].value;
 
-    let classData: any;
     if (!classId) {
-      classData = await createClass({
-        name,
-        periodId,
-        weekDays: selectedWeekdays.join(","),
-        size,
-        isActive,
-      });
+      try {
+        const classData = await createClass({
+          name,
+          periodId,
+          weekDays: selectedWeekdays.join(","),
+          size,
+          isActive,
+        });
+
+        setClasses(classData);
+      } catch (error) {
+        toast.error("Erro ao criar classe");
+        return;
+      }
     } else {
-      classData = await updateClass({
-        id: classId,
-        name,
-        weekDays: selectedWeekdays.join(","),
-        size,
-        isActive,
-      });
+      try {
+        const classData = await updateClass({
+          id: classId,
+          name,
+          weekDays: selectedWeekdays.join(","),
+          size,
+          isActive,
+        });
+        setClasses(classData);
+      } catch (error) {
+        toast.error("Erro ao atualizar classe");
+        return;
+      }
     }
     setName("");
-    setClasses(classData);
     setSelectedWeekdays([]);
     setIsModalOpen(false);
+    toast.success("Classe salva com sucesso!");
   }
 
   function handleWeekDaysCheckboxChange(weekday: string) {
@@ -91,21 +106,16 @@ export default function ModalClasses() {
   }
 
   return (
-    <form
-      className="flex-1 flex flex-col w-full justify-center gap-2 text-foreground z-1000"
-      onSubmit={handleFormSubmit}
-    >
-      <label className="text-md">Nome</label>
-      <input
-        className="border rounded-md px-4 py-2 pl-2"
+    <Form onSubmit={handleFormSubmit}>
+      <Label>Nome</Label>
+      <Input
         type="text"
         placeholder="Avançada 1"
         value={name}
         onChange={(e) => setName(e.target.value)}
       />
-      <label className="text-md">Tamanho da Turma</label>
-      <input
-        className="border rounded-md px-4 py-2 pl-2"
+      <Label>Tamanho da Turma</Label>
+      <Input
         type="number"
         value={size}
         step="2"
@@ -115,33 +125,30 @@ export default function ModalClasses() {
           else setSize(value);
         }}
       />
-      <label className="text-md">Semestre</label>
-      <select
-        className="rounded-md px-4 py-2 bg-inherit border mb-2"
-        name="periodId"
-      >
+      <Label>Semestre</Label>
+      <Select name="periodId">
         {periods.map((period: any) => (
           <option key={period.id} value={period.id}>
             {periodsOptions[period.semester]} - {period.year}
           </option>
         ))}
-      </select>
-      <div className="flex gap-4 mb-2">
-        <label>Classe Ativa</label>
-        <input
+      </Select>
+      <FlexContainer>
+        <Label>Classe Ativa</Label>
+        <Input
           name="status"
           type="checkbox"
           checked={isActive}
           onChange={() => setIsActive(!isActive)}
         />
-      </div>
-      <label className="text-md">Dias da Semana</label>
-      <div className="flex gap-2 justify-center">
+      </FlexContainer>
+      <Label>Dias da Semana</Label>
+      <FlexContainer>
         {validWeekDays.map(
           (weekday, index) =>
             index < 4 && (
-              <div key={weekday} className="flex items-center">
-                <input
+              <FlexItem key={weekday}>
+                <Input
                   type="checkbox"
                   id={weekday}
                   name="weekdays"
@@ -149,17 +156,17 @@ export default function ModalClasses() {
                   checked={selectedWeekdays.includes(weekday)}
                   onChange={() => handleWeekDaysCheckboxChange(weekday)}
                 />
-                <label className="ml-2">{weekDaysOptions[weekday]}</label>
-              </div>
+                <CheckboxLabel>{weekDaysOptions[weekday]}</CheckboxLabel>
+              </FlexItem>
             ),
         )}
-      </div>
-      <div className="flex gap-2 justify-center">
+      </FlexContainer>
+      <FlexContainer>
         {validWeekDays.map(
           (weekday, index) =>
             index >= 4 && (
-              <div key={weekday} className="flex items-center">
-                <input
+              <FlexItem key={weekday}>
+                <Input
                   type="checkbox"
                   id={weekday}
                   name="weekdays"
@@ -167,22 +174,30 @@ export default function ModalClasses() {
                   checked={selectedWeekdays.includes(weekday)}
                   onChange={() => handleWeekDaysCheckboxChange(weekday)}
                 />
-                <label className="ml-2">{weekDaysOptions[weekday]}</label>
-              </div>
+                <CheckboxLabel>{weekDaysOptions[weekday]}</CheckboxLabel>
+              </FlexItem>
             ),
         )}
-      </div>
-      <div className="flex justify-end gap-4 mt-4">
-        <button
-          className="border border-gray-700 rounded px-4 py-2 text-black"
-          onClick={() => setIsModalOpen(false)}
-        >
+      </FlexContainer>
+      <ButtonContainer>
+        <CloseButton type="button" onClick={() => setIsModalOpen(false)}>
           Fechar
-        </button>
-        <button className="bg-green-500 hover:bg-green-600 text-white font-bold py-2 px-4 rounded">
+        </CloseButton>
+        <SubmitButton type="submit">
           {classId ? "Salvar" : "Criar"}
-        </button>
-      </div>
-    </form>
+        </SubmitButton>
+      </ButtonContainer>
+    </Form>
   );
 }
+
+const Form = tw.form`flex-1 flex flex-col w-full justify-center gap-2 text-foreground z-1000`;
+const Label = tw.label`text-md`;
+const Input = tw.input`border rounded-md px-4 py-2 pl-2`;
+const Select = tw.select`rounded-md px-4 py-2 bg-inherit border mb-2`;
+const FlexContainer = tw.div`flex gap-2 justify-left`;
+const FlexItem = tw.div`flex items-center`;
+const CheckboxLabel = tw.label`ml-2`;
+const ButtonContainer = tw.div`flex justify-end gap-4 mt-4`;
+const CloseButton = tw.button`border border-gray-700 rounded px-4 py-2 text-black`;
+const SubmitButton = tw.button`bg-green-500 hover:bg-green-600 text-white font-bold py-2 px-4 rounded`;
