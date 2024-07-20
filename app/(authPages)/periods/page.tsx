@@ -8,11 +8,12 @@ import {
   TModalOptions,
 } from "@/atoms/modalAtom";
 import { periodsAtom } from "@/atoms/periodsAtom";
-import { deletePeriod } from "@/services/periods";
 import { ColDef } from "ag-grid-community";
 import { AgGridReact } from "ag-grid-react";
 import { useRecoilState, useSetRecoilState } from "recoil";
 import { periodsOptions } from "../classes/components/ModalClasses";
+import { toast } from "sonner";
+import { deletePeriod } from "@/app/api/periods/service";
 
 export default function () {
   const setIsModalOpen = useSetRecoilState(modalIsOpenAtom);
@@ -53,14 +54,22 @@ export default function () {
   }
 
   function actionCellRenderer({ data }: { data: TPeriod }) {
-    function handleDeletePeriod(periodId: string) {
-      deletePeriod(periodId);
+    async function handleDeletePeriod(periodId: string) {
+      toast.info("Excluindo período...");
+      try {
+        await deletePeriod(periodId);
+      } catch (error: any) {
+        if (error.response.status === 409) toast.error("Período em uso!");
+        else toast.error("Erro ao excluir período");
+        return;
+      }
       setPeriods((prevPeriods) => {
         const newPeriods = prevPeriods.filter(
           (period) => period.id !== periodId,
         );
         return newPeriods;
       });
+      toast.success("Período excluído com sucesso!");
     }
 
     return (

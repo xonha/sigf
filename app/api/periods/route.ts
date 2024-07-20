@@ -28,11 +28,13 @@ export async function POST(request: Request) {
 
 export async function DELETE(request: Request) {
   const body = await request.json();
-
   const { data, error } = await supabase.from(table).delete().eq("id", body.id);
 
   if (error) {
-    return NextResponse.json(error, { status: 500 });
+    if (error.code === "23503")
+      return NextResponse.json(error.message, { status: 409 });
+
+    return NextResponse.json(error.message, { status: 500 });
   }
   return NextResponse.json(data);
 }
