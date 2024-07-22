@@ -2,7 +2,7 @@
 
 import { TClasses } from "@/app/api/classes/[id]/route";
 import { readClasses } from "@/app/api/classes/controller";
-import { readEnrollmentsByUser } from "@/app/api/enrollments/controller";
+import { readEnrollmentsByUser } from "@/app/api/enrollments/service";
 import { ColDef } from "ag-grid-community";
 import { AgGridReact } from "ag-grid-react";
 import Link from "next/link";
@@ -13,7 +13,7 @@ import ButtonOptions from "./components/ButtonOptions";
 import { usersAtom } from "@/atoms/usersAtom";
 import { classesAtom, sortedClassesSelector } from "@/atoms/classesAtom";
 import { enrollmentsAtom } from "@/atoms/enrollmentsAtom";
-import { weekDaysOptions } from "./components/ModalClasses";
+import { weekDaysOptions, weekDaysOrder } from "./components/ModalClasses";
 
 export default function ClassesPage() {
   const user = useRecoilValue(usersAtom);
@@ -39,6 +39,10 @@ export default function ClassesPage() {
       valueFormatter: ({ value }) =>
         value
           .split(",")
+          .sort(
+            (a: string, b: string) =>
+              weekDaysOrder.indexOf(a) - weekDaysOrder.indexOf(b),
+          )
           .map((v: string) => weekDaysOptions[v])
           .join(", "),
     },

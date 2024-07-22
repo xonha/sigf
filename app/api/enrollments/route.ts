@@ -4,9 +4,7 @@ import supabase from "@/utils/db";
 export async function GET() {
   const { data, error } = await supabase.from("enrollment").select();
 
-  if (error) {
-    return NextResponse.json(error, { status: 500 });
-  }
+  if (error) return NextResponse.json(error, { status: 500 });
   return NextResponse.json(data);
 }
 
@@ -18,9 +16,7 @@ export async function POST(request: NextRequest) {
     .insert([{ ...body }])
     .select();
 
-  if (error) {
-    return NextResponse.json(error, { status: 500 });
-  }
+  if (error) return NextResponse.json(error, { status: 500 });
   return NextResponse.json(data);
 }
 
@@ -33,8 +29,6 @@ export async function DELETE(request: NextRequest) {
     .eq("userId", userId)
     .eq("classId", classId);
 
-  if (error) {
-    return NextResponse.json(error, { status: 500 });
-  }
+  if (error) return NextResponse.json(error, { status: 500 });
   return NextResponse.json(data);
 }

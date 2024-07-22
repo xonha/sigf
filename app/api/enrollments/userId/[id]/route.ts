@@ -1,14 +1,8 @@
 import supabase from "@/utils/db";
-import { Database } from "@/database.types";
 import { NextResponse } from "next/server";
+import { TEnrollmentRow } from "../../types";
 
-interface IParams {
-  id: string;
-}
-
-export type TEnrollment = Database["public"]["Tables"]["enrollment"]["Insert"];
-
-export async function GET(_: any, { params }: { params: IParams }) {
+export async function GET(_: any, { params }: { params: { id: string } }) {
   const { data, error } = await supabase
     .from("enrollment")
     .select("")
@@ -17,5 +11,5 @@ export async function GET(_: any, { params }: { params: IParams }) {
   if (error) {
     return NextResponse.json(error, { status: 500 });
   }
-  return NextResponse.json(data as unknown as TEnrollment[]);
+  return NextResponse.json(data as unknown as TEnrollmentRow[]);
 }

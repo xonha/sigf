@@ -1,11 +1,14 @@
 "use client";
 
 import { readClasses } from "@/app/api/classes/controller";
-import { readEnrollmentsByClassId } from "@/app/api/enrollments/controller";
-import { classesAtom } from "@/atoms/classesAtom";
 import {
-  enrollmentCountAtom,
+  readEnrollmentsByClassId,
+  updateEnrollment,
+} from "@/app/api/enrollments/service";
+import { TEnrollmentRow, TEnrollmentUpdate } from "@/app/api/enrollments/types";
+import {
   IEnrollmentCounts,
+  enrollmentCountAtom,
 } from "@/atoms/enrollmentsAtom";
 import { usersAtom } from "@/atoms/usersAtom";
 import { Database } from "@/database.types";
@@ -94,7 +97,7 @@ export default function ClassesIdPage() {
     const { classId, userId, status } = params.data;
 
     const renderButton = (
-      buttonStatus: "pending" | "approved" | "rejected",
+      buttonStatus: Database["public"]["Enums"]["enrollmentStatus"],
       text: string,
       color: string,
       hoverColor: string,
@@ -104,7 +107,10 @@ export default function ClassesIdPage() {
         key={buttonStatus}
         className={`${color} ${hoverColor} font-bold`}
         onClick={() =>
-          updateEnrollment(classId, userId, buttonStatus, alterCount)
+          handleUpdateEnrollment(
+            { classId, userId, status: buttonStatus },
+            alterCount,
+          )
         }
       >
         {text}
@@ -112,7 +118,7 @@ export default function ClassesIdPage() {
     );
 
     const getButtonsForStatus = (
-      currentStatus: "pending" | "approved" | "rejected",
+      currentStatus: Database["public"]["Enums"]["enrollmentStatus"],
     ) => {
       switch (currentStatus) {
         case "approved":
@@ -168,38 +174,38 @@ export default function ClassesIdPage() {
     return <div className="flex gap-2">{getButtonsForStatus(status)}</div>;
   }
 
-  async function updateEnrollment(
-    classId: string,
-    userId: string,
-    status: "approved" | "rejected" | "pending",
-    alterCount = true,
-  ) {
-    try {
-      const res = await fetch(`/api/enrollments/classId/${classId}`, {
-        method: "PATCH",
-        body: JSON.stringify({ status, userId, classId }),
-      });
-
-      const data = await res.json();
-
-      const updatedRowData = rowData.map((row) =>
-        row.classId === data[0].classId && row.userId === data[0].userId
-          ? { ...row, status: data[0].status }
+  function updateRowData(rowData: IRow[], enrollment: TEnrollmentRow): IRow[] {
+    return rowData.map(
+      (row: IRow): IRow =>
+        row.classId === enrollment.classId && row.userId === enrollment.userId
+          ? { ...row, status: enrollment.status }
           : row,
-      );
-      setRowData(updatedRowData);
+    );
+  }
 
-      if (!alterCount) return;
-      const countChange = data[0].status === "approved" ? 1 : -1;
-      if (data[0].danceRolePreference === "led") {
-        setEnrollmentsCount((prevCount: IEnrollmentCounts) => {
-          return { ...prevCount, led: prevCount.led + countChange };
-        });
-      } else if (data[0].danceRolePreference === "leader") {
-        setEnrollmentsCount((prevCount: IEnrollmentCounts) => {
-          return { ...prevCount, leader: prevCount.leader + countChange };
-        });
-      }
+  function updateEnrollmentCount(enrollment: {
+    status: Database["public"]["Enums"]["enrollmentStatus"];
+    danceRolePreference: Database["public"]["Enums"]["danceRolePreference"];
+  }): void {
+    const countChange = enrollment.status === "approved" ? 1 : -1;
+    const role = enrollment.danceRolePreference === "led" ? "led" : "leader";
+
+    setEnrollmentsCount((prevCount: IEnrollmentCounts) => ({
+      ...prevCount,
+      [role]: prevCount[role] + countChange,
+    }));
+  }
+
+  async function handleUpdateEnrollment(
+    enrollment: TEnrollmentUpdate,
+    alterCount = true,
+  ): Promise<void> {
+    try {
+      const updatedEnrollment = await updateEnrollment(enrollment);
+
+      setRowData(updateRowData(rowData, updatedEnrollment));
+
+      if (alterCount) updateEnrollmentCount(updatedEnrollment);
     } catch (error) {
       console.error("Error updating enrollment:", error);
     }
@@ -211,12 +217,18 @@ export default function ClassesIdPage() {
       setRowData(enrollments);
 
       const enrollmentsLedCount = enrollments.filter(
-        (enrollment) =>
+        (enrollment: {
+          danceRolePreference: Database["public"]["Enums"]["danceRolePreference"];
+          status: Database["public"]["Enums"]["enrollmentStatus"];
+        }) =>
           enrollment.danceRolePreference === "led" &&
           enrollment.status === "approved",
       );
       const enrollmentsLeaderCount = enrollments.filter(
-        (enrollment) =>
+        (enrollment: {
+          danceRolePreference: Database["public"]["Enums"]["danceRolePreference"];
+          status: Database["public"]["Enums"]["enrollmentStatus"];
+        }) =>
           enrollment.danceRolePreference === "leader" &&
           enrollment.status === "approved",
       );

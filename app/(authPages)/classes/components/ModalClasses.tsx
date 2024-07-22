@@ -22,6 +22,7 @@ export const weekDaysOptions = {
   fri: "Sex",
   sat: "Sáb",
 };
+export const weekDaysOrder = ["mon", "tue", "wed", "thu", "fri", "sat", "sun"];
 
 export const periodsOptions = {
   first: "Primeiro",
