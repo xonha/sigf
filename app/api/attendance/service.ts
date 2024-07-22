@@ -1,4 +1,4 @@
-import { TApprovedEnrollment } from "../enrollments/classId/[id]/approved/route";
+import { TApprovedEnrollment } from "../enrollments/types";
 import { TAttendance } from "./route";
 
 export async function createAttendances(attendances: TAttendance[]) {

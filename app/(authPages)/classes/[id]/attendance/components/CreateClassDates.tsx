@@ -1,7 +1,7 @@
 import {
   createAttendances,
   readApprovedEnrollments,
-} from "@/app/api/attendance/controller";
+} from "@/app/api/attendance/service";
 import { TAttendance } from "@/app/api/attendance/route";
 import {
   deleteClassDates,

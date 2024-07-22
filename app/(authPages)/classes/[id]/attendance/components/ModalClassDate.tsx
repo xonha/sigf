@@ -3,7 +3,7 @@
 import {
   createAttendances,
   readApprovedEnrollments,
-} from "@/app/api/attendance/controller";
+} from "@/app/api/attendance/service";
 import { TAttendance } from "@/app/api/attendance/route";
 import { createClassDates } from "@/app/api/classDates/controller";
 import { readClass } from "@/app/api/classes/controller";
