@@ -1,9 +1,9 @@
-import RecoilWrapper from "@/components/RecoilWrapper";
 import "react-datepicker/dist/react-datepicker.css";
 import "./globals.css";
 import "ag-grid-community/styles/ag-grid.css";
 import "ag-grid-community/styles/ag-theme-quartz.css";
 import { Toaster } from "sonner";
+import RecoilWrapper from "./components/RecoilWrapper";
 
 export const metadata = {
   title: "SIGF",
