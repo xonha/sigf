@@ -1,5 +1,6 @@
 "use client";
 
+import { useModal } from "@/app/components/MainModal";
 import { classDatesAtom } from "@/atoms/classDatesAtom";
 import { ColDef } from "ag-grid-community";
 import { AgGridReact } from "ag-grid-react";
@@ -16,6 +17,7 @@ export interface IClassDatesRow {
 export default function AttendancePage() {
   const pathname = usePathname();
   const classId = useParams().id;
+  const openModal = useModal();
   // TODO: Fix this any, using classDatesAtom but types are incorrect
   const [rowData, setRowData] = useRecoilState<IClassDatesRow[]>(
     classDatesAtom as any,
@@ -44,9 +46,13 @@ export default function AttendancePage() {
         </a>
         <button
           className="text-orange-500 hover:text-orange-400 font-bold"
-          onClick={() => deleteClassDate(classDateData.id)}
+          onClick={() =>
+            openModal("confirmation", "", () =>
+              deleteClassDate(classDateData.id),
+            )
+          }
         >
-          Deletar
+          Excluir
         </button>
       </div>
     );
