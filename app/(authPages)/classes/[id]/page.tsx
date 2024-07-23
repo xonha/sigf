@@ -221,7 +221,9 @@ export default function ClassesIdPage() {
     if (!canBeEnrolled) {
       toast.error(
         `Não é possível aprovar mais ${
-          enrollment.danceRolePreference === "led" ? "conduzidxs" : "condutorxs"
+          enrollment.danceRolePreference === "led"
+            ? "conduzidos(as)"
+            : "condutores(as)"
         }`,
       );
       return;

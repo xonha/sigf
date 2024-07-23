@@ -67,7 +67,7 @@ export default function NavbarButtonIndex() {
               : "bg-blue-500  text-white font-bold py-2 px-4 rounded"
           }
         >
-          Condutorxs: {enrollmentCount.leader} / {enrollmentCount.half}
+          Condutores(as): {enrollmentCount.leader} / {enrollmentCount.half}
         </div>
         <Link
           className="bg-green-500 hover:bg-green-600 text-white font-bold py-2 px-4 rounded"
@@ -82,7 +82,7 @@ export default function NavbarButtonIndex() {
               : "bg-orange-500  text-white font-bold py-2 px-4 rounded"
           }
         >
-          Conduzidxs: {enrollmentCount.led} / {enrollmentCount.half}
+          Conduzidos(as): {enrollmentCount.led} / {enrollmentCount.half}
         </div>
       </div>
     );
