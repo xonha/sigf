@@ -3,6 +3,7 @@ import { enrollmentsAtom } from "@/atoms/enrollmentsAtom";
 import { useRecoilValue } from "recoil";
 
 export default function ButtonEnrollment(props: { id: string }) {
+  const classId = props.id;
   const openModal = useModal();
   const enrollments = useRecoilValue(enrollmentsAtom);
   const isEnrolled = enrollments.some(
@@ -16,7 +17,7 @@ export default function ButtonEnrollment(props: { id: string }) {
           ? "text-green-500 hover:text-green-400 font-bold"
           : "text-blue-500 hover:text-blue-400 font-bold"
       }
-      onClick={() => openModal("classEnrollment")}
+      onClick={() => openModal("classEnrollment", classId)}
     >
       {isEnrolled ? "Inscrito" : "Inscrever"}
     </button>
