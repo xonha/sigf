@@ -1,5 +1,6 @@
 "use client";
 
+import { deleteClassDate, readClassDates } from "@/app/api/classDates/service";
 import { useModal } from "@/app/components/MainModal";
 import { classDatesAtom } from "@/atoms/classDatesAtom";
 import { ColDef } from "ag-grid-community";
@@ -7,6 +8,7 @@ import { AgGridReact } from "ag-grid-react";
 import { useParams, usePathname } from "next/navigation";
 import { useEffect } from "react";
 import { useRecoilState } from "recoil";
+import { toast } from "sonner";
 
 export interface IClassDatesRow {
   id: string;
@@ -48,7 +50,7 @@ export default function AttendancePage() {
           className="text-orange-500 hover:text-orange-400 font-bold"
           onClick={() =>
             openModal("confirmation", "", () =>
-              deleteClassDate(classDateData.id),
+              handleDeleteClassDate(classDateData.id),
             )
           }
         >
@@ -58,41 +60,41 @@ export default function AttendancePage() {
     );
   }
 
-  async function deleteClassDate(classDateId: string) {
+  async function handleDeleteClassDate(classDateId: string) {
+    toast.info("Deletando data da aula...");
+
     try {
-      const res = await fetch(`/api/classDates/${classDateId}`, {
-        method: "DELETE",
-      });
-
-      await res.json();
-      const new_res_data = rowData.filter((row) => row.id !== classDateId);
-
-      setRowData(new_res_data);
+      const deletedClassDate = await deleteClassDate(classDateId);
+      const newClassDates = rowData.filter(
+        (row) => row.id !== deletedClassDate.id,
+      );
+      setRowData(newClassDates);
+      toast.success("Data da aula deletada");
     } catch (error) {
-      console.error("Error deleting class date:", error);
+      toast.error("Erro ao deletar data da aula");
     }
   }
 
-  async function fetchClassDates() {
+  async function handleReadClassDates() {
     try {
-      const res = await fetch(`/api/classDates/${classId}`);
-      const res_data = await res.json();
+      const classDates = await readClassDates(classId as string);
+      if (!classDates) return;
 
-      const new_res_data = res_data.map((row) => {
+      const formattedClassDates = classDates.map((row) => {
         const date = new Date(row.date + "EDT");
 
         const day = date.toLocaleDateString("pt-BR", { weekday: "long" });
         return { ...row, day };
       });
 
-      setRowData(new_res_data);
+      setRowData(formattedClassDates);
     } catch (error) {
       console.error("Error fetching enrollments:", error);
     }
   }
 
   useEffect(() => {
-    fetchClassDates();
+    handleReadClassDates();
   }, []);
 
   return (

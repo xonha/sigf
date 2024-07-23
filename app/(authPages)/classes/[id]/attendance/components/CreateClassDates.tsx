@@ -6,7 +6,7 @@ import {
 import {
   createClassDates,
   deleteClassDates,
-} from "@/app/api/classDates/controller";
+} from "@/app/api/classDates/service";
 import { readClass } from "@/app/api/classes/controller";
 import { useModal } from "@/app/components/MainModal";
 import { classDatesAtom } from "@/atoms/classDatesAtom";
@@ -76,12 +76,16 @@ export default function GenerateClassDates() {
           Gerar Todas
         </button>
       )}
-      <button
-        className="bg-orange-500 hover:bg-orange-400 text-white font-bold py-2 px-4 rounded"
-        onClick={() => openModal("confirmation", "", handleDeleteAllClassDates)}
-      >
-        Excluir Todas
-      </button>
+      {classDates.length > 0 && (
+        <button
+          className="bg-orange-500 hover:bg-orange-400 text-white font-bold py-2 px-4 rounded"
+          onClick={() =>
+            openModal("confirmation", "", handleDeleteAllClassDates)
+          }
+        >
+          Excluir Todas
+        </button>
+      )}
     </div>
   );
 }

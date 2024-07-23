@@ -19,7 +19,8 @@ export async function DELETE(_, { params }) {
   const { data, error } = await supabase
     .from(tableName)
     .delete()
-    .eq("id", params.id);
+    .eq("id", params.id)
+    .select();
 
   if (error) {
     return NextResponse.json(error, { status: 500 });
