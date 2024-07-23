@@ -2,6 +2,7 @@ import { atom } from "recoil";
 
 export type TModalOptions =
   | ""
+  | "confirmation"
   | "classes"
   | "calendar"
   | "periods"
@@ -11,6 +12,11 @@ export type TModalOptions =
 export const modalOptionsAtom = atom<TModalOptions>({
   key: "modalOptionsAtom",
   default: "",
+});
+
+export const modalFunctionAtom = atom<Function>({
+  key: "modalFunctionAtom",
+  default: (): void => {},
 });
 
 export const modalIdAtom = atom<string>({

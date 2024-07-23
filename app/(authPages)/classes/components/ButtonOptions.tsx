@@ -5,9 +5,9 @@ import { useRecoilState } from "recoil";
 import { toast } from "sonner";
 
 export default function ButtonOptions(props: { id: string }) {
-  const classId = props.id;
   const [classes, setClasses] = useRecoilState(classesAtom);
   const openModal = useModal();
+  const classId = props.id;
 
   async function handleDeleteClass() {
     toast.info("Excluindo classe...");
@@ -31,7 +31,7 @@ export default function ButtonOptions(props: { id: string }) {
       </button>
       <button
         className="text-orange-500 hover:text-orange-400 font-bold"
-        onClick={handleDeleteClass}
+        onClick={() => openModal("confirmation", classId, handleDeleteClass)}
       >
         Excluir
       </button>

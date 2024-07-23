@@ -120,10 +120,15 @@ export default function ModalClasses() {
         type="number"
         value={size}
         step="2"
+        min="10"
         onChange={(e) => {
           const value = Number(e.target.value);
-          if (value % 2 !== 0) setSize(value - 1);
-          else setSize(value);
+          setSize(value);
+        }}
+        onBlur={(e) => {
+          const value = Number(e.target.value);
+          if (value < 10) setSize(10);
+          else if (value % 2 !== 0) setSize(value - 1);
         }}
       />
       <Label>Semestre</Label>

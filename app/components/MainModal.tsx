@@ -2,6 +2,7 @@
 
 import {
   TModalOptions,
+  modalFunctionAtom,
   modalIdAtom,
   modalIsOpenAtom,
   modalOptionsAtom,
@@ -13,6 +14,7 @@ import ModalClassDate from "../(authPages)/classes/[id]/attendance/components/Mo
 import ModalClassEnrollment from "../(authPages)/classes/components/ModalClassEnrollment";
 import ModalClasses from "../(authPages)/classes/components/ModalClasses";
 import ModalPeriods from "../(authPages)/periods/components/ModalPeriods";
+import { ModalConfirmation } from "./ModalConfirmation";
 
 Modal.setAppElement("#__modal");
 
@@ -20,14 +22,21 @@ export function useModal() {
   const setModalOption = useSetRecoilState(modalOptionsAtom);
   const setIsModalOpen = useSetRecoilState(modalIsOpenAtom);
   const setPeriodId = useSetRecoilState(modalIdAtom);
+  const setModalFunction = useSetRecoilState(modalFunctionAtom);
 
-  function openModal(modalOption: TModalOptions, id: string = "") {
+  function openModal(
+    modalOption: TModalOptions,
+    id: string = "",
+    modalFunction?: () => void,
+  ) {
     setIsModalOpen(true);
     setModalOption(modalOption);
     setPeriodId(id);
+    setModalFunction(() => modalFunction);
   }
   return openModal;
 }
+
 export default function MainModal() {
   const [isModalOpen, setIsModalOpen] = useRecoilState(modalIsOpenAtom);
   const modalOption = useRecoilValue(modalOptionsAtom);
@@ -47,6 +56,7 @@ export default function MainModal() {
     >
       {
         {
+          confirmation: <ModalConfirmation />,
           classes: <ModalClasses />,
           periods: <ModalPeriods />,
           calendar: <ModalCalendar />,
