@@ -12,7 +12,7 @@ const studentRoleOptions = {
   admin: "Admin",
 };
 
-export default function () {
+export default function UsersPage() {
   const [users, setUsers] = useState<TUserViewPlusRole[]>([]);
 
   const columnDefs: ColDef<TUserViewPlusRole>[] = [
@@ -65,8 +65,7 @@ export default function () {
     setUsers(newUsers);
   }
 
-  function actionCellRenderer(params) {
-    const data: TUserViewPlusRole = params.data;
+  function actionCellRenderer({ data }: { data: TUserViewPlusRole }) {
     function BtnStudent() {
       return (
         <button

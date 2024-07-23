@@ -1,28 +1,27 @@
 "use client";
 
-import { TPeriod } from "@/app/api/periods/route";
 import {
+  TModalOptions,
+  modalIdAtom,
   modalIsOpenAtom,
   modalOptionsAtom,
-  modalIdAtom,
-  TModalOptions,
 } from "@/atoms/modalAtom";
 import { periodsAtom } from "@/atoms/periodsAtom";
 import { ColDef } from "ag-grid-community";
 import { AgGridReact } from "ag-grid-react";
 import { useRecoilState, useSetRecoilState } from "recoil";
-import { periodsOptions } from "../classes/components/ModalClasses";
 import { toast } from "sonner";
+import { periodsOptions } from "../classes/components/ModalClasses";
+import { TPeriod } from "@/app/api/periods/route";
 import { deletePeriod } from "@/app/api/periods/service";
 
-export default function () {
+export default function PeriodsPage() {
   const setIsModalOpen = useSetRecoilState(modalIsOpenAtom);
   const setModalOption = useSetRecoilState(modalOptionsAtom);
   const setPeriodId = useSetRecoilState(modalIdAtom);
   const [periods, setPeriods] = useRecoilState<TPeriod[]>(periodsAtom);
 
   const columnDefs: ColDef<TPeriod>[] = [
-    { field: "active", headerName: "Ativo", flex: 1 },
     {
       field: "semester",
       headerName: "Semestre",
@@ -53,25 +52,23 @@ export default function () {
     setIsModalOpen(true);
   }
 
-  function actionCellRenderer({ data }: { data: TPeriod }) {
-    async function handleDeletePeriod(periodId: string) {
-      toast.info("Excluindo período...");
-      try {
-        await deletePeriod(periodId);
-      } catch (error: any) {
-        if (error.response.status === 409) toast.error("Período em uso!");
-        else toast.error("Erro ao excluir período");
-        return;
-      }
-      setPeriods((prevPeriods) => {
-        const newPeriods = prevPeriods.filter(
-          (period) => period.id !== periodId,
-        );
-        return newPeriods;
-      });
-      toast.success("Período excluído com sucesso!");
+  async function handleDeletePeriod(periodId: string) {
+    toast.info("Excluindo período...");
+    try {
+      await deletePeriod(periodId);
+    } catch (error: any) {
+      if (error.response.status === 409) toast.error("Período em uso!");
+      else toast.error("Erro ao excluir período");
+      return;
     }
+    setPeriods((prevPeriods) => {
+      const newPeriods = prevPeriods.filter((period) => period.id !== periodId);
+      return newPeriods;
+    });
+    toast.success("Período excluído com sucesso!");
+  }
 
+  function actionCellRenderer({ data }: { data: TPeriod }) {
     return (
       <div className="flex gap-2 w-full">
         <button

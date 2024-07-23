@@ -35,10 +35,7 @@ export async function readEnrollmentsByUser() {
 
   try {
     const res = await axios.get(`/api/enrollments/userId/${data.user.id}`);
-    const enrollments = res.data.map(
-      (enrollment: { classId: string }) => enrollment.classId,
-    );
-    return enrollments as TEnrollmentRow[];
+    return res.data as TEnrollmentRow[];
   } catch (error) {
     console.error("Error getting enrollments:", error);
     throw error;
@@ -48,6 +45,7 @@ export async function readEnrollmentsByUser() {
 export async function createEnrollment(enrollment: TEnrollmentInsert) {
   try {
     const res = await axios.post(`/api/enrollments`, enrollment);
+
     return res.data[0];
   } catch (error) {
     console.error("Error enrolling class:", error);
@@ -58,12 +56,14 @@ export async function createEnrollment(enrollment: TEnrollmentInsert) {
 export async function deleteEnrollment(
   enrollment: TEnrollmentInsert,
   userEnrollmentIds: any,
-) {
+): Promise<TEnrollmentRow> {
   try {
     await axios.delete(`/api/enrollments`, { data: enrollment });
-    return userEnrollmentIds.filter(
+    const filtered = userEnrollmentIds.filter(
       (enrollmentId: string) => enrollmentId !== enrollment.classId,
     );
+
+    return filtered as TEnrollmentRow;
   } catch (error) {
     console.error("Error unenrolling class:", error);
     throw error;
@@ -76,7 +76,7 @@ export async function updateEnrollment(enrollment: TEnrollmentUpdate) {
       `/api/enrollments/classId/${enrollment.classId}`,
       enrollment,
     );
-    return res.data[0];
+    return res.data[0] as TEnrollmentRow;
   } catch (error) {
     console.error("Error updating enrollment:", error);
     throw error;

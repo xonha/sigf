@@ -16,7 +16,9 @@ export async function POST(request: NextRequest) {
     .insert([{ ...body }])
     .select();
 
-  if (error) return NextResponse.json(error, { status: 500 });
+  if (error) {
+    return NextResponse.json(error, { status: 500 });
+  }
   return NextResponse.json(data);
 }
 

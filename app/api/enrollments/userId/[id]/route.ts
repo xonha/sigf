@@ -5,7 +5,7 @@ import { TEnrollmentRow } from "../../types";
 export async function GET(_: any, { params }: { params: { id: string } }) {
   const { data, error } = await supabase
     .from("enrollment")
-    .select("")
+    .select("*")
     .eq("userId", params.id);
 
   if (error) {

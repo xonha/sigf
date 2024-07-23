@@ -3,6 +3,7 @@
 import { readClasses } from "@/app/api/classes/controller";
 import {
   readEnrollmentsByClassId,
+  readEnrollmentsByUser,
   updateEnrollment,
 } from "@/app/api/enrollments/service";
 import { TEnrollmentRow, TEnrollmentUpdate } from "@/app/api/enrollments/types";
@@ -16,7 +17,8 @@ import { ColDef } from "ag-grid-community";
 import { AgGridReact } from "ag-grid-react";
 import { useParams } from "next/navigation";
 import { useEffect, useState } from "react";
-import { useRecoilValue, useSetRecoilState } from "recoil";
+import { useRecoilState, useRecoilValue, useSetRecoilState } from "recoil";
+import { toast } from "sonner";
 
 interface IRow {
   classId: string;
@@ -47,9 +49,11 @@ const enrollmentStatusOptions = {
 
 export default function ClassesIdPage() {
   const user = useRecoilValue(usersAtom);
-  const setEnrollmentsCount = useSetRecoilState(enrollmentCountAtom);
   const classId = useParams().id;
   const [rowData, setRowData] = useState<IRow[]>([]);
+  const [enrollmentsCount, setEnrollmentsCount] =
+    useRecoilState(enrollmentCountAtom);
+
   const columnDefs: ColDef<IRow>[] = [
     { field: "users_view.name", headerName: "Nome", flex: 3 },
     { field: "users_view.email", headerName: "Email", flex: 3 },
@@ -106,12 +110,7 @@ export default function ClassesIdPage() {
       <button
         key={buttonStatus}
         className={`${color} ${hoverColor} font-bold`}
-        onClick={() =>
-          handleUpdateEnrollment(
-            { classId, userId, status: buttonStatus },
-            alterCount,
-          )
-        }
+        onClick={() => handleUpdateEnrollment(buttonStatus, alterCount)}
       >
         {text}
       </button>
@@ -183,25 +182,53 @@ export default function ClassesIdPage() {
     );
   }
 
-  function updateEnrollmentCount(enrollment: {
-    status: Database["public"]["Enums"]["enrollmentStatus"];
-    danceRolePreference: Database["public"]["Enums"]["danceRolePreference"];
-  }): void {
+  function updateEnrollmentCount(enrollment: TEnrollmentRow): void {
     const countChange = enrollment.status === "approved" ? 1 : -1;
     const role = enrollment.danceRolePreference === "led" ? "led" : "leader";
-
     setEnrollmentsCount((prevCount: IEnrollmentCounts) => ({
       ...prevCount,
       [role]: prevCount[role] + countChange,
     }));
   }
 
+  async function canBeEnrolledOnRole(
+    enrollment: TEnrollmentRow,
+    status: Database["public"]["Enums"]["enrollmentStatus"],
+  ) {
+    if (
+      status === "approved" &&
+      enrollment?.danceRolePreference &&
+      enrollmentsCount[enrollment.danceRolePreference] >= enrollmentsCount.half
+    ) {
+      return false;
+    }
+    return true;
+  }
+
   async function handleUpdateEnrollment(
-    enrollment: TEnrollmentUpdate,
+    status: Database["public"]["Enums"]["enrollmentStatus"],
     alterCount = true,
   ): Promise<void> {
+    const userEnrollments = await readEnrollmentsByUser();
+    const enrollment = userEnrollments.find(
+      (enrollment) => enrollment.classId === classId,
+    );
+    if (!enrollment) return console.error("Enrollment not found");
+    const canBeEnrolled = await canBeEnrolledOnRole(enrollment, status);
+    if (!canBeEnrolled) {
+      toast.error(
+        `Não é possível aprovar mais ${
+          enrollment.danceRolePreference === "led" ? "conduzidxs" : "condutorxs"
+        }`,
+      );
+      return;
+    }
+
     try {
-      const updatedEnrollment = await updateEnrollment(enrollment);
+      const updatedEnrollment = await updateEnrollment({
+        ...enrollment,
+        status,
+      });
 
       setRowData(updateRowData(rowData, updatedEnrollment));
 
@@ -240,6 +267,7 @@ export default function ClassesIdPage() {
       if (!currentClass) return console.error("Class not found");
       setEnrollmentsCount({
         max: currentClass.size,
+        half: currentClass.size / 2,
         led: enrollmentsLedCount.length,
         leader: enrollmentsLeaderCount.length,
       });

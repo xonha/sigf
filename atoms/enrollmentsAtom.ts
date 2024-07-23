@@ -1,20 +1,19 @@
+import { TEnrollmentRow } from "@/app/api/enrollments/types";
 import { atom } from "recoil";
 
-export interface IEnrollmentsAtom {
-  classId: string;
-}
 export interface IEnrollmentCounts {
   max: number;
+  half: number;
   led: number;
   leader: number;
 }
 
-export const enrollmentsAtom = atom<IEnrollmentsAtom[] | []>({
+export const enrollmentsAtom = atom<TEnrollmentRow[] | []>({
   key: "enrollmentsAtom",
   default: [],
 });
 
 export const enrollmentCountAtom = atom<IEnrollmentCounts>({
   key: "enrollmentLedCountAtom",
-  default: { max: 30, led: 0, leader: 0 },
+  default: { max: 30, half: 15, led: 0, leader: 0 },
 });

@@ -11,8 +11,10 @@ export default function ButtonEnrollment(props: { id: string }) {
   const setIsModalOpen = useSetRecoilState(modalIsOpenAtom);
   const setModalOption = useSetRecoilState(modalOptionsAtom);
   const setModalId = useSetRecoilState(modalIdAtom);
-  const enrollmentIds = useRecoilValue(enrollmentsAtom);
-  const isEnrolled = enrollmentIds.includes(props.id as never);
+  const enrollments = useRecoilValue(enrollmentsAtom);
+  const isEnrolled = enrollments.some(
+    (enrollment) => enrollment.classId === props.id,
+  );
 
   function openModal(modalOption: TModalOptions) {
     setModalOption(modalOption);

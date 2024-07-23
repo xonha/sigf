@@ -16,54 +16,59 @@ export default function Calendar() {
   const [calendars, setCalendars] = useRecoilState(calendarsAtom);
   const [mainCalendar, setMainCalendar] = useState<TCalendar>();
   const [currentCalendar, setCurrentCalendar] = useState<TCalendar>(
-    calendars[0]
+    calendars[0],
   );
 
-  useEffect(() => {
-    async function handleLoadCalendars() {
-      const calendars = await readCalendars();
-      let mainCalendar: TCalendar = calendars.filter(
-        (cal) => cal.name === "Principal"
-      )[0];
+  const handleLoadCalendars = async () => {
+    const calendars = await readCalendars();
+    let mainCalendar: TCalendar | undefined = calendars.find(
+      (cal) => cal.name === "Principal",
+    );
 
-      if (calendars.length === 0 || !mainCalendar) {
-        mainCalendar = await createCalendar({ name: "Principal", url: "" });
-      }
-
-      setCalendars(calendars);
-      setMainCalendar(mainCalendar);
-      setCurrentCalendar(mainCalendar);
+    if (calendars.length === 0 || !mainCalendar) {
+      mainCalendar = await createCalendar({ name: "Principal", url: "" });
     }
+
+    setCalendars(calendars);
+    setMainCalendar(mainCalendar);
+    setCurrentCalendar(mainCalendar);
+  };
+
+  useEffect(() => {
     handleLoadCalendars();
   }, []);
 
   return (
     <>
-      <CalendarFrame src={currentCalendar ? currentCalendar.url : ""} />
+      <CalendarFrame src={currentCalendar?.url || ""} />
       <Sidebar>
         <ButtonCalendar
           key={mainCalendar?.id || ""}
-          id={mainCalendar?.id || ""}
-          name="Principal"
-          calendars={calendars}
-          setCalendars={setCalendars}
-          onClickName={() => setCurrentCalendar(mainCalendar || calendars[0])}
-          currentCalendar={currentCalendar}
-          setCurrentCalendar={setCurrentCalendar}
-          isPrincipal
+          {...{
+            id: mainCalendar?.id || "",
+            name: "Principal",
+            calendars,
+            setCalendars,
+            onClickName: () => setCurrentCalendar(mainCalendar || calendars[0]),
+            currentCalendar,
+            setCurrentCalendar,
+            isPrincipal: true,
+          }}
         />
         {calendars
           .filter((cal) => cal.name !== "Principal")
           .map((cal) => (
             <ButtonCalendar
               key={cal.id}
-              id={cal.id}
-              name={cal.name}
-              onClickName={() => setCurrentCalendar(cal)}
-              calendars={calendars}
-              setCalendars={setCalendars}
-              currentCalendar={currentCalendar}
-              setCurrentCalendar={setCurrentCalendar}
+              {...{
+                id: cal.id,
+                name: cal.name,
+                onClickName: () => setCurrentCalendar(cal),
+                calendars,
+                setCalendars,
+                currentCalendar,
+                setCurrentCalendar,
+              }}
             />
           ))}
       </Sidebar>

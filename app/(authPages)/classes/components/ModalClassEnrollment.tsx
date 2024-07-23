@@ -20,9 +20,11 @@ export type TDanceRolePreference =
 export default function ModalClassEnrollment() {
   const setIsModalOpen = useSetRecoilState(modalIsOpenAtom);
   const classId = useRecoilValue(modalIdAtom);
-  const [enrollmentIds, setEnrollmentIds] = useRecoilState(enrollmentsAtom);
-  const isEnrolled = enrollmentIds.includes(classId as never);
   const [danceRole, setDanceRole] = useState<TDanceRole>("led");
+  const [enrollments, setEnrollments] = useRecoilState(enrollmentsAtom);
+  const isEnrolled = enrollments.some(
+    (enrollment) => enrollment.classId === classId,
+  );
   const [danceRolePreference, setDanceRolePreference] =
     useState<TDanceRolePreference>("led");
   const optionalRoleOptions = {
@@ -40,11 +42,17 @@ export default function ModalClassEnrollment() {
     if (error) return toast.error("Erro ao obter usuário");
 
     try {
-      const filteredEnrollments = await deleteEnrollment(
+      const deletedEnrollment = await deleteEnrollment(
         { classId, userId: data.user.id },
-        enrollmentIds,
+        enrollments,
       );
-      setEnrollmentIds(filteredEnrollments);
+      const filteredEnrollments = enrollments.filter(
+        (enrollment) =>
+          enrollment.classId === deletedEnrollment.classId &&
+          enrollment.userId === deletedEnrollment.userId,
+      );
+
+      setEnrollments(filteredEnrollments);
     } catch (error) {
       toast.error("Erro ao desinscrever");
       return;
@@ -65,7 +73,8 @@ export default function ModalClassEnrollment() {
         danceRolePreference,
         danceRole,
       });
-      setEnrollmentIds([...enrollmentIds, createdEnrollment.classId]);
+
+      setEnrollments([...enrollments, createdEnrollment]);
     } catch (error) {
       toast.error("Erro ao se inscrever");
       return;
