@@ -45,7 +45,6 @@ export async function readEnrollmentsByUser() {
 export async function createEnrollment(enrollment: TEnrollmentInsert) {
   try {
     const res = await axios.post(`/api/enrollments`, enrollment);
-
     return res.data[0];
   } catch (error) {
     console.error("Error enrolling class:", error);
@@ -70,7 +69,9 @@ export async function deleteEnrollment(
   }
 }
 
-export async function updateEnrollment(enrollment: TEnrollmentUpdate) {
+export async function updateEnrollment(
+  enrollment: TEnrollmentUpdate,
+): Promise<TEnrollmentRow> {
   try {
     const res = await axios.patch(
       `/api/enrollments/classId/${enrollment.classId}`,
