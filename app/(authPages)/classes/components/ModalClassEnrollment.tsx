@@ -34,8 +34,6 @@ export default function ModalClassEnrollment() {
     (enrollment) => enrollment.classId === classId,
   );
 
-  console.log("enrollments", enrollments);
-
   const optionalRoleOptions = {
     led: "Conduzido(a)",
     leader: "Condutor(a)",
@@ -74,8 +72,6 @@ export default function ModalClassEnrollment() {
     toast.info("Inscrição em andamento...");
     const { data, error } = await useUser();
     if (error) return toast.error("Erro ao obter usuário");
-
-    console.log("danceRole", danceRole);
 
     try {
       const createdEnrollment = await createEnrollment({
@@ -119,8 +115,6 @@ export default function ModalClassEnrollment() {
     setIsModalOpen(false);
     toast.success("Inscrição atualizada com sucesso!");
   }
-
-  console.log("danceRole", danceRole);
 
   return (
     <Form onSubmit={(e) => e.preventDefault()}>

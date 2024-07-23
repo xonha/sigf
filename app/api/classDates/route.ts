@@ -3,11 +3,13 @@ import { Database } from "@/database.types";
 import { PostgrestError } from "@supabase/supabase-js";
 import { NextRequest, NextResponse } from "next/server";
 
-export type TClassDates = Database["public"]["Tables"]["classDates"]["Insert"];
+export type TClassDatesRow = Database["public"]["Tables"]["classDates"]["Row"];
+export type TClassDatesInsert =
+  Database["public"]["Tables"]["classDates"]["Insert"];
 
 export async function POST(
-  request: NextRequest
-): Promise<NextResponse<TClassDates[] | PostgrestError>> {
+  request: NextRequest,
+): Promise<NextResponse<TClassDatesInsert[] | PostgrestError>> {
   const body = await request.json();
 
   const { data, error } = await supabase
@@ -33,5 +35,5 @@ export async function DELETE(request: NextRequest) {
   if (error) {
     return NextResponse.json(error, { status: 500 });
   }
-  return NextResponse.json(data as TClassDates[]);
+  return NextResponse.json(data as TClassDatesInsert[]);
 }

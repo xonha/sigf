@@ -6,13 +6,14 @@ import {
 import {
   createClassDates,
   deleteClassDates,
-} from "@/app/api/classDates/controller";
+} from "@/app/api/classDates/service";
 import { readClass } from "@/app/api/classes/controller";
 import { useModal } from "@/app/components/MainModal";
 import { classDatesAtom } from "@/atoms/classDatesAtom";
 import { getWeekDays } from "@/utils/functions";
 import { useParams } from "next/navigation";
 import { useRecoilState } from "recoil";
+import { toast } from "sonner";
 
 export default function GenerateClassDates() {
   const [classDates, setClassDates] = useRecoilState(classDatesAtom);
@@ -20,29 +21,43 @@ export default function GenerateClassDates() {
   const openModal = useModal();
 
   async function handleDeleteAllClassDates() {
-    deleteClassDates(classId);
-    setClassDates([]);
+    toast.info("Excluindo aulas...");
+    try {
+      await deleteClassDates(classId);
+      setClassDates([]);
+    } catch (error) {
+      toast.error("Erro ao excluir aulas");
+      return;
+    }
+    toast.success("Aulas excluídas com sucesso!");
   }
 
   async function handleCreateAllClassDates() {
-    const classData = await readClass(classId);
+    toast.info("Gerando aulas...");
+    try {
+      const classData = await readClass(classId);
 
-    const weekDays = classData.weekDays.split(",");
-    const startDate = new Date(classData.period.startDate + "EDT");
-    const endDate = new Date(classData.period.endDate + "EDT");
+      const weekDays = classData.weekDays.split(",");
+      const startDate = new Date(classData.period.startDate + "EDT");
+      const endDate = new Date(classData.period.endDate + "EDT");
 
-    const weekDaysDates = getWeekDays(startDate, endDate, weekDays);
-    const classDates = await createClassDates(classId, weekDaysDates);
-    const approvedEnrollments = await readApprovedEnrollments(classId);
+      const weekDaysDates = getWeekDays(startDate, endDate, weekDays);
+      const classDates = await createClassDates(classId, weekDaysDates);
+      const approvedEnrollments = await readApprovedEnrollments(classId);
 
-    const attendances = classDates.flatMap((classDate) => {
-      return approvedEnrollments.map((enrollment) => {
-        return { classDateId: classDate.id, userId: enrollment.userId };
+      const attendances = classDates.flatMap((classDate) => {
+        return approvedEnrollments.map((enrollment) => {
+          return { classDateId: classDate.id, userId: enrollment.userId };
+        });
       });
-    });
 
-    setClassDates(classDates);
-    createAttendances(attendances as TAttendance[]);
+      setClassDates(classDates);
+      createAttendances(attendances as TAttendance[]);
+    } catch (error) {
+      toast.error("Erro ao gerar aulas");
+      return;
+    }
+    toast.success("Aulas geradas com sucesso!");
   }
 
   return (
@@ -61,12 +76,16 @@ export default function GenerateClassDates() {
           Gerar Todas
         </button>
       )}
-      <button
-        className="bg-orange-500 hover:bg-orange-400 text-white font-bold py-2 px-4 rounded"
-        onClick={handleDeleteAllClassDates}
-      >
-        Deletar Todas
-      </button>
+      {classDates.length > 0 && (
+        <button
+          className="bg-orange-500 hover:bg-orange-400 text-white font-bold py-2 px-4 rounded"
+          onClick={() =>
+            openModal("confirmation", "", handleDeleteAllClassDates)
+          }
+        >
+          Excluir Todas
+        </button>
+      )}
     </div>
   );
 }

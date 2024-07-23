@@ -113,7 +113,7 @@ export default function ButtonCalendar(props: {
                 className="border border-orange-500 rounded px-4 py-2 text-orange-500"
                 onClick={handleDeleteCalendar}
               >
-                Deletar
+                Excluir
               </button>
             )}
             {name === "" && url === "" ? (
