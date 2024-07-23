@@ -1,28 +1,23 @@
+import { TAttendance } from "@/app/api/attendance/route";
 import {
   createAttendances,
   readApprovedEnrollments,
 } from "@/app/api/attendance/service";
-import { TAttendance } from "@/app/api/attendance/route";
 import {
-  deleteClassDates,
   createClassDates,
+  deleteClassDates,
 } from "@/app/api/classDates/controller";
 import { readClass } from "@/app/api/classes/controller";
+import { useModal } from "@/app/components/MainModal";
 import { classDatesAtom } from "@/atoms/classDatesAtom";
-import {
-  TModalOptions,
-  modalIsOpenAtom,
-  modalOptionsAtom,
-} from "@/atoms/modalAtom";
 import { getWeekDays } from "@/utils/functions";
 import { useParams } from "next/navigation";
-import { useRecoilState, useSetRecoilState } from "recoil";
+import { useRecoilState } from "recoil";
 
 export default function GenerateClassDates() {
   const [classDates, setClassDates] = useRecoilState(classDatesAtom);
   const classId = useParams().id;
-  const setIsModalOpen = useSetRecoilState(modalIsOpenAtom);
-  const setModalOption = useSetRecoilState(modalOptionsAtom);
+  const openModal = useModal();
 
   async function handleDeleteAllClassDates() {
     deleteClassDates(classId);
@@ -48,11 +43,6 @@ export default function GenerateClassDates() {
 
     setClassDates(classDates);
     createAttendances(attendances as TAttendance[]);
-  }
-
-  function openModal(modalOption: TModalOptions) {
-    setModalOption(modalOption);
-    setIsModalOpen(true);
   }
 
   return (

@@ -1,26 +1,13 @@
 import { deleteClass } from "@/app/api/classes/controller";
+import { useModal } from "@/app/components/MainModal";
 import { classesAtom } from "@/atoms/classesAtom";
-import {
-  modalIsOpenAtom,
-  modalOptionsAtom,
-  modalIdAtom,
-  TModalOptions,
-} from "@/atoms/modalAtom";
-import { useRecoilState, useSetRecoilState } from "recoil";
+import { useRecoilState } from "recoil";
 import { toast } from "sonner";
 
 export default function ButtonOptions(props: { id: string }) {
   const classId = props.id;
   const [classes, setClasses] = useRecoilState(classesAtom);
-  const setIsModalOpen = useSetRecoilState(modalIsOpenAtom);
-  const setModalOption = useSetRecoilState(modalOptionsAtom);
-  const setModalId = useSetRecoilState(modalIdAtom);
-
-  function openModal(modalOption: TModalOptions) {
-    setModalOption(modalOption);
-    setModalId(props.id);
-    setIsModalOpen(true);
-  }
+  const openModal = useModal();
 
   async function handleDeleteClass() {
     toast.info("Excluindo classe...");
@@ -38,7 +25,7 @@ export default function ButtonOptions(props: { id: string }) {
     <div className="flex gap-2">
       <button
         className="text-blue-500 hover:text-blue-400 font-bold"
-        onClick={() => openModal("classes")}
+        onClick={() => openModal("classes", classId)}
       >
         Editar
       </button>

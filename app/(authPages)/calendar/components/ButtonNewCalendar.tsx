@@ -1,21 +1,7 @@
-import {
-  modalIsOpenAtom,
-  modalOptionsAtom,
-  modalIdAtom,
-  TModalOptions,
-} from "@/atoms/modalAtom";
-import { useSetRecoilState } from "recoil";
+import { useModal } from "@/app/components/MainModal";
 
 export default function ButtonNewCalendar() {
-  const setIsModalOpen = useSetRecoilState(modalIsOpenAtom);
-  const setModalOption = useSetRecoilState(modalOptionsAtom);
-  const setModalId = useSetRecoilState(modalIdAtom);
-
-  function openModal(modalOption: TModalOptions) {
-    setModalOption(modalOption);
-    setModalId("");
-    setIsModalOpen(true);
-  }
+  const openModal = useModal();
 
   return (
     <div className="flex justify-center">

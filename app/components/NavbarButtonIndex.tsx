@@ -1,22 +1,15 @@
 "use client";
 
+import { enrollmentCountAtom } from "@/atoms/enrollmentsAtom";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
-import { useRecoilValue, useSetRecoilState } from "recoil";
-import { enrollmentCountAtom } from "@/atoms/enrollmentsAtom";
-import {
-  modalIsOpenAtom,
-  modalOptionsAtom,
-  modalIdAtom,
-  TModalOptions,
-} from "@/atoms/modalAtom";
+import { useRecoilValue } from "recoil";
 import ButtonNewCalendar from "../(authPages)/calendar/components/ButtonNewCalendar";
 import GenerateClassDates from "../(authPages)/classes/[id]/attendance/components/CreateClassDates";
+import { useModal } from "./MainModal";
 
 export default function NavbarButtonIndex() {
-  const setIsModalOpen = useSetRecoilState(modalIsOpenAtom);
-  const setModalOption = useSetRecoilState(modalOptionsAtom);
-  const setModalId = useSetRecoilState(modalIdAtom);
+  const openModal = useModal();
   const enrollmentCount = useRecoilValue(enrollmentCountAtom);
 
   const pathname = usePathname();
@@ -26,12 +19,6 @@ export default function NavbarButtonIndex() {
   const attendanceRegex = new RegExp(
     /\/classes\/[0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{12}\/attendance$/,
   );
-
-  function openModal(modalOption: TModalOptions) {
-    setModalOption(modalOption);
-    setModalId("");
-    setIsModalOpen(true);
-  }
 
   if (pathname === "/periods") {
     return (

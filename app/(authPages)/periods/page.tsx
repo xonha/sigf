@@ -1,25 +1,18 @@
 "use client";
 
-import {
-  TModalOptions,
-  modalIdAtom,
-  modalIsOpenAtom,
-  modalOptionsAtom,
-} from "@/atoms/modalAtom";
+import { TPeriod } from "@/app/api/periods/route";
+import { deletePeriod } from "@/app/api/periods/service";
 import { periodsAtom } from "@/atoms/periodsAtom";
 import { ColDef } from "ag-grid-community";
 import { AgGridReact } from "ag-grid-react";
-import { useRecoilState, useSetRecoilState } from "recoil";
+import { useRecoilState } from "recoil";
 import { toast } from "sonner";
 import { periodsOptions } from "../classes/components/ModalClasses";
-import { TPeriod } from "@/app/api/periods/route";
-import { deletePeriod } from "@/app/api/periods/service";
+import { useModal } from "@/app/components/MainModal";
 
 export default function PeriodsPage() {
-  const setIsModalOpen = useSetRecoilState(modalIsOpenAtom);
-  const setModalOption = useSetRecoilState(modalOptionsAtom);
-  const setPeriodId = useSetRecoilState(modalIdAtom);
   const [periods, setPeriods] = useRecoilState<TPeriod[]>(periodsAtom);
+  const openModal = useModal();
 
   const columnDefs: ColDef<TPeriod>[] = [
     {
@@ -45,12 +38,6 @@ export default function PeriodsPage() {
     },
     { headerName: "Ações", minWidth: 150, cellRenderer: actionCellRenderer },
   ];
-
-  function openModal(modalOption: TModalOptions, periodId: string) {
-    setModalOption(modalOption);
-    setPeriodId(periodId);
-    setIsModalOpen(true);
-  }
 
   async function handleDeletePeriod(periodId: string) {
     toast.info("Excluindo período...");
