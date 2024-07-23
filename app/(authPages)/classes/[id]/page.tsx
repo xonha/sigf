@@ -3,10 +3,9 @@
 import { readClasses } from "@/app/api/classes/controller";
 import {
   readEnrollmentsByClassId,
-  readEnrollmentsByUser,
   updateEnrollment,
 } from "@/app/api/enrollments/service";
-import { TEnrollmentRow, TEnrollmentUpdate } from "@/app/api/enrollments/types";
+import { TEnrollmentRow } from "@/app/api/enrollments/types";
 import {
   IEnrollmentCounts,
   enrollmentCountAtom,
@@ -17,7 +16,7 @@ import { ColDef } from "ag-grid-community";
 import { AgGridReact } from "ag-grid-react";
 import { useParams } from "next/navigation";
 import { useEffect, useState } from "react";
-import { useRecoilState, useRecoilValue, useSetRecoilState } from "recoil";
+import { useRecoilState, useRecoilValue } from "recoil";
 import { toast } from "sonner";
 
 interface IRow {
@@ -98,7 +97,7 @@ export default function ClassesIdPage() {
   ];
 
   function actionButtonRenderer(params: { data: IRow }) {
-    const { classId, userId, status } = params.data;
+    const { userId, status } = params.data;
 
     const renderButton = (
       buttonStatus: Database["public"]["Enums"]["enrollmentStatus"],
@@ -110,7 +109,7 @@ export default function ClassesIdPage() {
       <button
         key={buttonStatus}
         className={`${color} ${hoverColor} font-bold`}
-        onClick={() => handleUpdateEnrollment(buttonStatus, alterCount)}
+        onClick={() => handleUpdateEnrollment(buttonStatus, userId, alterCount)}
       >
         {text}
       </button>
@@ -207,14 +206,18 @@ export default function ClassesIdPage() {
 
   async function handleUpdateEnrollment(
     status: Database["public"]["Enums"]["enrollmentStatus"],
+    userId: string,
     alterCount = true,
   ): Promise<void> {
-    const userEnrollments = await readEnrollmentsByUser();
+    const userEnrollments = await readEnrollmentsByClassId(classId as string);
     const enrollment = userEnrollments.find(
-      (enrollment) => enrollment.classId === classId,
+      (enrollment: TEnrollmentRow) =>
+        enrollment.classId === classId && enrollment.userId === userId,
     );
+
     if (!enrollment) return console.error("Enrollment not found");
     const canBeEnrolled = await canBeEnrolledOnRole(enrollment, status);
+
     if (!canBeEnrolled) {
       toast.error(
         `Não é possível aprovar mais ${
@@ -223,6 +226,8 @@ export default function ClassesIdPage() {
       );
       return;
     }
+
+    delete enrollment.users_view;
 
     try {
       const updatedEnrollment = await updateEnrollment({

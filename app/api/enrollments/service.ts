@@ -77,9 +77,9 @@ export async function updateEnrollment(
       `/api/enrollments/classId/${enrollment.classId}`,
       enrollment,
     );
+
     return res.data[0] as TEnrollmentRow;
   } catch (error) {
-    console.error("Error updating enrollment:", error);
     throw error;
   }
 }
