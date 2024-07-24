@@ -128,7 +128,7 @@ export default function ModalClasses() {
         onBlur={(e) => {
           const value = Number(e.target.value);
           if (value < 10) setSize(10);
-          else if (value % 2 !== 0) setSize(value - 1);
+          else if (value % 2 !== 0) setSize(value + 1);
         }}
       />
       <Label>Semestre</Label>
