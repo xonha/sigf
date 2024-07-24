@@ -53,13 +53,13 @@ export default function ClassesIdPage() {
   const [enrollmentsCount, setEnrollmentsCount] =
     useRecoilState(enrollmentCountAtom);
 
-  const columnDefs: ColDef<IRow>[] = [
+  const columnDefsNonAdmin: ColDef<IRow>[] = [
     { field: "users_view.name", headerName: "Nome", flex: 3 },
     { field: "users_view.email", headerName: "Email", flex: 3 },
     {
       field: "createdAt",
       headerName: "Data da inscrição",
-      flex: 3,
+      flex: 2,
       valueFormatter: ({ value }) =>
         new Date(value).toLocaleDateString("pt-BR"),
     },
@@ -81,19 +81,16 @@ export default function ClassesIdPage() {
       flex: 2,
       valueFormatter: ({ value }) => enrollmentStatusOptions[value],
     },
+  ];
+
+  const columnDefs: ColDef<IRow>[] = [
+    ...columnDefsNonAdmin,
     {
       field: "actionButton",
       headerName: "Ações",
       flex: 3,
       cellRenderer: actionButtonRenderer,
     },
-  ];
-  const columnDefsNonAdmin: ColDef<IRow>[] = [
-    { field: "users_view.name", headerName: "Nome", flex: 3 },
-    { field: "users_view.email", headerName: "Email", flex: 3 },
-    { field: "createdAt", headerName: "Data da inscrição", flex: 3 },
-    { field: "danceRole", headerName: "Papel", flex: 2 },
-    { field: "status", headerName: "Inscrição", flex: 2 },
   ];
 
   function actionButtonRenderer(params: { data: IRow }) {
