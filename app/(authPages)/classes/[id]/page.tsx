@@ -55,7 +55,6 @@ export default function ClassesIdPage() {
 
   const columnDefsNonAdmin: ColDef<IRow>[] = [
     { field: "users_view.name", headerName: "Nome", flex: 3 },
-    { field: "users_view.email", headerName: "Email", flex: 3 },
     {
       field: "createdAt",
       headerName: "Data da inscrição",
