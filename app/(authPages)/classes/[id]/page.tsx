@@ -176,7 +176,12 @@ export default function ClassesIdPage() {
     return rowData.map(
       (row: IRow): IRow =>
         row.classId === enrollment.classId && row.userId === enrollment.userId
-          ? { ...row, status: enrollment.status }
+          ? {
+              ...row,
+              status: enrollment.status,
+              danceRolePreference:
+                enrollment.danceRolePreference || row.danceRolePreference,
+            }
           : row,
     );
   }
@@ -190,18 +195,30 @@ export default function ClassesIdPage() {
     }));
   }
 
-  async function canBeEnrolledOnRole(
+  function canBeEnrolled(
     enrollment: TEnrollmentRow,
     status: Database["public"]["Enums"]["enrollmentStatus"],
-  ) {
-    if (
-      status === "approved" &&
-      enrollment?.danceRolePreference &&
-      enrollmentsCount[enrollment.danceRolePreference] >= enrollmentsCount.half
+  ): {
+    canUpdate: boolean;
+    role: Database["public"]["Enums"]["danceRolePreference"] | null;
+  } {
+    if (!enrollment.danceRolePreference)
+      return { canUpdate: false, role: null };
+
+    const preferedRole = enrollment.danceRolePreference;
+    const opositeRole = preferedRole === "led" ? "leader" : "led";
+
+    if (status !== "approved") return { canUpdate: true, role: preferedRole };
+
+    if (enrollmentsCount[preferedRole] < enrollmentsCount.half) {
+      return { canUpdate: true, role: enrollment.danceRolePreference };
+    } else if (
+      enrollmentsCount[opositeRole] < enrollmentsCount.half &&
+      enrollment.danceRole === "indifferent"
     ) {
-      return false;
+      return { canUpdate: true, role: opositeRole };
     }
-    return true;
+    return { canUpdate: false, role: null };
   }
 
   async function handleUpdateEnrollment(
@@ -216,9 +233,9 @@ export default function ClassesIdPage() {
     );
 
     if (!enrollment) return console.error("Enrollment not found");
-    const canBeEnrolled = await canBeEnrolledOnRole(enrollment, status);
+    const verifiedEnrollment = canBeEnrolled(enrollment, status);
 
-    if (!canBeEnrolled) {
+    if (!verifiedEnrollment.canUpdate) {
       toast.error(
         `Não é possível aprovar mais ${
           enrollment.danceRolePreference === "led"
@@ -234,10 +251,13 @@ export default function ClassesIdPage() {
     try {
       const updatedEnrollment = await updateEnrollment({
         ...enrollment,
+        danceRolePreference: verifiedEnrollment.role,
         status,
       });
 
-      setRowData(updateRowData(rowData, updatedEnrollment));
+      const updatedRowData = updateRowData(rowData, updatedEnrollment);
+
+      setRowData(updatedRowData);
 
       if (alterCount) updateEnrollmentCount(updatedEnrollment);
     } catch (error) {

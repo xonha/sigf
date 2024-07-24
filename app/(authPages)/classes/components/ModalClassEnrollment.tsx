@@ -33,6 +33,10 @@ export default function ModalClassEnrollment() {
   const isEnrolled = enrollments.some(
     (enrollment) => enrollment.classId === classId,
   );
+  const enrollmentIsPending = enrollments.some(
+    (enrollment) =>
+      enrollment.classId === classId && enrollment.status === "pending",
+  );
 
   const optionalRoleOptions = {
     led: "Conduzido(a)",
@@ -91,6 +95,11 @@ export default function ModalClassEnrollment() {
   }
 
   async function handleUpdateEnrollment() {
+    if (!enrollmentIsPending) {
+      toast.error("Inscrição já processada, não é possível atualizar");
+      setIsModalOpen(false);
+      return;
+    }
     toast.info("Atualizando inscrição...");
     const { data, error } = await useUser();
     if (error) return toast.error("Erro ao obter usuário");
