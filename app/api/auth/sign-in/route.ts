@@ -20,6 +20,7 @@ export async function POST(request: Request) {
     return NextResponse.redirect(
       `${requestUrl.origin}/?error=Could not authenticate user`,
       {
+        // a 301 status is required to redirect from a POST to a GET route
         status: 301,
       },
     );
