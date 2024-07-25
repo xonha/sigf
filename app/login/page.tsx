@@ -8,8 +8,10 @@ import tw from "tailwind-styled-components";
 
 export default function Login() {
   const router = useRouter();
-  const [isLoadingGoogle, setIsLoadingGoogle] = useState(false);
   const [isLoginForm, setIsLoginForm] = useState(true);
+  const [isLoadingGoogle, setIsLoadingGoogle] = useState(false);
+  const [isLoadingEmail, setIsLoadingEmail] = useState(false);
+  const [isLoadingRegister, setIsLoadingRegister] = useState(false);
 
   async function handleGoogleLogin() {
     setIsLoadingGoogle(true);
@@ -24,6 +26,8 @@ export default function Login() {
 
   async function handleEmailLogin(event) {
     event.preventDefault();
+    setIsLoadingEmail(true);
+
     try {
       const { data } = await axios.post("/api/auth/sign-in", {
         email: event.target.form.email.value,
@@ -32,6 +36,7 @@ export default function Login() {
       router.push(data.url);
     } catch (error) {
       toast.error("Erro ao tentar logar com email");
+      setIsLoadingEmail(false);
     }
   }
 
@@ -48,7 +53,21 @@ export default function Login() {
             placeholder="••••••••"
             required
           />
-          <ButtonPrimary onClick={handleEmailLogin}>Entrar</ButtonPrimary>
+          <p className="text-gray-500">
+            Não tem uma conta?{" "}
+            <button
+              className="text-blue-500"
+              onClick={(e) => {
+                e.preventDefault();
+                setIsLoginForm(false);
+              }}
+            >
+              Cadastrar
+            </button>
+          </p>
+          <ButtonPrimary onClick={handleEmailLogin}>
+            {isLoadingEmail ? "Carregando..." : "Entrar"}
+          </ButtonPrimary>
         </LoginForm>
       ) : (
         <RegisterForm action="/api/auth/sign-up" method="post">
@@ -63,29 +82,22 @@ export default function Login() {
             placeholder="••••••••"
             required
           />
-          <ButtonPrimary>Cadastrar</ButtonPrimary>
+          <p className="text-gray-500">
+            Já tem uma conta?{" "}
+            <button
+              className="text-blue-500"
+              onClick={(e) => {
+                e.preventDefault();
+                setIsLoginForm(true);
+              }}
+            >
+              Entrar
+            </button>
+          </p>
+          <ButtonPrimary>
+            {isLoadingRegister ? "Carregando..." : "Cadastrar"}
+          </ButtonPrimary>
         </RegisterForm>
-      )}
-      {isLoginForm ? (
-        <p>
-          Não tem uma conta?{" "}
-          <button
-            className="text-blue-500"
-            onClick={() => setIsLoginForm(false)}
-          >
-            Cadastrar
-          </button>
-        </p>
-      ) : (
-        <p>
-          Já tem uma conta?{" "}
-          <button
-            className="text-blue-500"
-            onClick={() => setIsLoginForm(true)}
-          >
-            Entrar
-          </button>
-        </p>
       )}
       <ButtonGoogle onClick={handleGoogleLogin}>
         {isLoadingGoogle ? "Carregando..." : "Entrar com Google"}
