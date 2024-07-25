@@ -24,7 +24,7 @@ export default function Login() {
     }
   }
 
-  async function handleEmailLogin(event) {
+  async function handleEmailLogin(event: any) {
     event.preventDefault();
     setIsLoadingEmail(true);
 
@@ -37,6 +37,24 @@ export default function Login() {
     } catch (error) {
       toast.error("Erro ao tentar logar com email");
       setIsLoadingEmail(false);
+    }
+  }
+
+  async function handleRegister(event: any) {
+    event.preventDefault();
+    setIsLoadingRegister(true);
+    try {
+      await axios.post("/api/auth/sign-up", {
+        name: event.target.form.name.value,
+        email: event.target.form.email.value,
+        password: event.target.form.password.value,
+      });
+      toast.success("Conta criada com sucesso");
+      setIsLoadingRegister(false);
+      setIsLoginForm(true);
+    } catch (error) {
+      toast.error("Erro ao tentar registrar com email");
+      setIsLoadingRegister(false);
     }
   }
 
@@ -70,7 +88,7 @@ export default function Login() {
           </ButtonPrimary>
         </LoginForm>
       ) : (
-        <RegisterForm action="/api/auth/sign-up" method="post">
+        <RegisterForm>
           <Label htmlFor="name">Nome</Label>
           <Input name="name" placeholder="João" required />
           <Label htmlFor="email">Email</Label>
@@ -94,7 +112,7 @@ export default function Login() {
               Entrar
             </button>
           </p>
-          <ButtonPrimary>
+          <ButtonPrimary onClick={handleRegister}>
             {isLoadingRegister ? "Carregando..." : "Cadastrar"}
           </ButtonPrimary>
         </RegisterForm>
