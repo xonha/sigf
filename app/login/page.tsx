@@ -25,13 +25,11 @@ export default function Login() {
   async function handleEmailLogin(event) {
     event.preventDefault();
     try {
-      const res = await axios.post("/api/auth/sign-in", {
+      const { data } = await axios.post("/api/auth/sign-in", {
         email: event.target.form.email.value,
         password: event.target.form.password.value,
       });
-      console.log("res", res.data.url);
-
-      // router.push(res.data.url);
+      router.push(data.url);
     } catch (error) {
       toast.error("Erro ao tentar logar com email");
     }

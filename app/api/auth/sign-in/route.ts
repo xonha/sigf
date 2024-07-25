@@ -6,12 +6,10 @@ export const dynamic = "force-dynamic";
 
 export async function POST(request: Request) {
   const requestUrl = new URL(request.url);
-  const formData = await request.formData();
-  const email = String(formData.get("email"));
-  const password = String(formData.get("password"));
   const supabase = createRouteHandlerClient({ cookies });
+  const { email, password } = await request.json();
 
-  const { data, error } = await supabase.auth.signInWithPassword({
+  const { error } = await supabase.auth.signInWithPassword({
     email,
     password,
   });
@@ -26,8 +24,6 @@ export async function POST(request: Request) {
     );
   }
 
-  const homeUrl = `${requestUrl.origin}/classes`;
-  return NextResponse.redirect(homeUrl, {
-    status: 301,
-  });
+  const url = `${requestUrl.origin}/classes`;
+  return NextResponse.json({ url });
 }
