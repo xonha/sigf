@@ -63,14 +63,14 @@ export default function GenerateClassDates() {
   return (
     <div className="flex gap-4">
       <button
-        className="bg-blue-500 hover:bg-blue-400 text-white font-bold py-2 px-4 rounded"
+        className="bg-blue-500 hover:bg-blue-600 text-white font-bold py-2 px-4 rounded"
         onClick={() => openModal("classDate")}
       >
         Criar Aula
       </button>
       {classDates.length === 0 && (
         <button
-          className="bg-green-500 hover:bg-green-400 text-white font-bold py-2 px-4 rounded"
+          className="bg-green-500 hover:bg-green-600 text-white font-bold py-2 px-4 rounded"
           onClick={handleCreateAllClassDates}
         >
           Gerar Todas
@@ -78,7 +78,7 @@ export default function GenerateClassDates() {
       )}
       {classDates.length > 0 && (
         <button
-          className="bg-orange-500 hover:bg-orange-400 text-white font-bold py-2 px-4 rounded"
+          className="bg-orange-500 hover:bg-orange-600 text-white font-bold py-2 px-4 rounded"
           onClick={() =>
             openModal("confirmation", "", handleDeleteAllClassDates)
           }

@@ -69,7 +69,7 @@ export default function UsersPage() {
     function BtnStudent() {
       return (
         <button
-          className="text-green-500 hover:text-green-400 font-bold"
+          className="text-green-500 hover:text-green-600 font-bold"
           onClick={() => handleChangeRole(data, "student")}
         >
           Aluno
@@ -79,7 +79,7 @@ export default function UsersPage() {
     function BtnTeacher() {
       return (
         <button
-          className="text-blue-500 hover:text-blue-400 font-bold"
+          className="text-blue-500 hover:text-blue-600 font-bold"
           onClick={() => handleChangeRole(data, "teacher")}
         >
           Professor
@@ -89,7 +89,7 @@ export default function UsersPage() {
     function BtnAdmin() {
       return (
         <button
-          className="text-orange-500 hover:text-orange-400 font-bold"
+          className="text-orange-500 hover:text-orange-600 font-bold"
           onClick={() => handleChangeRole(data, "admin")}
         >
           Admin

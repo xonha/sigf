@@ -129,5 +129,5 @@ const LoginForm = tw.form`flex flex-col w-full justify-center gap-2 text-foregro
 const RegisterForm = tw.form`flex flex-col w-full justify-center gap-2 text-foreground`;
 const Label = tw.label`text-md`;
 const Input = tw.input`rounded-md px-4 py-2 bg-inherit border mb-6`;
-const ButtonPrimary = tw.button`bg-green-500 rounded px-4 py-2 text-white mb-2`;
-const ButtonGoogle = tw.button`bg-blue-500 rounded px-4 py-2 text-white mb-2 mt-10 w-full`;
+const ButtonPrimary = tw.button`bg-green-500 hover:bg-green-600 rounded px-4 py-2 text-white mb-2`;
+const ButtonGoogle = tw.button`bg-blue-500 hover:bg-blue-600 rounded px-4 py-2 text-white mb-2 mt-10 w-full`;

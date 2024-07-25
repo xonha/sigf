@@ -20,16 +20,16 @@ import { useRecoilState, useRecoilValue } from "recoil";
 import { toast } from "sonner";
 
 interface IRow {
-  classId: string;
-  userId: string;
+  classId: "";
+  userId: "";
   status: Database["public"]["Enums"]["enrollmentStatus"];
-  attendance: string;
+  attendance: "";
   danceRole: Database["public"]["Enums"]["danceRole"];
   danceRolePreference: Database["public"]["Enums"]["danceRolePreference"];
   createdAt: Date;
   users_view: {
-    name: string;
-    email: string;
+    name: "";
+    email: "";
   };
   actionButton?: React.ReactNode;
 }
@@ -121,13 +121,13 @@ export default function ClassesIdPage() {
               "pending",
               "Resetar",
               "text-blue-500",
-              "hover:text-blue-400",
+              "hover:text-blue-600",
             ),
             renderButton(
               "rejected",
               "Rejeitar",
               "text-orange-500",
-              "hover:text-orange-400",
+              "hover:text-orange-600",
             ),
           ];
         case "rejected":
@@ -136,13 +136,13 @@ export default function ClassesIdPage() {
               "approved",
               "Aprovar",
               "text-green-500",
-              "hover:text-green-400",
+              "hover:text-green-600",
             ),
             renderButton(
               "pending",
               "Resetar",
               "text-blue-500",
-              "hover:text-blue-400",
+              "hover:text-blue-600",
               false,
             ),
           ];
@@ -152,13 +152,13 @@ export default function ClassesIdPage() {
               "approved",
               "Aprovar",
               "text-green-500",
-              "hover:text-green-400",
+              "hover:text-green-600",
             ),
             renderButton(
               "rejected",
               "Rejeitar",
               "text-orange-500",
-              "hover:text-orange-400",
+              "hover:text-orange-600",
               false,
             ),
           ];

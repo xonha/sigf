@@ -24,13 +24,13 @@ export default function ButtonOptions(props: { id: string }) {
   return (
     <div className="flex gap-2">
       <button
-        className="text-blue-500 hover:text-blue-400 font-bold"
+        className="text-blue-500 hover:text-blue-600 font-bold"
         onClick={() => openModal("classes", classId)}
       >
         Editar
       </button>
       <button
-        className="text-orange-500 hover:text-orange-400 font-bold"
+        className="text-orange-500 hover:text-orange-600 font-bold"
         onClick={() => openModal("confirmation", classId, handleDeleteClass)}
       >
         Excluir

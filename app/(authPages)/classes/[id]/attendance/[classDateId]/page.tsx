@@ -55,7 +55,7 @@ export default function AttendancePage() {
     function PresentButton() {
       return (
         <button
-          className="text-green-500 hover:text-green-400 font-bold"
+          className="text-green-500 hover:text-green-600 font-bold"
           onClick={() => updateAttendance(data.id, "present")}
         >
           Presente
@@ -66,7 +66,7 @@ export default function AttendancePage() {
     function AbsentButton() {
       return (
         <button
-          className="text-orange-500 hover:text-orange-400 font-bold"
+          className="text-orange-500 hover:text-orange-600 font-bold"
           onClick={() => updateAttendance(data.id, "absent")}
         >
           Ausente
@@ -77,7 +77,7 @@ export default function AttendancePage() {
     function JustifiedButton() {
       return (
         <button
-          className="text-blue-500 hover:text-blue-400 font-bold"
+          className="text-blue-500 hover:text-blue-600 font-bold"
           onClick={() => updateAttendance(data.id, "justified")}
         >
           Justificada

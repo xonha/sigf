@@ -41,13 +41,13 @@ export default function AttendancePage() {
     return (
       <div className="flex gap-4">
         <a
-          className="text-green-500 hover:text-green-400 font-bold"
+          className="text-green-500 hover:text-green-600 font-bold"
           href={`${pathname}/${classDateData.id}`}
         >
           Registrar
         </a>
         <button
-          className="text-orange-500 hover:text-orange-400 font-bold"
+          className="text-orange-500 hover:text-orange-600 font-bold"
           onClick={() =>
             openModal("confirmation", "", () =>
               handleDeleteClassDate(classDateData.id),
