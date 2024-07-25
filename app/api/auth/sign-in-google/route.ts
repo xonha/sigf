@@ -29,5 +29,5 @@ export async function POST(request: Request) {
     );
   }
 
-  return Response.redirect(data.url);
+  return NextResponse.json({ url: data.url });
 }
