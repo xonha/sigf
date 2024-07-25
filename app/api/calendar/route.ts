@@ -1,6 +1,5 @@
 import supabase from "@/utils/db";
 import { NextRequest, NextResponse } from "next/server";
-import { TCalendar, TCalendarUpdate } from "./controller";
 
 export async function GET() {
   const { data, error } = await supabase.from("calendar").select("*");
