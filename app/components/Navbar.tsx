@@ -9,8 +9,10 @@ import { FaBars } from "react-icons/fa";
 import { useRecoilState, useRecoilValue } from "recoil";
 import LogoutButton from "./LogoutButton";
 import NavbarButtonIndex from "./NavbarButtonIndex";
+import { useModal } from "./MainModal";
 
 export default function Navbar() {
+  const openModal = useModal();
   const profileRef = useRef<HTMLImageElement>(null);
   const user = useRecoilValue(usersAtom);
   const [sidebarIsOpen, setSidebarIsOpen] = useRecoilState(sidebarMainAtom);
@@ -60,11 +62,14 @@ export default function Navbar() {
         />
 
         {isProfileMenuVisible && (
-          <ul className="absolute right-4 bg-white border rounded-[10px] p-2 flex flex-col items-center z-50 gap-2">
-            <li className="font-bold">{user?.user_metadata?.name}</li>
+          <ul className="absolute right-4 bg-white border rounded-[10px] p-4 flex flex-col items-center z-50 gap-4">
+            <li className="font-bold">{user?.user_metadata?.full_name}</li>
             <li>{user?.email}</li>
             <li className="flex flex-row w-full justify-between">
-              <button className="py-2 px-4 rounded-md no-underline bg-blue-500 hover:bg-blue-600 text-white">
+              <button
+                className="py-2 px-4 rounded-md no-underline bg-blue-500 hover:bg-blue-600 text-white"
+                onClick={() => openModal("profile", "")}
+              >
                 Editar
               </button>
               <LogoutButton />

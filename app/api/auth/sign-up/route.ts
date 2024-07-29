@@ -7,7 +7,7 @@ export const dynamic = "force-dynamic";
 export async function POST(request: Request) {
   const requestUrl = new URL(request.url);
   const supabase = createRouteHandlerClient({ cookies });
-  const { email, password, name } = await request.json();
+  const { email, password, full_name } = await request.json();
 
   const { error } = await supabase.auth.signUp({
     email,
@@ -15,7 +15,7 @@ export async function POST(request: Request) {
     options: {
       emailRedirectTo: `${requestUrl.origin}/auth/callback`,
       data: {
-        name,
+        full_name,
       },
     },
   });
