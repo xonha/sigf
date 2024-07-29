@@ -60,9 +60,13 @@ export default function Navbar() {
         />
 
         {isProfileMenuVisible && (
-          <ul className="absolute right-4 bg-white border rounded-[10px] pt-2 px-2 flex flex-col items-center z-50">
-            <li className="pb-2">{user?.email}</li>
-            <li className="pb-2">
+          <ul className="absolute right-4 bg-white border rounded-[10px] p-2 flex flex-col items-center z-50 gap-2">
+            <li className="font-bold">{user?.user_metadata?.name}</li>
+            <li>{user?.email}</li>
+            <li className="flex flex-row w-full justify-between">
+              <button className="py-2 px-4 rounded-md no-underline bg-blue-500 hover:bg-blue-600 text-white">
+                Editar
+              </button>
               <LogoutButton />
             </li>
           </ul>
