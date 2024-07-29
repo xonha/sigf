@@ -65,7 +65,7 @@ export default function Navbar() {
           <ul className="absolute right-4 bg-white border rounded-[10px] p-4 flex flex-col items-center z-50 gap-4">
             <li className="font-bold">{user?.user_metadata?.full_name}</li>
             <li>{user?.email}</li>
-            <li className="flex flex-row w-full justify-between">
+            <li className="flex flex-row w-full justify-between gap-2">
               <button
                 className="py-2 px-4 rounded-md no-underline bg-blue-500 hover:bg-blue-600 text-white"
                 onClick={() => openModal("profile", "")}
