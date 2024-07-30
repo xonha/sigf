@@ -15,10 +15,10 @@ export async function PATCH(request: Request) {
   });
 
   if (error) {
-    return NextResponse.json({ error: error.message }, { status: 500 });
-  }
+    console.log("error", error);
 
-  console.log("data", data);
+    return NextResponse.json({ message: error.code }, { status: error.status });
+  }
 
   return NextResponse.json(data);
 }
