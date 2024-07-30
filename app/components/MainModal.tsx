@@ -15,6 +15,7 @@ import ModalClassEnrollment from "../(authPages)/classes/components/ModalClassEn
 import ModalClasses from "../(authPages)/classes/components/ModalClasses";
 import ModalPeriods from "../(authPages)/periods/components/ModalPeriods";
 import { ModalConfirmation } from "./ModalConfirmation";
+import { ModalProfile } from "./ModalProfile";
 
 Modal.setAppElement("#__modal");
 
@@ -62,6 +63,7 @@ export default function MainModal() {
           calendar: <ModalCalendar />,
           classDate: <ModalClassDate />,
           classEnrollment: <ModalClassEnrollment />,
+          profile: <ModalProfile />,
         }[modalOption]
       }
     </Modal>

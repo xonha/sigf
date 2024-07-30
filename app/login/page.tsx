@@ -43,9 +43,10 @@ export default function Login() {
   async function handleRegister(event: any) {
     event.preventDefault();
     setIsLoadingRegister(true);
+
     try {
       await axios.post("/api/auth/sign-up", {
-        name: event.target.form.name.value,
+        full_name: event.target.form.full_name.value,
         email: event.target.form.email.value,
         password: event.target.form.password.value,
       });
@@ -89,8 +90,8 @@ export default function Login() {
         </LoginForm>
       ) : (
         <RegisterForm>
-          <Label htmlFor="name">Nome</Label>
-          <Input name="name" placeholder="João" required />
+          <Label htmlFor="full_name">Nome</Label>
+          <Input name="full_name" placeholder="João" required />
           <Label htmlFor="email">Email</Label>
           <Input name="email" placeholder="exemplo@exemplo.com" required />
           <Label htmlFor="password">Senha</Label>

@@ -7,7 +7,8 @@ export type TModalOptions =
   | "calendar"
   | "periods"
   | "classDate"
-  | "classEnrollment";
+  | "classEnrollment"
+  | "profile";
 
 export const modalOptionsAtom = atom<TModalOptions>({
   key: "modalOptionsAtom",
