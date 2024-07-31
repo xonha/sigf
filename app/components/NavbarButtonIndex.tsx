@@ -1,6 +1,7 @@
 "use client";
 
 import { enrollmentCountAtom } from "@/atoms/enrollmentsAtom";
+import { usersAtom } from "@/atoms/usersAtom";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
 import { useRecoilValue } from "recoil";
@@ -11,6 +12,8 @@ import { useModal } from "./MainModal";
 export default function NavbarButtonIndex() {
   const openModal = useModal();
   const enrollmentCount = useRecoilValue(enrollmentCountAtom);
+  const user = useRecoilValue(usersAtom);
+  const userRole = user?.userRole;
 
   const pathname = usePathname();
   const classesIdRegex = new RegExp(
@@ -20,7 +23,7 @@ export default function NavbarButtonIndex() {
     /\/classes\/[0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{12}\/attendance$/,
   );
 
-  if (pathname === "/periods") {
+  if (pathname === "/periods" && userRole === "admin") {
     return (
       <>
         <button
@@ -31,9 +34,9 @@ export default function NavbarButtonIndex() {
         </button>
       </>
     );
-  } else if (pathname === "/calendar") {
+  } else if (pathname === "/calendar" && userRole === "admin") {
     return <ButtonNewCalendar />;
-  } else if (pathname === "/classes") {
+  } else if (pathname === "/classes" && userRole === "admin") {
     return (
       <>
         <button
@@ -44,7 +47,7 @@ export default function NavbarButtonIndex() {
         </button>
       </>
     );
-  } else if (pathname.match(classesIdRegex)) {
+  } else if (pathname.match(classesIdRegex) && userRole === "admin") {
     return (
       <div className="flex gap-4">
         <div
@@ -73,7 +76,16 @@ export default function NavbarButtonIndex() {
         </div>
       </div>
     );
-  } else if (pathname.match(attendanceRegex)) {
+  } else if (pathname.match(classesIdRegex)) {
+    return (
+      <Link
+        className="bg-green-500 hover:bg-green-600 text-white font-bold py-2 px-4 rounded"
+        href={`${pathname}/userAttendance`}
+      >
+        Minhas presenças
+      </Link>
+    );
+  } else if (pathname.match(attendanceRegex) && userRole === "admin") {
     return <GenerateClassDates />;
   }
 

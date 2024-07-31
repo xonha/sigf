@@ -50,7 +50,7 @@ export default function Navbar() {
         </Link>
       </div>
 
-      {user?.userRole === "admin" && <NavbarButtonIndex />}
+      <NavbarButtonIndex />
 
       <div className="pr-4 relative">
         <img
