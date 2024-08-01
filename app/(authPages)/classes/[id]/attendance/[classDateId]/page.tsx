@@ -15,7 +15,7 @@ export interface IClassDatesRow {
   users_view: {
     id: string;
     email: string;
-    name: string;
+    full_name: string;
   };
   classDates: {
     id: string;
@@ -38,7 +38,7 @@ export default function AttendancePage() {
 
   const [rowData, setRowData] = useState<IClassDatesRow[]>([]);
   const columnDefs: ColDef<IClassDatesRow>[] = [
-    { field: "users_view.name", headerName: "Nome", flex: 1 },
+    { field: "users_view.full_name", headerName: "Nome", flex: 1 },
     { field: "users_view.email", headerName: "Email", flex: 1 },
     {
       field: "presence",

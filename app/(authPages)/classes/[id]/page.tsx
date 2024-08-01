@@ -28,7 +28,7 @@ interface IRow {
   danceRolePreference: Database["public"]["Enums"]["danceRolePreference"];
   createdAt: Date;
   users_view: {
-    name: "";
+    full_name: "";
     email: "";
   };
   actionButton?: React.ReactNode;
@@ -54,7 +54,7 @@ export default function ClassesIdPage() {
     useRecoilState(enrollmentCountAtom);
 
   const columnDefsNonAdmin: ColDef<IRow>[] = [
-    { field: "users_view.name", headerName: "Nome", flex: 3 },
+    { field: "users_view.full_name", headerName: "Nome", flex: 3 },
     {
       field: "createdAt",
       headerName: "Data da inscrição",

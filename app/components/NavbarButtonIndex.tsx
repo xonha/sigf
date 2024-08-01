@@ -1,6 +1,8 @@
 "use client";
 
+import { attendancesAtom } from "@/atoms/attendanceAtom";
 import { enrollmentCountAtom } from "@/atoms/enrollmentsAtom";
+import { usersAtom } from "@/atoms/usersAtom";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
 import { useRecoilValue } from "recoil";
@@ -11,8 +13,10 @@ import { useModal } from "./MainModal";
 export default function NavbarButtonIndex() {
   const openModal = useModal();
   const enrollmentCount = useRecoilValue(enrollmentCountAtom);
+  const user = useRecoilValue(usersAtom);
+  const userRole = user?.userRole;
+  const pathName = usePathname();
 
-  const pathname = usePathname();
   const classesIdRegex = new RegExp(
     /\/classes\/[0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{12}$/,
   );
@@ -20,7 +24,7 @@ export default function NavbarButtonIndex() {
     /\/classes\/[0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{12}\/attendance$/,
   );
 
-  if (pathname === "/periods") {
+  if (pathName === "/periods" && userRole === "admin") {
     return (
       <>
         <button
@@ -31,9 +35,9 @@ export default function NavbarButtonIndex() {
         </button>
       </>
     );
-  } else if (pathname === "/calendar") {
+  } else if (pathName === "/calendar" && userRole === "admin") {
     return <ButtonNewCalendar />;
-  } else if (pathname === "/classes") {
+  } else if (pathName === "/classes" && userRole === "admin") {
     return (
       <>
         <button
@@ -44,7 +48,7 @@ export default function NavbarButtonIndex() {
         </button>
       </>
     );
-  } else if (pathname.match(classesIdRegex)) {
+  } else if (pathName.match(classesIdRegex) && userRole === "admin") {
     return (
       <div className="flex gap-4">
         <div
@@ -58,7 +62,7 @@ export default function NavbarButtonIndex() {
         </div>
         <Link
           className="bg-green-500 hover:bg-green-600 text-white font-bold py-2 px-4 rounded"
-          href={`${pathname}/attendance`}
+          href={`${pathName}/attendance`}
         >
           Presenças
         </Link>
@@ -73,8 +77,48 @@ export default function NavbarButtonIndex() {
         </div>
       </div>
     );
-  } else if (pathname.match(attendanceRegex)) {
+  } else if (pathName.match(classesIdRegex)) {
+    return (
+      <Link
+        className="bg-green-500 hover:bg-green-600 text-white font-bold py-2 px-4 rounded"
+        href={`${pathName}/userAttendance`}
+      >
+        Minhas presenças
+      </Link>
+    );
+  } else if (pathName.match(attendanceRegex) && userRole === "admin") {
     return <GenerateClassDates />;
+  } else if (pathName.includes("/userAttendance")) {
+    const attendances = useRecoilValue(attendancesAtom);
+    const totalRegistered = attendances.filter(
+      (a) => a.presence !== "notRegistered",
+    ).length;
+    const totalPresent = attendances.filter(
+      (a) => a.presence === "present",
+    ).length;
+    const totalJustified = attendances.filter(
+      (a) => a.presence === "justified",
+    ).length;
+    const totalValidPresence = totalPresent + totalJustified;
+    const attendancePercentage =
+      totalValidPresence > 0 ? totalValidPresence / totalRegistered : 100;
+
+    return (
+      <div className="flex gap-4">
+        <div className="bg-blue-500 text-white font-bold py-2 px-4 rounded">
+          {totalPresent} / {totalRegistered}
+        </div>
+        <div
+          className={
+            attendancePercentage > 75
+              ? "bg-green-500 text-white font-bold py-2 px-4 rounded"
+              : "bg-orange-500 text-white font-bold py-2 px-4 rounded"
+          }
+        >
+          {attendancePercentage} %
+        </div>
+      </div>
+    );
   }
 
   return;
