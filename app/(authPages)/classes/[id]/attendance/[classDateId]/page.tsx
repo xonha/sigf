@@ -25,7 +25,7 @@ export interface IClassDatesRow {
   };
 }
 
-export const presenceOptions = {
+const presenceOptions = {
   present: "Presente",
   absent: "Ausente",
   justified: "Justificada",

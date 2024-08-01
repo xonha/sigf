@@ -4,11 +4,13 @@ import {
   TAttendanceWithClassDates,
   readAttendances,
 } from "@/app/api/attendance/service";
+import { attendancesAtom } from "@/atoms/attendanceAtom";
 import useUser from "@/hooks/useUser";
 import { ColDef } from "ag-grid-community";
 import { AgGridReact } from "ag-grid-react";
 import { useParams } from "next/navigation";
-import { useEffect, useState } from "react";
+import { useEffect } from "react";
+import { useRecoilState } from "recoil";
 import tw from "tailwind-styled-components";
 
 const weekDays = [
@@ -30,7 +32,7 @@ const presenceOptions = {
 
 export default function AttendancePage() {
   const classId = useParams().id as string;
-  const [rowData, setRowData] = useState<TAttendanceWithClassDates[]>([]);
+  const [attendances, setAttendances] = useRecoilState(attendancesAtom);
   const columnDefs: ColDef<TAttendanceWithClassDates>[] = [
     {
       field: "classDates.date",
@@ -61,7 +63,7 @@ export default function AttendancePage() {
     const userId = data.user?.id;
 
     const attendances = await readAttendances(userId, classId);
-    setRowData(attendances);
+    setAttendances(attendances);
   }
 
   useEffect(() => {
@@ -71,7 +73,7 @@ export default function AttendancePage() {
   return (
     <AgGridReact
       className="w-full p-4"
-      rowData={rowData}
+      rowData={attendances}
       columnDefs={columnDefs}
       overlayNoRowsTemplate="ㅤ"
     />
