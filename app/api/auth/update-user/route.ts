@@ -15,10 +15,20 @@ export async function PATCH(request: Request) {
   });
 
   if (error) {
-    console.log("error", error);
-
-    return NextResponse.json({ message: error.code }, { status: error.status });
+    if (error.status === 422)
+      return NextResponse.json({
+        ...error,
+        message: "Não é permitido a mesma senha.",
+      });
+    return NextResponse.json({
+      ...error,
+      message: "Erro ao atualizar usuário.",
+    });
   }
 
-  return NextResponse.json(data);
+  return NextResponse.json({
+    ...data,
+    status: 204,
+    message: "Usuário atualizado",
+  });
 }

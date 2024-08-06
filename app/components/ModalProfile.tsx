@@ -1,8 +1,10 @@
 import { modalIsOpenAtom } from "@/atoms/modalAtom";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { useSetRecoilState } from "recoil";
 import tw from "tailwind-styled-components";
-import { updateUser } from "../api/auth/service";
+import useUser from "@/hooks/useUser";
+import axios from "axios";
+import { toast } from "sonner";
 
 export function ModalProfile() {
   const setIsModalOpen = useSetRecoilState(modalIsOpenAtom);
@@ -12,15 +14,33 @@ export function ModalProfile() {
   const [avatar, setAvatar] = useState<string | undefined>(undefined);
 
   async function handleSubmit() {
-    await updateUser({
-      full_name: fullName,
+    const { data } = await axios.patch("/api/auth/update-user", {
       email: email,
       password: password,
+      full_name: fullName,
       avatar_url: avatar,
     });
+
+    if (data.status !== 204) {
+      toast.error(data.message);
+      return;
+    }
+
+    toast.success("Perfil atualizado com sucesso");
     location.reload();
     setIsModalOpen(false);
   }
+
+  async function getUser() {
+    const { data } = await useUser();
+    setFullName(data?.user?.user_metadata.full_name);
+    setEmail(data?.user?.email);
+    setAvatar(data?.user?.user_metadata.avatar_url);
+  }
+
+  useEffect(() => {
+    getUser();
+  }, []);
 
   return (
     <Form onSubmit={(e) => e.preventDefault()}>
