@@ -8,8 +8,14 @@ export async function POST(request: Request) {
   const requestUrl = new URL(request.url);
   const supabase = createRouteHandlerClient({ cookies });
   const { email, password, full_name } = await request.json();
+  if (!email || !password || !full_name) {
+    return NextResponse.json({
+      message: "Email, senha e nome são obrigatórios.",
+      status: 400,
+    });
+  }
 
-  const { error } = await supabase.auth.signUp({
+  const { data, error } = await supabase.auth.signUp({
     email,
     password,
     options: {
@@ -21,15 +27,19 @@ export async function POST(request: Request) {
   });
 
   if (error) {
-    return NextResponse.redirect(
-      `${requestUrl.origin}/login?error=Could not authenticate user`,
-      {
-        // a 301 status is required to redirect from a POST to a GET route
-        status: 301,
-      },
-    );
+    if (error.status === 422)
+      return NextResponse.json({ ...error, message: "Usuário já cadastrado." });
+    if (error.status === 400)
+      return NextResponse.json({ ...error, message: "Email inválido." });
+    return NextResponse.json({
+      ...error,
+      message: "Erro ao cadastrar usuário.",
+    });
   }
 
-  const url = `${requestUrl.origin}/?message=Check email to continue sign in process`;
-  return NextResponse.json({ url });
+  return NextResponse.json({
+    ...data,
+    status: 201,
+    message: "Usuário cadastrado.",
+  });
 }
