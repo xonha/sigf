@@ -30,6 +30,7 @@ export default function AttendancePage() {
     {
       field: "classDates.date",
       headerName: "Dia",
+      sortable: false,
       flex: 1,
       valueFormatter: ({ value }) => weekDays[new Date(value).getDay()],
     },
@@ -37,6 +38,7 @@ export default function AttendancePage() {
       field: "classDates.date",
       headerName: "Data",
       flex: 1,
+      sort: "asc",
       valueFormatter: ({ value }) =>
         new Date(value).toLocaleDateString("pt-BR"),
     },
@@ -71,6 +73,8 @@ const PresenceColor = tw.p<{ value: keyof typeof presenceOptions }>`
         return "text-orange-500";
       case "justified":
         return "text-blue-500";
+      case "notRegistered":
+        return "text-gray-500 font-normal";
     }
   }}
 `;

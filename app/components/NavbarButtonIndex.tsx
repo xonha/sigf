@@ -106,16 +106,18 @@ export default function NavbarButtonIndex() {
     ).length;
     const totalValidPresence = totalPresent + totalJustified;
     const attendancePercentage =
-      totalValidPresence > 0 ? totalValidPresence / totalRegistered : 100;
+      totalValidPresence > 0
+        ? (totalValidPresence / totalRegistered) * 100
+        : 100;
 
     return (
       <div className="flex gap-4">
         <div className="bg-blue-500 text-white font-bold py-2 px-4 rounded">
-          {totalPresent} / {totalRegistered}
+          {totalValidPresence} / {totalRegistered}
         </div>
         <div
           className={
-            attendancePercentage > 75
+            attendancePercentage >= 75
               ? "bg-green-500 text-white font-bold py-2 px-4 rounded"
               : "bg-orange-500 text-white font-bold py-2 px-4 rounded"
           }
