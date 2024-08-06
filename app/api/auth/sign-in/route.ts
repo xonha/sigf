@@ -9,21 +9,23 @@ export async function POST(request: Request) {
   const supabase = createRouteHandlerClient({ cookies });
   const { email, password } = await request.json();
 
-  const { error } = await supabase.auth.signInWithPassword({
+  const { data, error } = await supabase.auth.signInWithPassword({
     email,
     password,
   });
 
   if (error) {
-    return NextResponse.redirect(
-      `${requestUrl.origin}/?error=Could not authenticate user`,
-      {
-        // a 301 status is required to redirect from a POST to a GET route
-        status: 301,
-      },
-    );
+    if (error.status === 400)
+      return NextResponse.json({
+        ...error,
+        message: "Credenciais incorretas.",
+      });
+    return NextResponse.json({
+      ...error,
+      message: "Erro ao autenticar usuário.",
+    });
   }
 
   const url = `${requestUrl.origin}/classes`;
-  return NextResponse.json({ url });
+  return NextResponse.json({ ...data, status: 200, url });
 }

@@ -33,9 +33,10 @@ export default function Login() {
         email: event.target.form.email.value,
         password: event.target.form.password.value,
       });
+      if (data.status !== 200) throw new Error(data.message);
       router.push(data.url);
-    } catch (error) {
-      toast.error("Erro ao tentar logar com email");
+    } catch (error: any) {
+      toast.error(error.message);
       setIsLoadingEmail(false);
     }
   }
@@ -45,16 +46,19 @@ export default function Login() {
     setIsLoadingRegister(true);
 
     try {
-      await axios.post("/api/auth/sign-up", {
+      const { data } = await axios.post("/api/auth/sign-up", {
         full_name: event.target.form.full_name.value,
         email: event.target.form.email.value,
         password: event.target.form.password.value,
       });
-      toast.success("Conta criada com sucesso");
-      setIsLoadingRegister(false);
+
+      if (data.status !== 201) throw new Error(data.message);
+
+      toast.success(data.message);
       setIsLoginForm(true);
-    } catch (error) {
-      toast.error("Erro ao tentar registrar com email");
+    } catch (error: any) {
+      toast.error(error.message);
+    } finally {
       setIsLoadingRegister(false);
     }
   }
