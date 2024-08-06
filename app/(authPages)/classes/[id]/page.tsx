@@ -1,22 +1,25 @@
 "use client";
 
+import { readAttendances } from "@/app/api/attendance/service";
 import { readClasses } from "@/app/api/classes/controller";
 import {
   readEnrollmentsByClassId,
   updateEnrollment,
 } from "@/app/api/enrollments/service";
 import { TEnrollmentRow } from "@/app/api/enrollments/types";
+import { attendancesAtom } from "@/atoms/attendanceAtom";
 import {
   IEnrollmentCounts,
   enrollmentCountAtom,
 } from "@/atoms/enrollmentsAtom";
 import { usersAtom } from "@/atoms/usersAtom";
 import { Database } from "@/database.types";
+import useUser from "@/hooks/useUser";
 import { ColDef } from "ag-grid-community";
 import { AgGridReact } from "ag-grid-react";
 import { useParams } from "next/navigation";
 import { useEffect, useState } from "react";
-import { useRecoilState, useRecoilValue } from "recoil";
+import { useRecoilState, useRecoilValue, useSetRecoilState } from "recoil";
 import { toast } from "sonner";
 
 interface IRow {
@@ -50,6 +53,7 @@ export default function ClassesIdPage() {
   const user = useRecoilValue(usersAtom);
   const classId = useParams().id;
   const [rowData, setRowData] = useState<IRow[]>([]);
+  const setAttendances = useSetRecoilState(attendancesAtom);
   const [enrollmentsCount, setEnrollmentsCount] =
     useRecoilState(enrollmentCountAtom);
 
@@ -91,7 +95,6 @@ export default function ClassesIdPage() {
       cellRenderer: actionButtonRenderer,
     },
   ];
-
   function actionButtonRenderer(params: { data: IRow }) {
     const { userId, status } = params.data;
 
@@ -261,41 +264,49 @@ export default function ClassesIdPage() {
     }
   }
 
+  async function handleReadEnrollments() {
+    const enrollments = await readEnrollmentsByClassId(classId as string);
+    setRowData(enrollments);
+
+    const enrollmentsLedCount = enrollments.filter(
+      (enrollment: {
+        danceRolePreference: Database["public"]["Enums"]["danceRolePreference"];
+        status: Database["public"]["Enums"]["enrollmentStatus"];
+      }) =>
+        enrollment.danceRolePreference === "led" &&
+        enrollment.status === "approved",
+    );
+    const enrollmentsLeaderCount = enrollments.filter(
+      (enrollment: {
+        danceRolePreference: Database["public"]["Enums"]["danceRolePreference"];
+        status: Database["public"]["Enums"]["enrollmentStatus"];
+      }) =>
+        enrollment.danceRolePreference === "leader" &&
+        enrollment.status === "approved",
+    );
+
+    const classes = await readClasses();
+    const currentClass = classes.find(
+      (currentClass) => currentClass.id === classId,
+    );
+    if (!currentClass) return console.error("Class not found");
+    setEnrollmentsCount({
+      max: currentClass.size,
+      half: currentClass.size / 2,
+      led: enrollmentsLedCount.length,
+      leader: enrollmentsLeaderCount.length,
+    });
+  }
+  async function handleReadAttendances() {
+    const { data } = await useUser();
+    const userId = data.user?.id;
+
+    const attendances = await readAttendances(userId, classId as string);
+    setAttendances(attendances);
+  }
+
   useEffect(() => {
-    async function handleReadEnrollments() {
-      const enrollments = await readEnrollmentsByClassId(classId as string);
-      setRowData(enrollments);
-
-      const enrollmentsLedCount = enrollments.filter(
-        (enrollment: {
-          danceRolePreference: Database["public"]["Enums"]["danceRolePreference"];
-          status: Database["public"]["Enums"]["enrollmentStatus"];
-        }) =>
-          enrollment.danceRolePreference === "led" &&
-          enrollment.status === "approved",
-      );
-      const enrollmentsLeaderCount = enrollments.filter(
-        (enrollment: {
-          danceRolePreference: Database["public"]["Enums"]["danceRolePreference"];
-          status: Database["public"]["Enums"]["enrollmentStatus"];
-        }) =>
-          enrollment.danceRolePreference === "leader" &&
-          enrollment.status === "approved",
-      );
-
-      const classes = await readClasses();
-      const currentClass = classes.find(
-        (currentClass) => currentClass.id === classId,
-      );
-      if (!currentClass) return console.error("Class not found");
-      setEnrollmentsCount({
-        max: currentClass.size,
-        half: currentClass.size / 2,
-        led: enrollmentsLedCount.length,
-        leader: enrollmentsLeaderCount.length,
-      });
-    }
-
+    handleReadAttendances();
     handleReadEnrollments();
   }, []);
 

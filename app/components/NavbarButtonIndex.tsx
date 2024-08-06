@@ -13,6 +13,7 @@ import { useModal } from "./MainModal";
 export default function NavbarButtonIndex() {
   const openModal = useModal();
   const enrollmentCount = useRecoilValue(enrollmentCountAtom);
+  const attendances = useRecoilValue(attendancesAtom);
   const user = useRecoilValue(usersAtom);
   const userRole = user?.userRole;
   const pathName = usePathname();
@@ -62,12 +63,14 @@ export default function NavbarButtonIndex() {
             Condutores(as): {enrollmentCount.leader} / {enrollmentCount.half}
           </div>
         )}
-        <Link
-          className="bg-green-500 hover:bg-green-600 text-white font-bold py-2 px-4 rounded"
-          href={`${pathName}/userAttendance`}
-        >
-          Minhas presenças
-        </Link>
+        {attendances.length > 0 && (
+          <Link
+            className="bg-green-500 hover:bg-green-600 text-white font-bold py-2 px-4 rounded"
+            href={`${pathName}/userAttendance`}
+          >
+            Minhas presenças
+          </Link>
+        )}
         {userRole === "admin" && (
           <>
             <Link
@@ -92,7 +95,6 @@ export default function NavbarButtonIndex() {
   } else if (pathName.match(attendanceRegex) && userRole === "admin") {
     return <GenerateClassDates />;
   } else if (pathName.includes("/userAttendance")) {
-    const attendances = useRecoilValue(attendancesAtom);
     const totalRegistered = attendances.filter(
       (a) => a.presence !== "notRegistered",
     ).length;
