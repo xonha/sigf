@@ -1,6 +1,7 @@
 import {
   FaCalendar,
   FaHourglassHalf,
+  FaMoneyBillTransfer,
   FaPeopleGroup,
   FaUserGear,
 } from "react-icons/fa6";
@@ -23,11 +24,17 @@ export default function SideBar() {
       href: "/periods",
     },
     isAdmin && {
+      text: "Fluxo de Caixa",
+      icon: <FaMoneyBillTransfer />,
+      href: "/cashFlow",
+    },
+    isAdmin && {
       text: "Usuários",
       icon: <FaUserGear />,
       href: "/users",
     },
   ];
+
   return (
     <aside
       className={`sticky bg-white ${
