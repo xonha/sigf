@@ -126,6 +126,30 @@ export default function NavbarButtonIndex() {
         </div>
       </div>
     );
+  } else if (pathName === "/cashFlow") {
+    return (
+      <div className="flex gap-4">
+        <div className="flex gap-[1px]">
+          <div className="bg-green-500 text-white py-2 px-4 rounded-l">
+            Entradas: <span className="font-black">R$ 0,00</span>
+          </div>
+          <button className="bg-green-500 hover:bg-green-600 text-white font-bold py-2 px-4 rounded-r">
+            +
+          </button>
+        </div>
+        <div className="bg-blue-500 text-white py-2 px-4 rounded">
+          Saldo: <span className="font-black">R$ 0,00</span>
+        </div>
+        <div className="flex gap-[1px]">
+          <button className="bg-orange-500 hover:bg-orange-600 text-white font-bold py-2 px-4 rounded-l">
+            +
+          </button>
+          <div className="bg-orange-500 text-white py-2 px-4 rounded-r">
+            Saídas: <span className="font-black">R$ 0,00</span>
+          </div>
+        </div>
+      </div>
+    );
   }
 
   return;
